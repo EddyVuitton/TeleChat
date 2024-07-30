@@ -1,0 +1,53 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="d-flex justify-center" style="width: 100%; height: 100%; padding-top: 2%;">
+    <div class="chat-container">
+        <div class="d-flex">
+            <MudTextField @bind-Value="_userName"
+                          Placeholder="Your name..."
+                          Immediate="true"
+                          Disabled="@(IsConnected)" />
+            <MudTextField @bind-Value="_sentTo"
+                          Placeholder="User name to send message..."
+                          Immediate="true"
+                          Disabled="@(IsConnected)" />
+            <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
+        </div>
+        <div @ref="chatDiv" id="chat" class="chat-message-container">
+            @{
+                foreach (var message in _messages.OrderByDescending(x => x.Id))
+                {
+                    var id = message.Id;
+                    var isLeft = message.From != _userName;
+
+                    var tempClass = $"message {(isLeft ? "message-left" : "message-right")}";
+
+                    <div class="@tempClass">
+                        @if (isLeft)
+                        {
+                            <div style="color: #935bd8;">@message.From</div>
+                        }
+                        <div>@(message.Message.MessageValue)</div>
+
+                        @{
+                            var tempStyle = isLeft ? "#959595" : "#bbb0ee";
+                        }
+
+                        <div class="message-timestamp" style="@tempStyle">@(message.Message.MessageDate.ToString("HH:mm"))</div>
+                    </div>
+                }
+            }
+        </div>
+        <div>
+            <EditForm Model="_newMessageInput" OnValidSubmit="Send">
+                <MudTextField @bind-Value="_newMessageInput"
+                              T="string"
+                              Placeholder="Message"
+                              AutoFocus="true"
+                              Disabled="!IsConnected" />
+            </EditForm>
+        </div>
+    </div>
+</div>
