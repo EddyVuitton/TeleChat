@@ -9,8 +9,8 @@
                           Placeholder="Your name..."
                           Immediate="true"
                           Disabled="@(IsConnected)" />
-            <MudTextField @bind-Value="_sentTo"
-                          Placeholder="User name to send message..."
+            <MudTextField @bind-Value="_groupName"
+                          Placeholder="Group name to connect..."
                           Immediate="true"
                           Disabled="@(IsConnected)" />
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
@@ -41,7 +41,7 @@
             }
         </div>
         <div>
-            <EditForm Model="_newMessageInput" OnValidSubmit="Send">
+            <EditForm Model="_newMessageInput" OnValidSubmit="SendToGroup">
                 <MudTextField @bind-Value="_newMessageInput"
                               T="string"
                               Placeholder="Message"

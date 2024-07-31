@@ -15,4 +15,14 @@ public class ChatHub : Hub<IChatHub>
     {
         await Clients.Users(sentTo).ReceiveMessage(fromUser, message);
     }
+
+    public async Task JoinRoom(string roomName)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+    }
+
+    public async Task SendMessageToGroup(string message, string fromUser, string groupName)
+    {
+        await Clients.Group(groupName).ReceiveMessage(fromUser, message);
+    }
 }

@@ -19,7 +19,7 @@ public partial class Home : IAsyncDisposable
     private readonly List<UserMessageDto> _messages = [];
     private const int _MessagesAmountToLoad = 5;
     private string _newMessageInput = string.Empty;
-    private string _sentTo = string.Empty;
+    private string _groupName = string.Empty;
     private string _userName = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -77,7 +77,7 @@ public partial class Home : IAsyncDisposable
 
     private async Task Connect()
     {
-        if (hubConnection is null && !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_sentTo))
+        if (hubConnection is null && !string.IsNullOrEmpty(_userName) && !string.IsNullOrEmpty(_groupName))
         {
             try
             {
@@ -90,12 +90,15 @@ public partial class Home : IAsyncDisposable
                     })
                     .Build();
 
+                hubConnection.On<string>("JoinRoom", (_groupName) =>
+                {
+                    AddMessage(_messages, "Admin", true, $"Connected to {_groupName}");
+                });
+
                 hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
                 {
                     AddMessage(_messages, user, true, message);
-
-                    InvokeAsync(StateHasChanged);
-                    InvokeAsync(async () => await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth));
+                    InvokeAsync(RefreshChat);
                     
                 });
                 await hubConnection.StartAsync();
@@ -112,16 +115,35 @@ public partial class Home : IAsyncDisposable
     {
         if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
         {
-            await hubConnection.SendAsync("SendMessage", _sentTo, _newMessageInput, _userName);
+            await hubConnection.SendAsync("SendMessage", _groupName, _newMessageInput, _userName);
 
             AddMessage(_messages, _userName, true, _newMessageInput);
 
             _newMessageInput = new(string.Empty);
 
-            StateHasChanged();
-            await Task.Delay(10);
-            await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth);
+            await RefreshChat();
         }
+    }
+
+    private async Task SendToGroup()
+    {
+        if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
+        {
+            await hubConnection.SendAsync("SendMessageToGroup", _newMessageInput, _userName, _groupName);
+
+            AddMessage(_messages, _userName, true, _newMessageInput);
+
+            _newMessageInput = new(string.Empty);
+
+            await RefreshChat();
+        }
+    }
+
+    private async Task RefreshChat()
+    {
+        StateHasChanged();
+        await Task.Delay(10);
+        await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth);
     }
 
     #endregion
