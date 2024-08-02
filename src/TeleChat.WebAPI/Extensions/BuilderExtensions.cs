@@ -37,8 +37,8 @@ public static class BuilderExtensions
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtOptions.Value.Issuer,
-                ValidAudience = jwtOptions.Value.Audience,
+                ValidIssuers = jwtOptions.Value.ValidIssuers,
+                ValidAudiences = jwtOptions.Value.ValidAudiences,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key))
             };
         });
