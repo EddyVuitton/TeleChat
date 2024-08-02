@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text;
 using TeleChat.WebAPI.Hubs;
 using TeleChat.WebAPI.Options.JWT;
+using TeleChat.WebAPI.Repositories;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -17,6 +18,11 @@ public static class BuilderExtensions
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddLogging(options =>
+        {
+            options.AddConsole();
+            options.AddDebug();
+        });
     }
 
     public static void AddHubChat(this WebApplicationBuilder builder)
@@ -48,6 +54,11 @@ public static class BuilderExtensions
     public static void AddOptions(this WebApplicationBuilder builder)
     {
         builder.Services.ConfigureOptions<JWTOptionsSetup>();
+    }
+
+    public static void AddRepositories(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<MainRepository>();
     }
 
     public static void AddMiddleware(this WebApplication app)

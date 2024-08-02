@@ -1,56 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using TeleChat.Domain.Auth;
-using TeleChat.WebAPI.Hubs;
-using TeleChat.WebAPI.Options.JWT;
+using TeleChat.WebAPI.Repositories;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MainController(IHubContext<ChatHub, IChatHub> hubContext, IOptions<JWTOptions> options) : ControllerBase
+public class MainController(MainRepository mainRepository, ILogger<MainController> logger) : ControllerBase
 {
-    private readonly IHubContext<ChatHub, IChatHub> _hubContext = hubContext;
-    private readonly IOptions<JWTOptions> _options = options;
+    private readonly MainRepository _mainRepository = mainRepository;
+    private readonly ILogger<MainController> _logger = logger;
 
     [HttpPost("AddToGroupAsync")]
-    public async Task AddToGroupAsync(string connectionId, string groupName)
+    public async Task<ActionResult> AddToGroupAsync(string connectionId, string groupName)
     {
-        await _hubContext.Groups.AddToGroupAsync(connectionId, groupName);
+        try
+        {
+            await _mainRepository.AddToGroupAsync(connectionId, groupName);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w dodaniu połączenia do grupy");
+            return Problem(ex.Message);
+        }
     }
 
     [HttpPost("SendToGroupAsync")]
-    public async Task SendToGroupAsync(string connectionId, string userName, string message, string groupName)
+    public async Task<ActionResult> SendToGroupAsync(string connectionId, string userName, string message, string groupName)
     {
-        await _hubContext.Clients.GroupExcept(groupName, connectionId).ReceiveMessage(userName, message);
+        try
+        {
+            await _mainRepository.SendToGroupAsync(connectionId, userName, message, groupName);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w wysłaniu wiadomości do grupy");
+            return Problem(ex.Message);
+        }
     }
 
     [HttpGet("BuildToken")]
-    public UserToken BuildToken(string issuer, string audience, string userName)
+    public ActionResult BuildToken(string issuer, string audience, string userName)
     {
-        var claims = new List<Claim>()
+        try
         {
-            new(ClaimTypes.NameIdentifier, userName)
-        };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Value.Key));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expiration = DateTime.Now.AddMinutes(1);
-
-        JwtSecurityToken token = new(
-            issuer: issuer,
-            audience: audience,
-            claims: claims,
-            expires: expiration,
-            signingCredentials: creds
-        );
-
-        return new UserToken() { Token =  new JwtSecurityTokenHandler().WriteToken(token) };
+            var token = _mainRepository.BuildToken(issuer, audience, userName);
+            return Ok(token);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w wygenerowaniu tokena -> issuer:{issuer} audience:{audience} userName:{userName}", issuer, audience, userName);
+            return Problem(ex.Message);
+        }
     }
 }

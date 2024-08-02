@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddOptions();
 builder.AddServices();
 builder.AddHubChat();
+builder.AddRepositories();
 
 var app = builder.Build();
 
