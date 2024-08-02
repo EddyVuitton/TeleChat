@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text;
-using TeleChat.WebAPI.Hub;
+using TeleChat.WebAPI.Hubs;
 using TeleChat.WebAPI.Options.JWT;
 
 namespace TeleChat.WebAPI.Extensions;

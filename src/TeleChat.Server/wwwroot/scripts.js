@@ -1,9 +1,3 @@
-function scrollToBottom(id) {
-    const element = document.getElementById(id);
-
-    element.scrollTo({ top: element.scrollHeight })
-}
-
 function initializeChat(dotNetHelper) {
     const chat = document.getElementById('chat');
 

@@ -13,7 +13,6 @@ public partial class Home : IAsyncDisposable
     [Inject] public IMainService Service { get; set; } = null!;
     [Inject] public IScrollManager ScrollManager { get; set; } = null!;
 
-    private ElementReference chatDiv;
     private HubConnection? hubConnection;
 
     private readonly List<UserMessageDto> _messages = [];
@@ -21,6 +20,7 @@ public partial class Home : IAsyncDisposable
     private string _newMessageInput = string.Empty;
     private string _groupName = string.Empty;
     private string _userName = string.Empty;
+    private string _connectionId = string.Empty;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -58,6 +58,7 @@ public partial class Home : IAsyncDisposable
         {
             await hubConnection.DisposeAsync();
         }
+
         GC.SuppressFinalize(this);
     }
 
@@ -71,7 +72,7 @@ public partial class Home : IAsyncDisposable
     {
         var newId = (_messages?.Count > 0 ? _messages.Max(x => x.Id) : 0) + 1;
         newId = isNew ? -(_messages?.Count) ?? -1 : newId;
-                
+
         list.Add(new UserMessageDto(newId, from, new MessageDto(message, DateTime.Now)));
     }
 
@@ -90,18 +91,20 @@ public partial class Home : IAsyncDisposable
                     })
                     .Build();
 
-                hubConnection.On<string>("JoinRoom", (_groupName) =>
-                {
-                    AddMessage(_messages, "Admin", true, $"Connected to {_groupName}");
-                });
-
                 hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
                 {
                     AddMessage(_messages, user, true, message);
                     InvokeAsync(RefreshChat);
-                    
                 });
+
                 await hubConnection.StartAsync();
+
+                if (!string.IsNullOrEmpty(hubConnection.ConnectionId))
+                {
+                    _connectionId = hubConnection.ConnectionId;
+                    await Service.AddToGroupAsync(_connectionId, _groupName);
+                }
+
                 StateHasChanged();
             }
             catch
@@ -111,25 +114,11 @@ public partial class Home : IAsyncDisposable
         }
     }
 
-    private async Task Send()
-    {
-        if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
-        {
-            await hubConnection.SendAsync("SendMessage", _groupName, _newMessageInput, _userName);
-
-            AddMessage(_messages, _userName, true, _newMessageInput);
-
-            _newMessageInput = new(string.Empty);
-
-            await RefreshChat();
-        }
-    }
-
     private async Task SendToGroup()
     {
         if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
         {
-            await hubConnection.SendAsync("SendMessageToGroup", _newMessageInput, _userName, _groupName);
+            await Service.SendToGroupAsync(_connectionId, _userName, _newMessageInput, _groupName);
 
             AddMessage(_messages, _userName, true, _newMessageInput);
 

@@ -3,34 +3,36 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
-using TeleChat.WebAPI.Hub;
+using TeleChat.Domain.Auth;
+using TeleChat.WebAPI.Hubs;
 using TeleChat.WebAPI.Options.JWT;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MainController(IHubContext<ChatHub> hubContext, IOptions<JWTOptions> options) : ControllerBase
+public class MainController(IHubContext<ChatHub, IChatHub> hubContext, IOptions<JWTOptions> options) : ControllerBase
 {
-    private readonly IHubContext<ChatHub> _hubContext = hubContext;
+    private readonly IHubContext<ChatHub, IChatHub> _hubContext = hubContext;
     private readonly IOptions<JWTOptions> _options = options;
 
-    [HttpPost("InfoAsync")]
-    public async Task Index()
+    [HttpPost("AddToGroupAsync")]
+    public async Task AddToGroupAsync(string connectionId, string groupName)
     {
-        await _hubContext.Clients.All.SendAsync("ReceiveMessage", "From WebApi", $"Home page loaded at: {DateTime.Now}");
+        await _hubContext.Groups.AddToGroupAsync(connectionId, groupName);
     }
 
-    [HttpPost("SendMessageAsync")]
-    public async Task SendMessageAsync(string sentTo, string message, string fromUser)
+    [HttpPost("SendToGroupAsync")]
+    public async Task SendToGroupAsync(string connectionId, string userName, string message, string groupName)
     {
-        await _hubContext.Clients.User(sentTo).SendAsync("ReceiveMessage", fromUser, message);
+        await _hubContext.Clients.GroupExcept(groupName, connectionId).ReceiveMessage(userName, message);
     }
 
     [HttpGet("BuildToken")]
-    public UserToken BuildToken(string userName)
+    public UserToken BuildToken(string issuer, string audience, string userName)
     {
         var claims = new List<Claim>()
         {
@@ -42,9 +44,8 @@ public class MainController(IHubContext<ChatHub> hubContext, IOptions<JWTOptions
         var expiration = DateTime.Now.AddMinutes(1);
 
         JwtSecurityToken token = new(
-
-            issuer: "TeleChat.WebUI",
-            audience: "https://localhost:44362",
+            issuer: issuer,
+            audience: audience,
             claims: claims,
             expires: expiration,
             signingCredentials: creds
@@ -52,9 +53,4 @@ public class MainController(IHubContext<ChatHub> hubContext, IOptions<JWTOptions
 
         return new UserToken() { Token =  new JwtSecurityTokenHandler().WriteToken(token) };
     }
-}
-
-public class UserToken
-{
-    public string Token { get; set; } = string.Empty;
 }

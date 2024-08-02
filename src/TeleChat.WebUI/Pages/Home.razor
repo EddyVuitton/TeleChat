@@ -15,7 +15,7 @@
                           Disabled="@(IsConnected)" />
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
         </div>
-        <div @ref="chatDiv" id="chat" class="chat-message-container">
+        <div id="chat" class="chat-message-container">
             @{
                 foreach (var message in _messages.OrderByDescending(x => x.Id))
                 {
