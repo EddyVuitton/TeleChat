@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Text;
+using TeleChat.Domain.Context;
 using TeleChat.WebAPI.Hubs;
 using TeleChat.WebAPI.Options.JWT;
 using TeleChat.WebAPI.Repositories;
@@ -22,6 +24,10 @@ public static class BuilderExtensions
         {
             options.AddConsole();
             options.AddDebug();
+        });
+        builder.Services.AddDbContextFactory<DBContext>(options =>
+        {
+            options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"));
         });
     }
 
@@ -73,6 +79,7 @@ public static class BuilderExtensions
                 c.DocExpansion(DocExpansion.None);
                 c.EnableTryItOutByDefault();
             });
+            app.ReMigrateDatabase();
         }
 
         app.UseHttpsRedirection();
@@ -83,5 +90,14 @@ public static class BuilderExtensions
         app.MapControllers();
 
         app.MapHub<ChatHub>("/Chat");
+    }
+
+    public static void ReMigrateDatabase(this WebApplication app)
+    {
+        using var serviceScope = app.Services.CreateScope();
+        var context = serviceScope.ServiceProvider.GetService<DBContext>()!;
+
+        context.Database.EnsureDeleted(); //zdropuj bazę danych, jeżeli istnieje...
+        context.Database.Migrate(); //i stwórz kontekst bazy danych
     }
 }
