@@ -65,6 +65,7 @@ public static class BuilderExtensions
     public static void AddRepositories(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<MainRepository>();
+        builder.Services.AddScoped<AccountRepository>();
     }
 
     public static void AddMiddleware(this WebApplication app)

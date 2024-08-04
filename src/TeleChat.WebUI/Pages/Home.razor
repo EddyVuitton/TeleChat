@@ -2,6 +2,19 @@
 
 <PageTitle>Home</PageTitle>
 
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <MudText Typo="Typo.h2">Zautoryzowany</MudText>
+            <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj</MudButton>
+        </Authorized>
+        <NotAuthorized>
+            <MudText Typo="Typo.h2">Niezautoryzowany</MudText>
+            <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj</MudButton>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
 <div class="d-flex justify-center" style="width: 100%; height: 100%; padding-top: 2%;">
     <div class="chat-container">
         <div class="d-flex">

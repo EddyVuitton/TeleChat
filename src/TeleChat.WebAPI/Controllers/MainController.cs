@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TeleChat.Domain.Auth;
 using TeleChat.WebAPI.Repositories;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MainController(MainRepository mainRepository, ILogger<MainController> logger) : ControllerBase
+public class MainController(MainRepository mainRepository, AccountRepository accountRepository, ILogger<MainController> logger) : ControllerBase
 {
     private readonly MainRepository _mainRepository = mainRepository;
+    private readonly AccountRepository _accountRepository = accountRepository;
     private readonly ILogger<MainController> _logger = logger;
 
     [HttpPost("AddToGroupAsync")]
@@ -40,17 +42,17 @@ public class MainController(MainRepository mainRepository, ILogger<MainControlle
         }
     }
 
-    [HttpGet("BuildToken")]
-    public ActionResult BuildToken(string issuer, string audience, string userName)
+    [HttpPost("LoginAsync")]
+    public async Task<ActionResult<UserToken>> LoginAsync(string login, string password, string issuer, string audience)
     {
         try
         {
-            var token = _mainRepository.BuildToken(issuer, audience, userName);
+            var token = await _accountRepository.LoginAsync(login, password, issuer, audience);
             return Ok(token);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Błąd w wygenerowaniu tokena -> issuer:{issuer} audience:{audience} userName:{userName}", issuer, audience, userName);
+            _logger.LogError(ex, "Błąd w logowaniu");
             return Problem(ex.Message);
         }
     }
