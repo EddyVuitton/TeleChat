@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
-using Newtonsoft.Json.Linq;
 using TeleChat.Domain.Dtos;
 using TeleChat.Domain.Extensions;
-using TeleChat.Domain.Forms;
 using TeleChat.WebUI.Auth;
+using TeleChat.WebUI.Dialogs.Auth;
 using TeleChat.WebUI.Services.Main;
 
 namespace TeleChat.WebUI.Pages;
@@ -14,9 +13,10 @@ namespace TeleChat.WebUI.Pages;
 public partial class Home : IAsyncDisposable
 {
     [Inject] public IJSRuntime JS { get; set; } = null!;
-    [Inject] public IMainService Service { get; set; } = null!;
+    [Inject] public IMainService MainService { get; set; } = null!;
     [Inject] public IScrollManager ScrollManager { get; set; } = null!;
     [Inject] public ILoginService LoginService { get; set; } = null!;
+    [Inject] public IDialogService DialogService { get; init; } = null!;
 
     private HubConnection? hubConnection;
 
@@ -32,11 +32,18 @@ public partial class Home : IAsyncDisposable
     {
         if (firstRender)
         {
-            var isLoggedIn = await LoginService.IsLoggedInAsync();
-            if (isLoggedIn.isLoggedIn && isLoggedIn.token is not null)
+            await LoginService.LogoutIfExpiredTokenAsync();
+
+            var (isLoggedIn, token, claims) = await LoginService.IsLoggedInAsync();
+            if (isLoggedIn && token is not null)
             {
-                _token = isLoggedIn.token;
-                await LoginService.LogoutIfExpiredTokenAsync();
+                _token = token;
+                //var userLogin = claims?.FirstOrDefault(x => x.Type == "UserLogin");
+
+                //if (userLogin is not null)
+                //{
+                //    var user = await MainService.GetUserByLoginAsync(userLogin.Value);
+                //}
             }
 
             await JS.InvokeVoidAsync("initializeChat", DotNetObjectReference.Create(this));
@@ -76,7 +83,7 @@ public partial class Home : IAsyncDisposable
     }
 
     public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
-
+     
     #endregion
 
     #region Privates
@@ -91,24 +98,28 @@ public partial class Home : IAsyncDisposable
 
     private async Task Login()
     {
-        var loginForm = new LoginAccountForm()
+        var options = new DialogOptions
         {
-            Login = "eddy",
-            Password = "admin",
+            CloseOnEscapeKey = true,
+            NoHeader = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
         };
 
-        try
-        {
-            var userTokenResult = await Service.LoginAsync(loginForm);
-            _token = userTokenResult.Token;
+        await DialogService.ShowAsync<LoginDialog>(null, options);
+    }
 
-            await LoginService.LoginAsync(userTokenResult);
-            StateHasChanged();
-        }
-        catch (Exception ex)
+    private async Task Register()
+    {
+        var options = new DialogOptions
         {
-            await JS.LogAsync(ExceptionToString(ex));
-        }
+            CloseOnEscapeKey = true,
+            NoHeader = true,
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true
+        };
+
+        await DialogService.ShowAsync<RegisterDialog>(null, options);
     }
 
     private async Task LogOut()
@@ -141,7 +152,7 @@ public partial class Home : IAsyncDisposable
                 if (!string.IsNullOrEmpty(hubConnection.ConnectionId))
                 {
                     _connectionId = hubConnection.ConnectionId;
-                    await Service.AddToGroupAsync(_connectionId, _groupName);
+                    await MainService.AddToGroupAsync(_connectionId, _groupName);
                 }
 
                 StateHasChanged();
@@ -149,7 +160,7 @@ public partial class Home : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            await JS.LogAsync(ExceptionToString(ex));
+            await JS.LogAsync(ex);
         }
     }
 
@@ -159,7 +170,7 @@ public partial class Home : IAsyncDisposable
         {
             if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
             {
-                await Service.SendToGroupAsync(_connectionId, _userName, _newMessageInput, _groupName);
+                await MainService.SendToGroupAsync(_connectionId, _userName, _newMessageInput, _groupName);
 
                 AddMessage(_messages, _userName, true, _newMessageInput);
 
@@ -170,7 +181,7 @@ public partial class Home : IAsyncDisposable
         }
         catch (Exception ex)
         {
-            await JS.LogAsync(ExceptionToString(ex));
+            await JS.LogAsync(ex);
         }
     }
 
@@ -179,23 +190,6 @@ public partial class Home : IAsyncDisposable
         StateHasChanged();
         await Task.Delay(10);
         await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth);
-    }
-
-    private static string ExceptionToString(Exception ex)
-    {
-        var log = $"{ex.Message}";
-
-        if (!string.IsNullOrEmpty(ex.InnerException?.ToString()))
-        {
-            log += Environment.NewLine + ex.InnerException;
-        }
-
-        if (!string.IsNullOrEmpty(ex.StackTrace?.ToString()))
-        {
-            log += Environment.NewLine + ex.StackTrace;
-        }
-
-        return log;
     }
 
     #endregion

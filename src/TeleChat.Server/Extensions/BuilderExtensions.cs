@@ -4,6 +4,7 @@ using MudBlazor.Services;
 using TeleChat.Server.Options.WebAPI;
 using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.EntryPoint;
+using TeleChat.WebUI.Services.Account;
 using TeleChat.WebUI.Services.Main;
 
 namespace TeleChat.Server.Extensions;
@@ -26,6 +27,7 @@ public static class BuilderExtensions
         builder.Services.AddMudServices();
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(webapiOptions.Value.BaseAddress) });
         builder.Services.AddScoped<IMainService, MainService>();
+        builder.Services.AddScoped<IAccountService, AccountService>();
     }
 
     public static void AddOptions(this WebApplicationBuilder builder)

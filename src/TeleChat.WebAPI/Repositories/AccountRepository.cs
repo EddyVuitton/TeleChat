@@ -4,6 +4,7 @@ using System.Security.Claims;
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Context;
 using TeleChat.Domain.Entities;
+using TeleChat.Domain.Forms;
 using TeleChat.WebAPI.Helpers;
 using TeleChat.WebAPI.Options.JWT;
 
@@ -18,22 +19,11 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
 
     public async Task<UserToken> LoginAsync(string login, string password, string issuer, string audience)
     {
-        {
-            await _context.User.AddAsync(new User()
-            {
-                Id = 1,
-                Login = login,
-                Name = "Eddy",
-                Password = AuthHelper.HashPassword(password)
-            });
-            await _context.SaveChangesAsync();
-        }
-
         var user = await _context.User.FirstOrDefaultAsync(x => x.Login == login);
 
         if (user is null)
         {
-            throw new Exception("Nie znaleziono użytkownika o podanym loginem...");
+            throw new Exception("Nie znaleziono użytkownika o podanym loginie...");
         }
 
         var hashedPassword = AuthHelper.HashPassword(password);
@@ -45,7 +35,6 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
             var jtwKey = _jwtOptions.Value.Key;
             var claims = new List<Claim>()
             {
-                new(ClaimTypes.NameIdentifier, user.Name),
                 new("UserLogin", user.Login)
             };
 
@@ -57,6 +46,33 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
         {
             throw new Exception("Nieprawidłowy login lub hasło");
         }
+    }
+
+    public async Task RegisterAsync(RegisterAccountForm form)
+    {
+        form = form ?? throw new ArgumentNullException(nameof(form));
+
+        var checkIfUserExists = await _context.User.FirstOrDefaultAsync(x => x.Login == form.Login);
+
+        if (checkIfUserExists is not null)
+        {
+            throw new Exception("Użytkownik o podanym loginie już istnieje");
+        }
+
+        var newUser = new User()
+        {
+            Login = form.Login,
+            Name = form.Name,
+            Password = AuthHelper.HashPassword(form.Password)
+        };
+
+        await _context.User.AddAsync(newUser);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<User?> GetUserByLoginAsync(string login)
+    {
+        return await _context.User.FirstOrDefaultAsync(x => x.Login == login);
     }
 
     #endregion

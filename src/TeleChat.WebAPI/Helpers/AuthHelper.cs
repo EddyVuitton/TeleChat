@@ -21,7 +21,7 @@ public static class AuthHelper
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var expiration = DateTime.Now.AddMinutes(1);
+        var expiration = DateTime.Now.AddDays(1);
 
         JwtSecurityToken token = new(
             issuer: issuer,

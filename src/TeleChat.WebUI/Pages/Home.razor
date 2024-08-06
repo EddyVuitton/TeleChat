@@ -6,11 +6,12 @@
     <AuthorizeView>
         <Authorized>
             <MudText Typo="Typo.h2">Zautoryzowany</MudText>
-            <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj</MudButton>
+            <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj się</MudButton>
         </Authorized>
         <NotAuthorized>
             <MudText Typo="Typo.h2">Niezautoryzowany</MudText>
-            <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj</MudButton>
+            <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj się</MudButton>
+            <MudButton OnClick="Register" Variant="Variant.Filled" Color="Color.Primary">Zarejestruj się</MudButton>
         </NotAuthorized>
     </AuthorizeView>
 </CascadingAuthenticationState>

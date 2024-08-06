@@ -1,0 +1,38 @@
+﻿<MudDialog>
+    <DialogContent>
+        <EditForm Model="@_model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+            <MudCard Elevation="0">
+                <MudCardContent>
+                    <MudTextField @bind-Value="_model.Name"
+                                  Label="Nazwa użytkownika"
+                                  Class="mt-3"
+                                  For="@(() => _model.Name)" />
+
+                    <MudTextField @bind-Value="_model.Login"
+                                  Label="Login"
+                                  Class="mt-3"
+                                  For="@(() => _model.Login)" />
+
+                    <MudTextField @bind-Value="_model.Password"
+                                  Label="Hasło"
+                                  HelperText="Wybierz silne hasło"
+                                  Class="mt-3"
+                                  For="@(() => _model.Password)"
+                                  InputType="InputType.Password" />
+
+                    <MudTextField @bind-Value="_model.Password2"
+                                  Label="Powtórz hasło"
+                                  Class="mt-3"
+                                  For="@(() => _model.Password2)"
+                                  InputType="InputType.Password" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Zamknij</MudButton>
+                    <MudSpacer />
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Stwórz konto</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </EditForm>
+    </DialogContent>
+</MudDialog>
