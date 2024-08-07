@@ -68,7 +68,7 @@ public static class BuilderExtensions
         builder.Services.AddScoped<AccountRepository>();
     }
 
-    public static void AddMiddleware(this WebApplication app)
+    public static async Task AddMiddlewareAsync(this WebApplication app)
     {
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -80,7 +80,7 @@ public static class BuilderExtensions
                 c.DocExpansion(DocExpansion.None);
                 c.EnableTryItOutByDefault();
             });
-            app.ReMigrateDatabase();
+            await app.ReMigrateDatabaseAsync();
         }
 
         app.UseHttpsRedirection();
@@ -93,12 +93,14 @@ public static class BuilderExtensions
         app.MapHub<ChatHub>("/Chat");
     }
 
-    public static void ReMigrateDatabase(this WebApplication app)
+    public static async Task ReMigrateDatabaseAsync(this WebApplication app)
     {
         using var serviceScope = app.Services.CreateScope();
         var context = serviceScope.ServiceProvider.GetService<DBContext>()!;
 
         context.Database.EnsureDeleted(); //zdropuj bazę danych, jeżeli istnieje...
         context.Database.Migrate(); //i stwórz kontekst bazy danych
+
+        await context.AddSeedDataAsync();
     }
 }

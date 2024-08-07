@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TeleChat.Domain.Dtos;
 using TeleChat.WebAPI.Repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TeleChat.WebAPI.Controllers;
 
@@ -36,6 +38,21 @@ public class MainController(MainRepository mainRepository, ILogger<MainControlle
         catch (Exception ex)
         {
             _logger.LogError(ex, "Błąd w wysłaniu wiadomości do grupy");
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpPost("SendMessageAsync")]
+    public async Task<ActionResult> SendMessageAsync(MessageDto message)
+    {
+        try
+        {
+            await _mainRepository.SendMessageAsync(message);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w wysłaniu wiadomości");
             return Problem(ex.Message);
         }
     }

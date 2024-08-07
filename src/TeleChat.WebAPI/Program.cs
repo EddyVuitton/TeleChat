@@ -9,6 +9,6 @@ builder.AddRepositories();
 
 var app = builder.Build();
 
-app.AddMiddleware();
+await app.AddMiddlewareAsync();
 
 app.Run();

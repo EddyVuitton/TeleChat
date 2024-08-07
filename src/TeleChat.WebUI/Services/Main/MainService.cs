@@ -1,4 +1,9 @@
-﻿namespace TeleChat.WebUI.Services.Main;
+﻿using Newtonsoft.Json;
+using System.Text;
+using TeleChat.Domain.Dtos;
+using TeleChat.Domain.Forms;
+
+namespace TeleChat.WebUI.Services.Main;
 
 public class MainService(HttpClient httpClient) : IMainService
 {
@@ -36,6 +41,15 @@ public class MainService(HttpClient httpClient) : IMainService
         string url = $"{_MainRoute}/SendToGroupAsync?{queryString}";
 
         var response = await _httpClient.PostAsync(url, null);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task SendMessageAsync(MessageDto message)
+    {
+        var json = JsonConvert.SerializeObject(message);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync($"{_MainRoute}/SendMessageAsync", content);
         response.EnsureSuccessStatusCode();
     }
 

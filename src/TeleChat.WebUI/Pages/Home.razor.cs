@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Dtos;
+using TeleChat.Domain.Entities;
 using TeleChat.Domain.Extensions;
 using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.Dialogs.Auth;
@@ -170,7 +171,15 @@ public partial class Home : IAsyncDisposable
         {
             if (hubConnection is not null && !string.IsNullOrEmpty(_newMessageInput))
             {
-                await MainService.SendToGroupAsync(_connectionId, _userName, _newMessageInput, _groupName);
+                //await MainService.SendToGroupAsync(_connectionId, _userName, _newMessageInput, _groupName);
+                var message = new Message()
+                {
+                    Text = _newMessageInput,
+                    TypeId = 1,
+                    ReceiverId = 1
+                };
+                var messageDto = new MessageDto(_connectionId, _groupName, null, message);
+                await MainService.SendMessageAsync(messageDto);
 
                 AddMessage(_messages, _userName, true, _newMessageInput);
 
