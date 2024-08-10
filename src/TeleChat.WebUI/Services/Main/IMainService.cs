@@ -1,10 +1,12 @@
 ﻿using TeleChat.Domain.Dtos;
+using TeleChat.Domain.Entities;
 
 namespace TeleChat.WebUI.Services.Main;
 
 public interface IMainService
 {
-    Task AddToGroupAsync(string connectionId, string groupName);
-    Task SendToGroupAsync(string connectionId, string userName, string message, string groupName);
-    Task SendMessageAsync(MessageDto message);
+    Task AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid);
+    Task<List<MessageType>> GetMessageTypesAsync();
+    Task<List<UserGroupChat>> GetUserGroupChatsAsync(int userId);
+    Task<Message?> SendMessageAsync(MessageDto message);
 }

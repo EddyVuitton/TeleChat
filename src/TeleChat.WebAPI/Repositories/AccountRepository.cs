@@ -19,13 +19,7 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
 
     public async Task<UserToken> LoginAsync(string login, string password, string issuer, string audience)
     {
-        var user = await _context.User.FirstOrDefaultAsync(x => x.Login == login);
-
-        if (user is null)
-        {
-            throw new Exception("Nie znaleziono użytkownika o podanym loginie...");
-        }
-
+        var user = await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login) ?? throw new Exception("Nie znaleziono użytkownika o podanym loginie");
         var hashedPassword = AuthHelper.HashPassword(password);
 
         var result = user.Password == hashedPassword;
@@ -52,7 +46,7 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
     {
         form = form ?? throw new ArgumentNullException(nameof(form));
 
-        var checkIfUserExists = await _context.User.FirstOrDefaultAsync(x => x.Login == form.Login);
+        var checkIfUserExists = await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == form.Login);
 
         if (checkIfUserExists is not null)
         {
@@ -63,22 +57,15 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
         {
             Login = form.Login,
             Name = form.Name,
-            Password = AuthHelper.HashPassword(form.Password)
+            Password = AuthHelper.HashPassword(form.Password),
+            IsActive = true
         };
 
         await _context.User.AddAsync(newUser);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<User?> GetUserByLoginAsync(string login)
-    {
-        return await _context.User.FirstOrDefaultAsync(x => x.Login == login);
-    }
-
-    #endregion
-
-    #region Privates
-
+    public async Task<User?> GetUserByLoginAsync(string login) => await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login);
 
     #endregion
 }

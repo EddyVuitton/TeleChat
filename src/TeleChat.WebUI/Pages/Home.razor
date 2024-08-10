@@ -5,15 +5,15 @@
 <CascadingAuthenticationState>
     <AuthorizeView>
         <Authorized>
-            <MudText Typo="Typo.h2">Zautoryzowany</MudText>
-            <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj się</MudButton>
+            <MudText Typo="Typo.h2">Zautoryzowany @(_user.Name)</MudText>
         </Authorized>
         <NotAuthorized>
-            <MudText Typo="Typo.h2">Niezautoryzowany</MudText>
-            <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj się</MudButton>
-            <MudButton OnClick="Register" Variant="Variant.Filled" Color="Color.Primary">Zarejestruj się</MudButton>
+            <MudText Typo="Typo.h2">Niezautoryzowany (@_isLoggedIn)</MudText>
         </NotAuthorized>
     </AuthorizeView>
+    <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj się</MudButton>
+    <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj się</MudButton>
+    <MudButton OnClick="Register" Variant="Variant.Filled" Color="Color.Primary">Zarejestruj się</MudButton>
 </CascadingAuthenticationState>
 
 <div class="d-flex justify-center" style="width: 100%; height: 100%; padding-top: 2%;">
@@ -22,40 +22,38 @@
             <MudTextField @bind-Value="_userName"
                           Placeholder="Your name..."
                           Immediate="true"
-                          Disabled="@(IsConnected)" />
+                          Disabled="true" />
             <MudTextField @bind-Value="_groupName"
                           Placeholder="Group name to connect..."
                           Immediate="true"
-                          Disabled="@(IsConnected)" />
+                          Disabled="true" />
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
         </div>
         <div id="chat" class="chat-message-container">
             @{
-                foreach (var message in _messages.OrderByDescending(x => x.Id))
+                foreach (var message in _messages.OrderBy(x => x.Created))
                 {
                     var id = message.Id;
-                    var isLeft = message.From != _userName;
+                    var isLeft = message.User.Id != _user.Id;
+                    var messageTimestamp = message.Created.ToString("HH:mm");
 
-                    var tempClass = $"message {(isLeft ? "message-left" : "message-right")}";
+                    var messageClass = $"message {(isLeft ? "message-left" : "message-right")}";
+                    var messageTimestampStyle = isLeft ? "#959595" : "#bbb0ee";
 
-                    <div class="@tempClass">
+                    <div class="@messageClass">
                         @if (isLeft)
                         {
-                            <div style="color: #935bd8;">@message.From</div>
+                            <div style="color: #935bd8;">@message.User.Name</div>
                         }
-                        <div>@(message.Message.MessageValue)</div>
+                        <div>@(message.Text)</div>
 
-                        @{
-                            var tempStyle = isLeft ? "#959595" : "#bbb0ee";
-                        }
-
-                        <div class="message-timestamp" style="@tempStyle">@(message.Message.MessageDate.ToString("HH:mm"))</div>
+                        <div class="message-timestamp" style="@messageTimestampStyle">@(messageTimestamp)</div>
                     </div>
                 }
             }
         </div>
         <div>
-            <EditForm Model="_newMessageInput" OnValidSubmit="SendToGroup">
+            <EditForm Model="_newMessageInput" OnValidSubmit="SendMessageAsync">
                 <MudTextField @bind-Value="_newMessageInput"
                               T="string"
                               Placeholder="Message"

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeleChat.Domain.Dtos;
+using TeleChat.Domain.Entities;
 using TeleChat.WebAPI.Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TeleChat.WebAPI.Controllers;
 
@@ -12,12 +12,12 @@ public class MainController(MainRepository mainRepository, ILogger<MainControlle
     private readonly MainRepository _mainRepository = mainRepository;
     private readonly ILogger<MainController> _logger = logger;
 
-    [HttpPost("AddToGroupAsync")]
-    public async Task<ActionResult> AddToGroupAsync(string connectionId, string groupName)
+    [HttpPost("AddConnectionToGroupAsync")]
+    public async Task<ActionResult> AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
     {
         try
         {
-            await _mainRepository.AddToGroupAsync(connectionId, groupName);
+            await _mainRepository.AddConnectionToGroupAsync(connectionId, groupChatGuid);
             return Ok();
         }
         catch (Exception ex)
@@ -27,32 +27,47 @@ public class MainController(MainRepository mainRepository, ILogger<MainControlle
         }
     }
 
-    [HttpPost("SendToGroupAsync")]
-    public async Task<ActionResult> SendToGroupAsync(string connectionId, string userName, string message, string groupName)
-    {
-        try
-        {
-            await _mainRepository.SendToGroupAsync(connectionId, userName, message, groupName);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Błąd w wysłaniu wiadomości do grupy");
-            return Problem(ex.Message);
-        }
-    }
-
     [HttpPost("SendMessageAsync")]
-    public async Task<ActionResult> SendMessageAsync(MessageDto message)
+    public async Task<ActionResult<Message>> SendMessageAsync(MessageDto message)
     {
         try
         {
-            await _mainRepository.SendMessageAsync(message);
-            return Ok();
+            var result = await _mainRepository.SendMessageAsync(message);
+            return Ok(result);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Błąd w wysłaniu wiadomości");
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetMessageTypesAsync")]
+    public async Task<ActionResult<List<MessageType>>> GetMessageTypesAsync()
+    {
+        try
+        {
+            var result = await _mainRepository.GetMessageTypesAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w pobraniu typów wiadomości");
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetUserGroupChatsAsync")]
+    public async Task<ActionResult<List<UserGroupChat>>> GetUserGroupChatsAsync(int userId)
+    {
+        try
+        {
+            var result = await _mainRepository.GetUserGroupChatsAsync(userId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w pobraniu grup użytkownika");
             return Problem(ex.Message);
         }
     }

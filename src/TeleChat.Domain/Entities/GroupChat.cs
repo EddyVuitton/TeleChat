@@ -2,18 +2,14 @@
 
 namespace TeleChat.Domain.Entities;
 
-public class User
+public class GroupChat
 {
     [Key]
     public int Id { get; set; }
     [Required]
     public string Name { get; set; } = string.Empty;
     [Required]
-    public string Login { get; set; } = string.Empty;
-    [Required]
-    public string Password { get; set; } = string.Empty;
+    public Guid Guid { get; set; } = Guid.NewGuid();
     [Required]
     public DateTime Created { get; set; } = DateTime.UtcNow;
-    [Required]
-    public bool IsActive { get; set; }
 }

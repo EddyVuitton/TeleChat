@@ -48,8 +48,8 @@ public class AccountController(AccountRepository accountRepository, ILogger<Main
     {
         try
         {
-            await _accountRepository.GetUserByLoginAsync(login);
-            return Ok();
+            var result = await _accountRepository.GetUserByLoginAsync(login);
+            return Ok(result);
         }
         catch (Exception ex)
         {

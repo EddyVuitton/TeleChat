@@ -1,5 +1,6 @@
 ﻿using TeleChat.Domain.Context;
 using TeleChat.Domain.Entities;
+using TeleChat.WebAPI.Helpers;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -7,21 +8,35 @@ public static class DBContextExtensions
 {
     public static async Task AddSeedDataAsync(this DBContext context)
     {
-        var receiverTypes = new List<ReceiverType>
+        var user = new User()
         {
-            new() { Name = "UserChat" },
-            new() { Name = "GroupChat" }
+            Name = "Demo",
+            Login = "demo",
+            Password = AuthHelper.HashPassword("demo"),
+            IsActive = true
         };
-
-        await context.ReceiverType.AddRangeAsync(receiverTypes);
 
         var messageTypes = new List<MessageType>
         {
-            new() { Name = "PlainText", DefaultStyle = string.Empty },
-            new() { Name = "GIFs", DefaultStyle = "max-width: 200px; max-height: 200px;" }
+            new() { Name = "PlainText" },
+            new() { Name = "GIF", DefaultStyle = "max-width: 200px; max-height: 200px;" }
         };
 
+        var groupChat = new GroupChat()
+        {
+            Name = "Domyślna grupa"
+        };
+
+        var userGroupChat = new UserGroupChat()
+        {
+            User = user,
+            GroupChat = groupChat
+        };
+
+        await context.User.AddAsync(user);
         await context.MessageType.AddRangeAsync(messageTypes);
+        await context.GroupChat.AddAsync(groupChat);
+        await context.UserGroupChat.AddAsync(userGroupChat);
 
         await context.SaveChangesAsync();
     }
