@@ -8,9 +8,9 @@ using TeleChat.Domain.Forms;
 using TeleChat.WebAPI.Helpers;
 using TeleChat.WebAPI.Options.JWT;
 
-namespace TeleChat.WebAPI.Repositories;
+namespace TeleChat.WebAPI.Repositories.Account;
 
-public class AccountRepository(DBContext context, IOptions<JWTOptions> options)
+public class AccountRepository(DBContext context, IOptions<JWTOptions> options) : IAccountRepository
 {
     private readonly DBContext _context = context;
     private readonly IOptions<JWTOptions> _jwtOptions = options;

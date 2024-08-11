@@ -6,9 +6,9 @@ using TeleChat.Domain.Dtos;
 using TeleChat.Domain.Entities;
 using TeleChat.WebAPI.Hubs;
 
-namespace TeleChat.WebAPI.Repositories
+namespace TeleChat.WebAPI.Repositories.Main
 {
-    public class MainRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext context)
+    public class MainRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext context) : IMainRepository
     {
         private readonly IHubContext<ChatHub, IChatHub> _hubContext = hubContext;
         private readonly DBContext _context = context;

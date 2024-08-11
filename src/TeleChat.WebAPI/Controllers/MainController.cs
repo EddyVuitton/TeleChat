@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeleChat.Domain.Dtos;
 using TeleChat.Domain.Entities;
-using TeleChat.WebAPI.Repositories;
+using TeleChat.WebAPI.Repositories.Main;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MainController(MainRepository mainRepository, ILogger<MainController> logger) : ControllerBase
+public class MainController(IMainRepository mainRepository, ILogger<MainController> logger) : ControllerBase
 {
-    private readonly MainRepository _mainRepository = mainRepository;
+    private readonly IMainRepository _mainRepository = mainRepository;
     private readonly ILogger<MainController> _logger = logger;
 
     [HttpPost("AddConnectionToGroupAsync")]

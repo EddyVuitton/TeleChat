@@ -7,7 +7,8 @@ using System.Text;
 using TeleChat.Domain.Context;
 using TeleChat.WebAPI.Hubs;
 using TeleChat.WebAPI.Options.JWT;
-using TeleChat.WebAPI.Repositories;
+using TeleChat.WebAPI.Repositories.Account;
+using TeleChat.WebAPI.Repositories.Main;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -64,8 +65,8 @@ public static class BuilderExtensions
 
     public static void AddRepositories(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<MainRepository>();
-        builder.Services.AddScoped<AccountRepository>();
+        builder.Services.AddScoped<IMainRepository, MainRepository>();
+        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
     }
 
     public static async Task AddMiddlewareAsync(this WebApplication app)

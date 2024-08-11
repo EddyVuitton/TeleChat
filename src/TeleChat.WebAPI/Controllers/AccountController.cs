@@ -2,15 +2,15 @@
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Entities;
 using TeleChat.Domain.Forms;
-using TeleChat.WebAPI.Repositories;
+using TeleChat.WebAPI.Repositories.Account;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController(AccountRepository accountRepository, ILogger<MainController> logger) : ControllerBase
+public class AccountController(IAccountRepository accountRepository, ILogger<MainController> logger) : ControllerBase
 {
-    private readonly AccountRepository _accountRepository = accountRepository;
+    private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly ILogger<MainController> _logger = logger;
 
     [HttpPost("LoginAsync")]
