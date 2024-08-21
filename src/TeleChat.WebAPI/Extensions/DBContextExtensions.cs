@@ -1,5 +1,5 @@
 ﻿using TeleChat.Domain.Context;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Helpers;
 
 namespace TeleChat.WebAPI.Extensions;

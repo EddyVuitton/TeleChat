@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 using TeleChat.Domain.Dtos;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 
 namespace TeleChat.WebUI.Services.Main;
 

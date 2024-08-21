@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeleChat.Domain.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,7 +65,7 @@ namespace TeleChat.Domain.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Text = table.Column<string>(type: "text", nullable: false),
-                    TypeId = table.Column<int>(type: "integer", nullable: false),
+                    MessageTypeId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     GroupChatId = table.Column<int>(type: "integer", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -77,20 +77,17 @@ namespace TeleChat.Domain.Migrations
                         name: "FK_Message_GroupChat_GroupChatId",
                         column: x => x.GroupChatId,
                         principalTable: "GroupChat",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Message_MessageType_TypeId",
-                        column: x => x.TypeId,
+                        name: "FK_Message_MessageType_MessageTypeId",
+                        column: x => x.MessageTypeId,
                         principalTable: "MessageType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Message_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -110,14 +107,12 @@ namespace TeleChat.Domain.Migrations
                         name: "FK_UserGroupChat_GroupChat_GroupChatId",
                         column: x => x.GroupChatId,
                         principalTable: "GroupChat",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UserGroupChat_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -126,9 +121,9 @@ namespace TeleChat.Domain.Migrations
                 column: "GroupChatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Message_TypeId",
+                name: "IX_Message_MessageTypeId",
                 table: "Message",
-                column: "TypeId");
+                column: "MessageTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_UserId",

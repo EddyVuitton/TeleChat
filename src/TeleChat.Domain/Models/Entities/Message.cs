@@ -1,19 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace TeleChat.Domain.Models.Entities;
 
-namespace TeleChat.Domain.Entities;
-
-public class UserGroupChat
+public class Message
 {
-    [Key]
     public int Id { get; set; }
-    [ForeignKey(nameof(User))]
+    public string Text { get; set; } = null!;
+    public int MessageTypeId { get; set; }
     public int UserId { get; set; }
-    [ForeignKey(nameof(GroupChat))]
     public int GroupChatId { get; set; }
-    [Required]
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
+    public virtual MessageType MessageType { get; set; } = new();
     public virtual User User { get; set; } = new();
     public virtual GroupChat GroupChat { get; set; } = new();
 }

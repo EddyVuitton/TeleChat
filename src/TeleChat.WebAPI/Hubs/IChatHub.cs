@@ -1,4 +1,4 @@
-﻿using TeleChat.Domain.Entities;
+﻿using TeleChat.Domain.Models.Entities;
 
 namespace TeleChat.WebAPI.Hubs;
 

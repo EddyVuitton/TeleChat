@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Dtos;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Extensions;
 using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.Dialogs.Auth;

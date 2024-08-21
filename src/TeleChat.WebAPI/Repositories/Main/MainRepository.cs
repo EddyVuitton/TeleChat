@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TeleChat.Domain.Context;
 using TeleChat.Domain.Dtos;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Hubs;
 
 namespace TeleChat.WebAPI.Repositories.Main
@@ -59,13 +59,13 @@ namespace TeleChat.WebAPI.Repositories.Main
         {
             message = message ?? throw new ArgumentNullException(nameof(message));
 
-            var groupChat = await _context.GroupChat.AsNoTracking().FirstOrDefaultAsync(x => x.Id == message.GroupChatId)
+            var groupChat = await _context.GroupChat.FirstOrDefaultAsync(x => x.Id == message.GroupChatId)
                 ?? throw new NoNullAllowedException(nameof(message.GroupChatId));
 
-            var messageType = await _context.MessageType.AsNoTracking().FirstOrDefaultAsync(x => x.Id == message.MessageTypeId)
+            var messageType = await _context.MessageType.FirstOrDefaultAsync(x => x.Id == message.MessageTypeId)
                 ?? throw new NoNullAllowedException(nameof(message.MessageTypeId));
 
-            var user = await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Id == message.UserId)
+            var user = await _context.User.FirstOrDefaultAsync(x => x.Id == message.UserId)
                 ?? throw new NoNullAllowedException(nameof(message.UserId));
 
             var newMessage = new Message()
@@ -78,7 +78,7 @@ namespace TeleChat.WebAPI.Repositories.Main
 
             try
             {
-                await _context.Message.AddAsync(newMessage);
+                await _context.AddAsync(newMessage);
                 await _context.SaveChangesAsync();
 
                 return newMessage;

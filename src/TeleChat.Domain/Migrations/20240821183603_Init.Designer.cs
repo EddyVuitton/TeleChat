@@ -12,8 +12,8 @@ using TeleChat.Domain.Context;
 namespace TeleChat.Domain.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20240810203131_Initial")]
-    partial class Initial
+    [Migration("20240821183603_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace TeleChat.Domain.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.GroupChat", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.GroupChat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,10 +45,10 @@ namespace TeleChat.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GroupChat");
+                    b.ToTable("GroupChat", (string)null);
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.Message", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,12 +62,12 @@ namespace TeleChat.Domain.Migrations
                     b.Property<int>("GroupChatId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MessageTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("TypeId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -76,14 +76,14 @@ namespace TeleChat.Domain.Migrations
 
                     b.HasIndex("GroupChatId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("MessageTypeId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.MessageType", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.MessageType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,10 +100,10 @@ namespace TeleChat.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MessageType");
+                    b.ToTable("MessageType", (string)null);
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.User", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,10 +131,10 @@ namespace TeleChat.Domain.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.UserGroupChat", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.UserGroupChat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -157,27 +157,27 @@ namespace TeleChat.Domain.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGroupChat");
+                    b.ToTable("UserGroupChat", (string)null);
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.Message", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.Message", b =>
                 {
-                    b.HasOne("TeleChat.Domain.Entities.GroupChat", "GroupChat")
+                    b.HasOne("TeleChat.Domain.Models.Entities.GroupChat", "GroupChat")
                         .WithMany()
                         .HasForeignKey("GroupChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TeleChat.Domain.Entities.MessageType", "MessageType")
+                    b.HasOne("TeleChat.Domain.Models.Entities.MessageType", "MessageType")
                         .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("MessageTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TeleChat.Domain.Entities.User", "User")
+                    b.HasOne("TeleChat.Domain.Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("GroupChat");
@@ -187,18 +187,18 @@ namespace TeleChat.Domain.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TeleChat.Domain.Entities.UserGroupChat", b =>
+            modelBuilder.Entity("TeleChat.Domain.Models.Entities.UserGroupChat", b =>
                 {
-                    b.HasOne("TeleChat.Domain.Entities.GroupChat", "GroupChat")
+                    b.HasOne("TeleChat.Domain.Models.Entities.GroupChat", "GroupChat")
                         .WithMany()
                         .HasForeignKey("GroupChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("TeleChat.Domain.Entities.User", "User")
+                    b.HasOne("TeleChat.Domain.Models.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("GroupChat");

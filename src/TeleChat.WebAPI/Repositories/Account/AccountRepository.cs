@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Context;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
 using TeleChat.WebAPI.Helpers;
 using TeleChat.WebAPI.Options.JWT;

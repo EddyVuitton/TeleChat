@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeleChat.Domain.Dtos;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Repositories.Main;
 
 namespace TeleChat.WebAPI.Controllers;

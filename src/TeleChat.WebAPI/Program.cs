@@ -1,4 +1,6 @@
+using Swashbuckle.AspNetCore.SwaggerUI;
 using TeleChat.WebAPI.Extensions;
+using TeleChat.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,26 @@ builder.AddRepositories();
 
 var app = builder.Build();
 
-await app.AddMiddlewareAsync();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.DefaultModelsExpandDepth(-1);
+        c.DocExpansion(DocExpansion.None);
+        c.EnableTryItOutByDefault();
+    });
+    await app.ReMigrateDatabaseAsync();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.MapHub<ChatHub>("/Chat");
 
 app.Run();

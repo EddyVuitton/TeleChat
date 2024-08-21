@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 using TeleChat.Domain.Auth;
-using TeleChat.Domain.Entities;
+using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
 
 namespace TeleChat.WebUI.Services.Account;
