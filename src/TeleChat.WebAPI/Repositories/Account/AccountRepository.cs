@@ -19,12 +19,12 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
 
     public async Task<UserToken> LoginAsync(string login, string password, string issuer, string audience)
     {
-        var user = await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login) ?? throw new Exception("Nie znaleziono użytkownika o podanym loginie");
-        var hashedPassword = AuthHelper.HashPassword(password);
+        var user = await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login)
+            ?? throw new Exception("Nie znaleziono użytkownika o podanym loginie");
 
-        var result = user.Password == hashedPassword;
+        var verified = AuthHelper.Verify(password, user.Password);
 
-        if (result)
+        if (verified)
         {
             var jtwKey = _jwtOptions.Value.Key;
             var claims = new List<Claim>()
