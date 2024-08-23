@@ -1,16 +1,28 @@
-﻿using Newtonsoft.Json;
-using System.Text;
-using TeleChat.Domain.Dtos;
+using Microsoft.AspNetCore.SignalR.Client;
 using TeleChat.Domain.Models.Entities;
+using TeleChat.Domain;
+using Newtonsoft.Json;
+using System.Text;
+using Newtonsoft.Json.Linq;
 
-namespace TeleChat.WebUI.Services.Main;
+namespace TeleChat.WebUI.Hub;
 
-public class MainService(HttpClient httpClient) : IMainService
+public class HubService(HttpClient httpClient) : IHubService
 {
     private readonly HttpClient _httpClient = httpClient;
-    private const string _MainRoute = "api/Main";
+    private const string _HubRoute = "api/Hub";
 
-    #region Publics
+    public HubConnection CreateHubConnection(string token)
+    {
+        var hubConnection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:44362/Chat", options =>
+            {
+                options.AccessTokenProvider = async () => await Task.FromResult(token);
+            })
+            .Build();
+
+        return hubConnection;
+    }
 
     public async Task AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
     {
@@ -21,7 +33,7 @@ public class MainService(HttpClient httpClient) : IMainService
         };
 
         string queryString = string.Join("&", parameters);
-        string url = $"{_MainRoute}/AddConnectionToGroupAsync?{queryString}";
+        string url = $"{_HubRoute}/AddConnectionToGroupAsync?{queryString}";
 
         var response = await _httpClient.PostAsync(url, null);
         response.EnsureSuccessStatusCode();
@@ -32,7 +44,7 @@ public class MainService(HttpClient httpClient) : IMainService
         var json = JsonConvert.SerializeObject(message);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync($"{_MainRoute}/SendMessageAsync", content);
+        var response = await _httpClient.PostAsync($"{_HubRoute}/SendMessageAsync", content);
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -43,7 +55,7 @@ public class MainService(HttpClient httpClient) : IMainService
 
     public async Task<List<MessageType>> GetMessageTypesAsync()
     {
-        string url = $"{_MainRoute}/GetMessageTypesAsync";
+        string url = $"{_HubRoute}/GetMessageTypesAsync";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
@@ -55,7 +67,7 @@ public class MainService(HttpClient httpClient) : IMainService
 
     public async Task<List<UserGroupChat>> GetUserGroupChatsAsync(int userId)
     {
-        string url = $"{_MainRoute}/GetUserGroupChatsAsync?userId={userId}";
+        string url = $"{_HubRoute}/GetUserGroupChatsAsync?userId={userId}";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
@@ -65,5 +77,15 @@ public class MainService(HttpClient httpClient) : IMainService
         return deserialisedResponse;
     }
 
-    #endregion
+    public async Task<GroupChat> GetDefaultGroupChatAsync()
+    {
+        string url = $"{_HubRoute}/GetDefaultGroupChat";
+        var response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var deserialisedResponse = JsonConvert.DeserializeObject<GroupChat>(responseContent) ?? new();
+
+        return deserialisedResponse;
+    }
 }

@@ -4,10 +4,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
-using TeleChat.Domain.Context;
+using TeleChat.Domain;
+using TeleChat.WebAPI.Account;
+using TeleChat.WebAPI.Hub;
 using TeleChat.WebAPI.Options.JWT;
-using TeleChat.WebAPI.Repositories.Account;
-using TeleChat.WebAPI.Repositories.Main;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -67,7 +67,7 @@ public static class BuilderExtensions
 
     public static void AddRepositories(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<IMainRepository, MainRepository>();
+        builder.Services.AddScoped<IHubRepository, HubRepository>();
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
     }
 

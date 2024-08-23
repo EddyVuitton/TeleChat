@@ -1,9 +1,10 @@
-﻿namespace TeleChat.Domain.Dtos;
+﻿namespace TeleChat.Domain;
 
 public record MessageDto(
-	string Text,
+    string Text,
     string ConnectionId,
     int MessageTypeId,
     int UserId,
-    int GroupChatId
+    int GroupChatId,
+    string UserName
 );

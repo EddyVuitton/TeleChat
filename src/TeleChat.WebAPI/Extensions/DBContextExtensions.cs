@@ -1,4 +1,4 @@
-﻿using TeleChat.Domain.Context;
+﻿using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Helpers;
 

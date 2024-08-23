@@ -4,9 +4,8 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain.Forms;
+using TeleChat.WebUI.Account;
 using TeleChat.WebUI.Auth;
-using TeleChat.WebUI.Pages;
-using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
 
@@ -20,7 +19,6 @@ public partial class LoginDialog
     [CascadingParameter] public MudDialogInstance MudDialog { get; private init; } = null!;
 
     [Parameter] public RegisterAccountForm? RegisterAccountForm { get; set; }
-    [Parameter] public Home? HomePage { get; set; }
 
     private readonly LoginAccountForm _model = new();
 
@@ -42,8 +40,6 @@ public partial class LoginDialog
 
             await LoginService.LoginAsync(response);
             
-            HomePage?.SetIsLoggedIn(true, loginForm.Login);
-
             Cancel();
         }
         catch (Exception ex)

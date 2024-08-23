@@ -2,16 +2,15 @@
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
-using TeleChat.WebAPI.Repositories.Account;
 
-namespace TeleChat.WebAPI.Controllers;
+namespace TeleChat.WebAPI.Account;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountController(IAccountRepository accountRepository, ILogger<MainController> logger) : ControllerBase
+public class AccountController(IAccountRepository accountRepository, ILogger<AccountController> logger) : ControllerBase
 {
     private readonly IAccountRepository _accountRepository = accountRepository;
-    private readonly ILogger<MainController> _logger = logger;
+    private readonly ILogger<AccountController> _logger = logger;
 
     [HttpPost("LoginAsync")]
     public async Task<ActionResult<UserToken>> LoginAsync(string login, string password, string issuer, string audience)
@@ -49,6 +48,27 @@ public class AccountController(IAccountRepository accountRepository, ILogger<Mai
         try
         {
             var result = await _accountRepository.GetUserByLoginAsync(login);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w znalezieniu użytkownika");
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetToken")]
+    public UserToken GetToken(string issuer, string audience)
+    {
+        return _accountRepository.GetToken(issuer, audience);
+    }
+
+    [HttpPost("CreateUser")]
+    public async Task<ActionResult<User>> CreateUser(string name)
+    {
+        try
+        {
+            var result = await _accountRepository.CreateUser(name);
             return Ok(result);
         }
         catch (Exception ex)

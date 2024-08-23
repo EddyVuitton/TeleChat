@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using TeleChat.Domain.Auth;
-using TeleChat.Domain.Context;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
 using TeleChat.WebAPI.Helpers;
 using TeleChat.WebAPI.Options.JWT;
+using TeleChat.Domain;
 
-namespace TeleChat.WebAPI.Repositories.Account;
+namespace TeleChat.WebAPI.Account;
 
 public class AccountRepository(DBContext context, IOptions<JWTOptions> options) : IAccountRepository
 {
@@ -65,7 +65,43 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
         await _context.SaveChangesAsync();
     }
 
-    public async Task<User?> GetUserByLoginAsync(string login) => await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login);
+    public async Task<User?> GetUserByLoginAsync(string login)
+    {
+        return await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login);
+    }
+
+    public UserToken GetToken(string issuer, string audience)
+    {
+        var jtwKey = _jwtOptions.Value.Key;
+        var claims = new List<Claim>();
+
+        var token = AuthHelper.BuildToken(claims, issuer, audience, jtwKey);
+
+        return token;
+    }
+
+    public async Task<User?> CreateUser(string name)
+    {
+        var checkIfUserExists = await _context.User.FirstOrDefaultAsync(x => x.Name == name);
+
+        if (checkIfUserExists is not null)
+        {
+            return checkIfUserExists;
+        }
+
+        var newUser = new User()
+        {
+            Name = name,
+            Login = name,
+            Password = AuthHelper.HashPassword(name),
+            IsActive = true
+        };
+
+        await _context.AddAsync(newUser);
+        await _context.SaveChangesAsync();
+
+        return newUser;
+    }
 
     #endregion
 }

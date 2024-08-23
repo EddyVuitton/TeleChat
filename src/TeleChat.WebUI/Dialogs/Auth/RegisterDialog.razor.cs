@@ -4,8 +4,7 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain.Forms;
-using TeleChat.WebUI.Services.Account;
-using TeleChat.WebUI.Services.Main;
+using TeleChat.WebUI.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
 

@@ -1,23 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeleChat.Domain.Dtos;
+using Microsoft.EntityFrameworkCore;
+using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
-using TeleChat.WebAPI.Repositories.Main;
 
-namespace TeleChat.WebAPI.Controllers;
+namespace TeleChat.WebAPI.Hub;
 
 [ApiController]
 [Route("api/[controller]")]
-public class MainController(IMainRepository mainRepository, ILogger<MainController> logger) : ControllerBase
+public class HubController(IHubRepository repository, ILogger<HubController> logger, DBContext context) : ControllerBase
 {
-    private readonly IMainRepository _mainRepository = mainRepository;
-    private readonly ILogger<MainController> _logger = logger;
+    private readonly IHubRepository _repository = repository;
+    private readonly ILogger<HubController> _logger = logger;
+    private readonly DBContext _context = context;
 
     [HttpPost("AddConnectionToGroupAsync")]
     public async Task<ActionResult> AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
     {
         try
         {
-            await _mainRepository.AddConnectionToGroupAsync(connectionId, groupChatGuid);
+            await _repository.AddConnectionToGroupAsync(connectionId, groupChatGuid);
             return Ok();
         }
         catch (Exception ex)
@@ -32,7 +33,7 @@ public class MainController(IMainRepository mainRepository, ILogger<MainControll
     {
         try
         {
-            var result = await _mainRepository.SendMessageAsync(message);
+            var result = await _repository.SendMessageAsync(message);
             return Ok(result);
         }
         catch (Exception ex)
@@ -47,7 +48,7 @@ public class MainController(IMainRepository mainRepository, ILogger<MainControll
     {
         try
         {
-            var result = await _mainRepository.GetMessageTypesAsync();
+            var result = await _repository.GetMessageTypesAsync();
             return Ok(result);
         }
         catch (Exception ex)
@@ -62,7 +63,7 @@ public class MainController(IMainRepository mainRepository, ILogger<MainControll
     {
         try
         {
-            var result = await _mainRepository.GetUserGroupChatsAsync(userId);
+            var result = await _repository.GetUserGroupChatsAsync(userId);
             return Ok(result);
         }
         catch (Exception ex)
@@ -70,5 +71,11 @@ public class MainController(IMainRepository mainRepository, ILogger<MainControll
             _logger.LogError(ex, "Błąd w pobraniu grup użytkownika");
             return Problem(ex.Message);
         }
+    }
+
+    [HttpGet("GetDefaultGroupChat")]
+    public async Task<ActionResult<GroupChat>> GetDefaultGroupChat()
+    {
+        return await _context.GroupChat.FirstAsync();
     }
 }

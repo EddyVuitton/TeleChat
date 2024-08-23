@@ -2,7 +2,7 @@
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Models.Configurations;
 
-namespace TeleChat.Domain.Context;
+namespace TeleChat.Domain;
 
 public class DBContext(DbContextOptions<DBContext> options) : DbContext(options)
 {

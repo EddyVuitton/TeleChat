@@ -4,8 +4,9 @@ using System.Text;
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
+using static MudBlazor.CategoryTypes;
 
-namespace TeleChat.WebUI.Services.Account;
+namespace TeleChat.WebUI.Account;
 
 public class AccountService(HttpClient httpClient) : IAccountService
 {
@@ -52,6 +53,41 @@ public class AccountService(HttpClient httpClient) : IAccountService
         string url = $"{_AccountRoute}/GetUserByLoginAsync?login={login}";
 
         var response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var deserialisedResponse = JsonConvert.DeserializeObject<User>(responseContent);
+
+        return deserialisedResponse;
+    }
+
+    public async Task<UserToken> GetTokenAsync()
+    {
+        var (issuer, audience) = GetIssuerAndAudience();
+
+        var parameters = new List<string>()
+        {
+            $"issuer={issuer}",
+            $"audience={audience}"
+        };
+
+        string queryString = string.Join("&", parameters);
+        string url = $"{_AccountRoute}/GetToken?{queryString}";
+
+        var response = await _httpClient.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var deserialisedResponse = JsonConvert.DeserializeObject<UserToken>(responseContent);
+
+        return deserialisedResponse ?? new();
+    }
+
+    public async Task<User?> CreateUser(string name)
+    {
+        string url = $"{_AccountRoute}/CreateUser?name={name}";
+
+        var response = await _httpClient.PostAsync(url, null);
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();

@@ -2,56 +2,23 @@
 
 <PageTitle>Home</PageTitle>
 
-<CascadingAuthenticationState>
-    <AuthorizeView>
-        <Authorized>
-            <MudText Typo="Typo.h2">Zautoryzowany @(_user.Name)</MudText>
-        </Authorized>
-        <NotAuthorized>
-            <MudText Typo="Typo.h2">Niezautoryzowany (@_isLoggedIn)</MudText>
-        </NotAuthorized>
-    </AuthorizeView>
-    <MudButton OnClick="LogOut" Variant="Variant.Filled" Color="Color.Primary">Wyloguj się</MudButton>
-    <MudButton OnClick="Login" Variant="Variant.Filled" Color="Color.Primary">Zaloguj się</MudButton>
-    <MudButton OnClick="Register" Variant="Variant.Filled" Color="Color.Primary">Zarejestruj się</MudButton>
-</CascadingAuthenticationState>
-
 <div class="d-flex justify-center" style="width: 100%; height: 100%; padding-top: 2%;">
     <div class="chat-container">
         <div class="d-flex">
             <MudTextField @bind-Value="_userName"
                           Placeholder="Your name..."
                           Immediate="true"
-                          Disabled="true" />
+                          Disabled="false" />
             <MudTextField @bind-Value="_groupName"
                           Placeholder="Group name to connect..."
-                          Immediate="true"
-                          Disabled="true" />
+                          Immediate="false"
+                          Disabled="false" />
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
         </div>
-        <div id="chat" class="chat-message-container">
-            @{
-                foreach (var message in _messages.OrderBy(x => x.Created))
-                {
-                    var id = message.Id;
-                    var isLeft = message.User.Id != _user.Id;
-                    var messageTimestamp = message.Created.ToString("HH:mm");
-
-                    var messageClass = $"message {(isLeft ? "message-left" : "message-right")}";
-                    var messageTimestampStyle = isLeft ? "#959595" : "#bbb0ee";
-
-                    <div class="@messageClass">
-                        @if (isLeft)
-                        {
-                            <div style="color: #935bd8;">@message.User.Name</div>
-                        }
-                        <div>@(message.Text)</div>
-
-                        <div class="message-timestamp" style="@messageTimestampStyle">@(messageTimestamp)</div>
-                    </div>
-                }
-            }
-        </div>
+        @if (_user is not null)
+        {
+            <ChatBox @ref="_chatBox" Messages="_messages" User="_user" />
+        }
         <div>
             <EditForm Model="_newMessageInput" OnValidSubmit="SendMessageAsync">
                 <MudTextField @bind-Value="_newMessageInput"

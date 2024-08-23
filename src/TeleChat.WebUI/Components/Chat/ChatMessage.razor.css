@@ -1,24 +1,4 @@
-.chat-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.chat-message-container {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    width: 40vw;
-    height: 60vh;
-    overflow-y: scroll;
-    border: 1px solid red;
-}
-
-.chat-input-message {
-    border-radius: 10px !important;
-    border: 1px solid red;
-}
-
-.message {
+﻿.message {
     max-width: 55%;
     min-width: 40px;
     margin: 5px 0;

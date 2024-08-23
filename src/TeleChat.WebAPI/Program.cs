@@ -1,6 +1,6 @@
 using Swashbuckle.AspNetCore.SwaggerUI;
 using TeleChat.WebAPI.Extensions;
-using TeleChat.WebAPI.Hubs;
+using TeleChat.WebAPI.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
 
