@@ -5,18 +5,19 @@ using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain;
 using TeleChat.WebUI.Components.Chat;
-using TeleChat.WebUI.Hub;
-using TeleChat.WebUI.Account;
+using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.WebUI.Pages;
 
 public partial class Home : IAsyncDisposable
 {
-    [Inject] public IJSRuntime JS { get; set; } = null!;
-    [Inject] public IAccountService AccountService { get; init; } = null!;
-    [Inject] public IHubService HubService { get; set; } = null!;
+    [Inject] public IJSRuntime JS { get; private init; } = null!;
+    [Inject] public IAccountService AccountService { get; private init; } = null!;
+    [Inject] public IHubService HubService { get; private init; } = null!;
 
     private HubConnection? hubConnection;
+    private ChatBox _chatBox = new();
 
     private string _newMessageInput = string.Empty;
     private string _groupName = string.Empty;
@@ -28,8 +29,6 @@ public partial class Home : IAsyncDisposable
     private User? _user;
     private GroupChat _groupChat = new();
     private readonly List<Message> _messages = [];
-
-    private ChatBox _chatBox = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,7 +87,7 @@ public partial class Home : IAsyncDisposable
                     AddMessage(message);
                     InvokeAsync(_chatBox.RefreshChatAsync);
                 });
-                
+
                 await hubConnection.StartAsync();
 
                 _connectionId = hubConnection.ConnectionId ?? string.Empty;
@@ -118,7 +117,7 @@ public partial class Home : IAsyncDisposable
                     _newMessageInput,
                     _connectionId,
                     1,
-                    _user.Id,
+                    _user!.Id,
                     1,
                     _userName
                 );

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
-namespace TeleChat.WebUI.Hub;
+namespace TeleChat.WebUI.Services.Hub;
 
 public class HubService(HttpClient httpClient) : IHubService
 {

@@ -4,17 +4,17 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain.Forms;
-using TeleChat.WebUI.Account;
 using TeleChat.WebUI.Auth;
+using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
 
 public partial class LoginDialog
 {
-    [Inject] public IAccountService AccountService { get; init; } = null!;
-    [Inject] public ILoginService LoginService { get; init; } = null!;
-    [Inject] public IDialogService DialogService { get; init; } = null!;
-    [Inject] public IJSRuntime JS { get; set; } = null!;
+    [Inject] public IAccountService AccountService { get; private init; } = null!;
+    [Inject] public ILoginService LoginService { get; private init; } = null!;
+    [Inject] public IDialogService DialogService { get; private init; } = null!;
+    [Inject] public IJSRuntime JS { get; private init; } = null!;
 
     [CascadingParameter] public MudDialogInstance MudDialog { get; private init; } = null!;
 
@@ -44,7 +44,6 @@ public partial class LoginDialog
         }
         catch (Exception ex)
         {
-            //SnackbarService.Show(ex.Message, Severity.Error, true, false);
             await JS.LogAsync(ex);
         }
     }

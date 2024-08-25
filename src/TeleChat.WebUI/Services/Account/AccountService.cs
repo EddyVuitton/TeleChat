@@ -6,7 +6,7 @@ using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
 using static MudBlazor.CategoryTypes;
 
-namespace TeleChat.WebUI.Account;
+namespace TeleChat.WebUI.Services.Account;
 
 public class AccountService(HttpClient httpClient) : IAccountService
 {

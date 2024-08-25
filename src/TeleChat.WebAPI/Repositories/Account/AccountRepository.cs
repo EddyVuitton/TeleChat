@@ -8,7 +8,7 @@ using TeleChat.WebAPI.Helpers;
 using TeleChat.WebAPI.Options.JWT;
 using TeleChat.Domain;
 
-namespace TeleChat.WebAPI.Account;
+namespace TeleChat.WebAPI.Repositories.Account;
 
 public class AccountRepository(DBContext context, IOptions<JWTOptions> options) : IAccountRepository
 {

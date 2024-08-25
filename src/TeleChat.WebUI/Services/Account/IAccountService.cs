@@ -2,7 +2,7 @@
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
 
-namespace TeleChat.WebUI.Account;
+namespace TeleChat.WebUI.Services.Account;
 
 public interface IAccountService
 {

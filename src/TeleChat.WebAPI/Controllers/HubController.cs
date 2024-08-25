@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
+using TeleChat.WebAPI.Repositories.Hub;
 
-namespace TeleChat.WebAPI.Hub;
+namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

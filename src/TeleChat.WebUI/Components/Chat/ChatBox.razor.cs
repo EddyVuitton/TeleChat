@@ -7,8 +7,8 @@ namespace TeleChat.WebUI.Components.Chat;
 
 public partial class ChatBox
 {
-    [Inject] public IJSRuntime JS { get; set; } = null!;
-    [Inject] public IScrollManager ScrollManager { get; set; } = null!;
+    [Inject] public IJSRuntime JS { get; private init; } = null!;
+    [Inject] public IScrollManager ScrollManager { get; private init; } = null!;
 
     [Parameter] public List<Message> Messages { get; set; } = [];
     [Parameter] public User User { get; set; } = new();

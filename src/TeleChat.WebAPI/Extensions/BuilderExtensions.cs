@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using TeleChat.Domain;
-using TeleChat.WebAPI.Account;
-using TeleChat.WebAPI.Hub;
 using TeleChat.WebAPI.Options.JWT;
+using TeleChat.WebAPI.Repositories.Hub;
+using TeleChat.WebAPI.Repositories.Account;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -71,14 +73,17 @@ public static class BuilderExtensions
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
     }
 
-    public static async Task ReMigrateDatabaseAsync(this WebApplication app)
+    public static async Task MigrateDatabaseIfNotExistsAsync(this WebApplication app)
     {
         using var serviceScope = app.Services.CreateScope();
         var context = serviceScope.ServiceProvider.GetService<DBContext>()!;
 
-        context.Database.EnsureDeleted(); //zdropuj bazę danych, jeżeli istnieje...
-        context.Database.Migrate(); //i stwórz kontekst bazy danych
+        var doesDatabaseExist = (context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator)?.Exists() ?? false;
 
-        await context.AddSeedDataAsync();
+        if (!doesDatabaseExist)
+        {
+            await context.Database.MigrateAsync();
+            await context.AddSeedDataAsync();
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 
-namespace TeleChat.WebAPI.Hub;
+namespace TeleChat.WebAPI.Repositories.Hub;
 
 public interface IHubRepository
 {

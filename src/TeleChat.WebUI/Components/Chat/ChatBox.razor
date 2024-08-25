@@ -2,7 +2,6 @@
     @{
         foreach (var message in Messages.OrderBy(x => x.Created))
         {
-            var id = message.Id;
             var isLeft = message.User.Id != User.Id;
             var messageTimestamp = message.Created.ToString("HH:mm");
 

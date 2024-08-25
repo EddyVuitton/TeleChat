@@ -3,8 +3,8 @@ using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 using TeleChat.Server.Options.WebAPI;
 using TeleChat.WebUI.Auth;
-using TeleChat.WebUI.Hub;
-using TeleChat.WebUI.Account;
+using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.Server.Extensions;
 

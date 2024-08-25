@@ -15,10 +15,7 @@
                           Disabled="false" />
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
         </div>
-        @if (_user is not null)
-        {
-            <ChatBox @ref="_chatBox" Messages="_messages" User="_user" />
-        }
+        <ChatBox @ref="_chatBox" Messages="_messages" User="_user" />
         <div>
             <EditForm Model="_newMessageInput" OnValidSubmit="SendMessageAsync">
                 <MudTextField @bind-Value="_newMessageInput"

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain;
 
-namespace TeleChat.WebUI.Hub;
+namespace TeleChat.WebUI.Services.Hub;
 
 public interface IHubService
 {

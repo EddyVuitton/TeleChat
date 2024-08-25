@@ -2,8 +2,9 @@
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
+using TeleChat.WebAPI.Repositories.Account;
 
-namespace TeleChat.WebAPI.Account;
+namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

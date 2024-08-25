@@ -4,15 +4,15 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain.Forms;
-using TeleChat.WebUI.Account;
+using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
 
 public partial class RegisterDialog
 {
-    [Inject] public IAccountService AccountService { get; init; } = null!;
-    [Inject] public IDialogService DialogService { get; init; } = null!;
-    [Inject] public IJSRuntime JS { get; set; } = null!;
+    [Inject] public IAccountService AccountService { get; private init; } = null!;
+    [Inject] public IDialogService DialogService { get; private init; } = null!;
+    [Inject] public IJSRuntime JS { get; private init; } = null!;
 
     [CascadingParameter] public MudDialogInstance MudDialog { get; private init; } = null!;
 
@@ -25,14 +25,10 @@ public partial class RegisterDialog
             var registerForm = context.Model as RegisterAccountForm ?? new();
             await AccountService.RegisterAsync(registerForm);
 
-            //SnackbarService.Show("Konto zostało poprawnie zarejestrowane", Severity.Success, true, false);
             await OpenLoginDialog();
         }
         catch (Exception ex)
         {
-            //SnackbarService.Show("Konto nie zostało zarejestrowane", Severity.Warning, true, false);
-            //SnackbarService.Show(ex.Message, Severity.Error);
-
             await JS.LogAsync(ex);
         }
     }

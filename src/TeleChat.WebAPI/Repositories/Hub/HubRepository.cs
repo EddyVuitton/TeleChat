@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
+using TeleChat.WebAPI.Hub;
 
-namespace TeleChat.WebAPI.Hub;
+namespace TeleChat.WebAPI.Repositories.Hub;
 
 public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext context) : IHubRepository
 {
