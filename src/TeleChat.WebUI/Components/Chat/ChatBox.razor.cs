@@ -34,7 +34,7 @@ public partial class ChatBox
                     var message = Messages[0];
                     message.Text = "dwadioawdjioawdwadioawdj";
                     message.UserId = -1;
-                    message.User.Name = "Application";
+                    message.User = new User() { Name = "Application" };
                     message.Created = Messages.Min(x => x.Created).AddSeconds(-1);
 
                     AddMessage(message);

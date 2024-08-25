@@ -3,7 +3,6 @@ using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain;
 using Newtonsoft.Json;
 using System.Text;
-using Newtonsoft.Json.Linq;
 
 namespace TeleChat.WebUI.Services.Hub;
 

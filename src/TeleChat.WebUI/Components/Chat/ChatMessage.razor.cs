@@ -1,20 +1,28 @@
 ﻿using Microsoft.AspNetCore.Components;
+using TeleChat.Domain.Models.Entities;
 
 namespace TeleChat.WebUI.Components.Chat;
 
 public partial class ChatMessage
 {
-    [Parameter] public bool IsLeft { get; set; }
-    [Parameter] public string? UserName { get; set; }
-    [Parameter] public string Text { get; set; } = string.Empty;
-    [Parameter] public string TimeStamp { get; set; } = string.Empty;
+    [Parameter] public Message? Message { get; init; }
+    [Parameter] public User? LoggedUser { get; init; }
 
+    private bool _isLeft;
+    private string _timeStamp = string.Empty;
     private string _class = string.Empty;
     private string _timeStampStyle = string.Empty;
 
     protected override void OnInitialized()
     {
-        _class = "message " + (IsLeft ? "message-left" : "message-right");
-        _timeStampStyle = "color: " + (IsLeft ? "#959595" : "#bbb0ee");
+        if (Message is null || LoggedUser is null)
+        {
+            return;
+        }
+
+        _isLeft = Message.User?.Id != LoggedUser.Id;
+        _timeStamp = Message.Created.ToString("HH:mm");
+        _class = "message " + (_isLeft ? "message-left" : "message-right");
+        _timeStampStyle = "color: " + (_isLeft ? "#959595" : "#bbb0ee");
     }
 }

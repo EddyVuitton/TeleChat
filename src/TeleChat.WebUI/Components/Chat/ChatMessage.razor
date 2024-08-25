@@ -1,9 +1,12 @@
-﻿<div class="@_class">
-    @if (IsLeft)
-    {
-        <div style="color: #935bd8;">@UserName</div>
-    }
-    <div>@Text</div>
+﻿@if (Message is not null && LoggedUser is not null)
+{
+    <div class="@_class">
+        @if (_isLeft)
+        {
+            <div style="color: #935bd8;">@Message.User?.Name</div>
+        }
+        <div>@Message.Text</div>
 
-    <div class="message-timestamp" style="@_timeStampStyle">@TimeStamp</div>
-</div>
+        <div class="message-timestamp" style="@_timeStampStyle">@_timeStamp</div>
+    </div>
+}

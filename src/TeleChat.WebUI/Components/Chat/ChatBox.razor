@@ -2,13 +2,7 @@
     @{
         foreach (var message in Messages.OrderBy(x => x.Created))
         {
-            var isLeft = message.User.Id != User.Id;
-            var messageTimestamp = message.Created.ToString("HH:mm");
-
-            <ChatMessage IsLeft="isLeft"
-                         UserName="@message.User.Name"
-                         Text="@message.Text"
-                         TimeStamp="@messageTimestamp" />
+            <ChatMessage Message=@message LoggedUser="User" />
         }
     }
 </div>
