@@ -16,14 +16,12 @@
             <MudButton OnClick="Connect" Variant="Variant.Outlined" Disabled="@(IsConnected)">Connect</MudButton>
         </div>
         <ChatBox @ref="_chatBox" Messages="_messages" User="_user" />
-        <div>
-            <EditForm Model="_newMessageInput" OnValidSubmit="SendMessageAsync">
-                <MudTextField @bind-Value="_newMessageInput"
-                              T="string"
-                              Placeholder="Message"
-                              AutoFocus="true"
-                              Disabled="!IsConnected" />
-            </EditForm>
-        </div>
+        <EditForm Model="_newMessageInput" OnValidSubmit="SendMessageAsync">
+            <MudTextField @bind-Value="_newMessageInput"
+                          T="string"
+                          Placeholder="Message"
+                          AutoFocus="true"
+                          Disabled="!IsConnected" />
+        </EditForm>
     </div>
 </div>

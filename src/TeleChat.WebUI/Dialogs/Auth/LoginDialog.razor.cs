@@ -57,7 +57,7 @@ public partial class LoginDialog
 
         var options = new DialogOptions
         {
-            CloseOnEscapeKey = false,
+            CloseOnEscapeKey = true,
             NoHeader = true,
             MaxWidth = MaxWidth.Small,
             FullWidth = true

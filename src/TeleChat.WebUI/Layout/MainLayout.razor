@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@using TeleChat.WebUI.Components.Account
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
+    <MudAppBar Style="background-color: #FFFFFF" Elevation="1" Fixed="false" Dense="true">
+        <MudSpacer />
+        <AppBarOptions />
+    </MudAppBar>
     <body>
         @Body
     </body>
