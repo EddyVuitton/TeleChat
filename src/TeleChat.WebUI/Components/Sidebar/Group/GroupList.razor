@@ -1,0 +1,12 @@
+﻿<div class="items-container">
+    <div class="d-flex flex-column items-container-content">
+        @foreach (var i in Groups)
+        {
+            <GroupItem />
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<int> Groups { get; set; } = [];
+}

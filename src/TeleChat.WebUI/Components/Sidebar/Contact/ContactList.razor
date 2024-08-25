@@ -1,0 +1,10 @@
+﻿<div class="d-flex flex-column items-container">
+    @foreach (var i in Contacts)
+    {
+        <ContactItem />
+    }
+</div>
+
+@code {
+    [Parameter] public List<int> Contacts { get; set; } = [];
+}

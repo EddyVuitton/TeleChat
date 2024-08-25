@@ -1,0 +1,35 @@
+﻿.item-container {
+    width: 100%;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+    .item-container:hover {
+        background-color: #282828;
+    }
+
+.item-name {
+    width: inherit;
+    font-weight: bold;
+    color: #D3D3D3;
+    font-size: 20px;
+}
+
+.item-time {
+    width: fit-content;
+    color: #D3D3D3;
+    font-size: 13px;
+}
+
+.item-last-message {
+    width: 100%;
+    color: darkgrey;
+    font-size: 15px;
+}
+
+.hide-on-overflow {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
