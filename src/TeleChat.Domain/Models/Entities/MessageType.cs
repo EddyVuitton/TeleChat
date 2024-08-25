@@ -5,6 +5,4 @@ public class MessageType
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? DefaultStyle { get; set; }
-
-    //public virtual ICollection<Message> Messages { get; set; } = [];
 }

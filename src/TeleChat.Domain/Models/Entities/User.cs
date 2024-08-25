@@ -8,7 +8,4 @@ public class User
     public string Password { get; set; } = string.Empty;
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public bool IsActive { get; set; } = true;
-
-    //public virtual ICollection<Message> Messages { get; set; } = [];
-    //public virtual ICollection<UserGroupChat> UserGroupChats { get; set; } = [];
 }

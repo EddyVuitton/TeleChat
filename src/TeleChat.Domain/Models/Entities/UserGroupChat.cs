@@ -7,6 +7,6 @@ public class UserGroupChat
     public int GroupChatId { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
-    public virtual User User { get; set; } = new();
-    public virtual GroupChat GroupChat { get; set; } = new();
+    public virtual User? User { get; set; }
+    public virtual GroupChat? GroupChat { get; set; }
 }

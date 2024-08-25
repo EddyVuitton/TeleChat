@@ -9,7 +9,7 @@ public class Message
     public int GroupChatId { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
 
-    public virtual MessageType MessageType { get; set; } = new();
-    public virtual User User { get; set; } = new();
-    public virtual GroupChat GroupChat { get; set; } = new();
+    public virtual MessageType? MessageType { get; set; }
+    public virtual User? User { get; set; }
+    public virtual GroupChat? GroupChat { get; set; }
 }
