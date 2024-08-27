@@ -4,7 +4,8 @@ using Microsoft.JSInterop;
 using MudBlazor;
 using TeleChat.Domain.Extensions;
 using TeleChat.Domain.Forms;
-using TeleChat.WebUI.Auth;
+//using TeleChat.WebUI.Auth;
+using TeleChat.WebUI.Layout;
 using TeleChat.WebUI.Services.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
@@ -12,13 +13,14 @@ namespace TeleChat.WebUI.Dialogs.Auth;
 public partial class LoginDialog
 {
     [Inject] public IAccountService AccountService { get; private init; } = null!;
-    [Inject] public ILoginService LoginService { get; private init; } = null!;
+    //[Inject] public ILoginService LoginService { get; private init; } = null!;
     [Inject] public IDialogService DialogService { get; private init; } = null!;
     [Inject] public IJSRuntime JS { get; private init; } = null!;
 
     [CascadingParameter] public MudDialogInstance MudDialog { get; private init; } = null!;
 
     [Parameter] public RegisterAccountForm? RegisterAccountForm { get; set; }
+    [Parameter] public MainLayout MainLayout { get; set; } = null!;
 
     private readonly LoginAccountForm _model = new();
 
@@ -35,11 +37,14 @@ public partial class LoginDialog
     {
         try
         {
+            //Tymczasowo na potrzeby rozwoju aplikacji
             var loginForm = context.Model as LoginAccountForm ?? new();
+            var user = await AccountService.CreateUser(loginForm.Login);
             var response = await AccountService.LoginAsync(loginForm);
 
-            await LoginService.LoginAsync(response);
-            
+            //await LoginService.LoginAsync(response);
+            MainLayout.User = user!;
+
             Cancel();
         }
         catch (Exception ex)

@@ -6,7 +6,7 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="d-flex">
+<div class="d-flex" style="width: 100vw; height: 95vh;">
     <div class="side-bar-container">
         @if (_groups.Count > 0)
         {
@@ -20,6 +20,19 @@
                     Contacts
                 </MudText>
                 <ContactList Contacts="_contacts" />
+            </div>
+        }
+    </div>
+    <div class="d-flex justify-center" style="border: 1px solid white; width: 100%; padding: 1% 0px">
+        @if (MainLayout is not null && MainLayout.User?.Name != "")
+        {
+            <div class="d-flex flex-column">
+                <ChatBox />
+                <EditForm>
+                    <MudTextField T="string"
+                                  Placeholder="Message"
+                                  AutoFocus="true" />
+                </EditForm>
             </div>
         }
     </div>

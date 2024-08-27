@@ -40,7 +40,6 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         var userGroupChats = await _context.UserGroupChat
             .Where(x => x.UserId == userId)
             .Include(x => x.GroupChat)
-            .Include(x => x.User)
             .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync();
@@ -90,7 +89,10 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
 
     private async Task SendToGroupAsync(string connectionId, Message message)
     {
-        await _hubContext.Clients.GroupExcept(message.GroupChat.Guid.ToString(), connectionId).ReceiveMessage(message);
+        if (message.GroupChat is not null)
+        {
+            await _hubContext.Clients.GroupExcept(message.GroupChat.Guid.ToString(), connectionId).ReceiveMessage(message);
+        }
     }
 
     #endregion
