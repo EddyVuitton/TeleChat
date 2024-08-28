@@ -15,5 +15,11 @@ public class GroupChatConfiguration : IEntityTypeConfiguration<GroupChat>
         builder.Property(x => x.Name).IsRequired();
         builder.Property(x => x.Guid).IsRequired();
         builder.Property(x => x.Created).IsRequired();
+
+        builder.HasData(new GroupChat()
+        {
+            Id = 1,
+            Name = "Domyślna grupa"
+        });
     }
 }

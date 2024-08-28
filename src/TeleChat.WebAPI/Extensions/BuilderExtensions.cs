@@ -76,14 +76,11 @@ public static class BuilderExtensions
     public static async Task MigrateDatabaseIfNotExistsAsync(this WebApplication app)
     {
         using var serviceScope = app.Services.CreateScope();
-        var context = serviceScope.ServiceProvider.GetService<DBContext>()!;
+        var dbContext = serviceScope.ServiceProvider.GetService<DBContext>();
 
-        var doesDatabaseExist = (context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator)?.Exists() ?? false;
-
-        if (!doesDatabaseExist)
+        if (dbContext is not null)
         {
-            await context.Database.MigrateAsync();
-            await context.AddSeedDataAsync();
+            await dbContext.Database.MigrateAsync();
         }
     }
 }
