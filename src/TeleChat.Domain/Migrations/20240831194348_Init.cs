@@ -4,6 +4,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TeleChat.Domain.Migrations
 {
     /// <inheritdoc />
@@ -50,8 +52,7 @@ namespace TeleChat.Domain.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Login = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,6 +115,30 @@ namespace TeleChat.Domain.Migrations
                         principalTable: "User",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                table: "GroupChat",
+                columns: new[] { "Id", "Created", "Guid", "Name" },
+                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(9182), new Guid("dd1cdaef-ee33-4cdc-8fa1-5285627aeccf"), "Domyślna grupa" });
+
+            migrationBuilder.InsertData(
+                table: "MessageType",
+                columns: new[] { "Id", "DefaultStyle", "Name" },
+                values: new object[,]
+                {
+                    { 1, null, "PlainText" },
+                    { 2, "max-width: 200px; max-height: 200px;", "GIF" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Created", "Login", "Name", "Password" },
+                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo", "Demo", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
+
+            migrationBuilder.InsertData(
+                table: "UserGroupChat",
+                columns: new[] { "Id", "Created", "GroupChatId", "UserId" },
+                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915), 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_GroupChatId",

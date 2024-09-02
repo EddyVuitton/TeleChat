@@ -48,8 +48,8 @@ namespace TeleChat.Domain.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 28, 10, 53, 48, 72, DateTimeKind.Utc).AddTicks(7316),
-                            Guid = new Guid("97831b26-33a2-4967-a124-8c61d9e3e3cb"),
+                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(9182),
+                            Guid = new Guid("dd1cdaef-ee33-4cdc-8fa1-5285627aeccf"),
                             Name = "Domyślna grupa"
                         });
                 });
@@ -133,9 +133,6 @@ namespace TeleChat.Domain.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("text");
@@ -151,6 +148,16 @@ namespace TeleChat.Domain.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212),
+                            Login = "demo",
+                            Name = "Demo",
+                            Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C"
+                        });
                 });
 
             modelBuilder.Entity("TeleChat.Domain.Models.Entities.UserGroupChat", b =>
@@ -177,6 +184,15 @@ namespace TeleChat.Domain.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGroupChat", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915),
+                            GroupChatId = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("TeleChat.Domain.Models.Entities.Message", b =>

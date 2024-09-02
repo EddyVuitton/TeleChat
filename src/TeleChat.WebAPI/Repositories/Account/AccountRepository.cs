@@ -57,8 +57,7 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
         {
             Login = form.Login,
             Name = form.Name,
-            Password = AuthHelper.HashPassword(form.Password),
-            IsActive = true
+            Password = AuthHelper.HashPassword(form.Password)
         };
 
         await _context.User.AddAsync(newUser);
@@ -93,8 +92,7 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
         {
             Name = name,
             Login = name,
-            Password = AuthHelper.HashPassword(name),
-            IsActive = true
+            Password = AuthHelper.HashPassword(name)
         };
 
         await _context.AddAsync(newUser);

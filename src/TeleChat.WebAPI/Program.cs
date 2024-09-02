@@ -21,7 +21,7 @@ if (app.Environment.IsDevelopment())
         c.DocExpansion(DocExpansion.None);
         c.EnableTryItOutByDefault();
     });
-    await app.MigrateDatabaseIfNotExistsAsync();
+    await app.MigrateDatabaseAsync();
 }
 
 app.UseHttpsRedirection();

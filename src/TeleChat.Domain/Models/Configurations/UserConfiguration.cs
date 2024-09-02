@@ -16,6 +16,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Login).IsRequired();
         builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Created).IsRequired();
-        builder.Property(x => x.IsActive).IsRequired();
+
+        builder.HasData(new User
+        {
+            Id = 1,
+            Name = "Demo",
+            Login = "demo",
+            Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C", //demo
+        });
     }
 }

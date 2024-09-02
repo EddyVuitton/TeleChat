@@ -28,5 +28,12 @@ public class UserGroupChatConfiguration : IEntityTypeConfiguration<UserGroupChat
             .WithMany()
             .HasForeignKey(x => x.GroupChatId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasData(new UserGroupChat
+        {
+            Id = 1,
+            UserId = 1,
+            GroupChatId = 1
+        });
     }
 }
