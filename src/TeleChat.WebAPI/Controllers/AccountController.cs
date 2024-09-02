@@ -58,12 +58,6 @@ public class AccountController(IAccountRepository accountRepository, ILogger<Acc
         }
     }
 
-    [HttpGet("GetToken")]
-    public UserToken GetToken(string issuer, string audience)
-    {
-        return _accountRepository.GetToken(issuer, audience);
-    }
-
     [HttpPost("CreateUser")]
     public async Task<ActionResult<User>> CreateUser(string name)
     {

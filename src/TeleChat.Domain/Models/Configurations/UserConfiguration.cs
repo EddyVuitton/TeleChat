@@ -20,8 +20,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasData(new User
         {
             Id = 1,
-            Name = "Demo",
-            Login = "demo",
+            Name = "Konto Demo 1",
+            Login = "demo1",
+            Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C", //demo
+        });
+
+        builder.HasData(new User
+        {
+            Id = 2,
+            Name = "Konto Demo 2",
+            Login = "demo2",
             Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C", //demo
         });
     }

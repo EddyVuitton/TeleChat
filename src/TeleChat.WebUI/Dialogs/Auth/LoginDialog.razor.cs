@@ -40,9 +40,6 @@ public partial class LoginDialog
 
     protected override void OnInitialized()
     {
-        _model.Login = "demo";
-        _model.Password = "demo";
-
         if (RegisterAccountForm is not null)
         {
             _model.Login = RegisterAccountForm.Login;
@@ -58,14 +55,12 @@ public partial class LoginDialog
     {
         try
         {
-            //Tymczasowo na potrzeby rozwoju aplikacji
             var loginForm = context.Model as LoginAccountForm ?? new();
-            var user = await AccountService.CreateUser(loginForm.Login);
             var response = await AccountService.LoginAsync(loginForm);
 
-            if (HomePage is not null)
+            if (HomePage is not null && response is not null)
             {
-                HomePage.LoggedUser = user;
+                HomePage.UserToken = response;
             }
 
             //await LoginService.LoginAsync(response);
@@ -94,6 +89,12 @@ public partial class LoginDialog
         };
 
         DialogService.Show<RegisterDialog>(null, options);
+    }
+
+    private void OnSelectedValueChange(string value)
+    {
+        _model.Login = value;
+        _model.Password = "demo";
     }
 
     #endregion

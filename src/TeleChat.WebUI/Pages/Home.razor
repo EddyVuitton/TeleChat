@@ -6,9 +6,9 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (_loggedUser is not null)
+@if (_userToken is not null)
 {
-    <MudText Typo="Typo.h3">@_loggedUser.Name</MudText>
+    <MudText Typo="Typo.h3">@_userToken.User.Name</MudText>
 }
 
 <div class="d-flex" style="width: 100vw; height: 95vh;">
@@ -29,13 +29,13 @@
         }
     </div>
     <div class="d-flex justify-center" style="border: 1px solid white; width: 100%; padding: 1% 0px">
-        @if (_loggedUser is not null)
+        @if (_userToken is not null)
         {
             <div class="d-flex flex-column">
                 <div>
                     <MudText Typo="Typo.h5" Style="cursor: default;">@_selectedGroupChatName</MudText>
                 </div>
-                <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_loggedUser" />
+                <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_userToken.User" />
                 <EditForm Model="_newMessageText" OnValidSubmit="SendMessageAsync">
                     <MudTextField @bind-Value="_newMessageText"
                                   T="string"

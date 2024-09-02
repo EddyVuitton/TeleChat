@@ -35,5 +35,12 @@ public class UserGroupChatConfiguration : IEntityTypeConfiguration<UserGroupChat
             UserId = 1,
             GroupChatId = 1
         });
+
+        builder.HasData(new UserGroupChat
+        {
+            Id = 2,
+            UserId = 2,
+            GroupChatId = 1
+        });
     }
 }

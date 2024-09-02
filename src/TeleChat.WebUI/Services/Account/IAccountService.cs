@@ -6,7 +6,7 @@ namespace TeleChat.WebUI.Services.Account;
 
 public interface IAccountService
 {
-    Task<UserToken> LoginAsync(LoginAccountForm form);
+    Task<UserToken?> LoginAsync(LoginAccountForm form);
     Task RegisterAsync(RegisterAccountForm form);
     Task<User?> GetUserByLoginAsync(string login);
     Task<UserToken> GetTokenAsync();

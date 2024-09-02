@@ -13,6 +13,14 @@
                 </MudCardContent>
                 <MudCardActions>
                     @* <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary">Zamknij</MudButton> *@
+                    <MudList T="string" SelectedValueChanged="((e) => OnSelectedValueChange(e))">
+                        <MudListItem Text="Konta demo">
+                            <NestedList>
+                                <MudListItem Text="Demo 1" Value='"demo1"' />
+                                <MudListItem Text="Demo 2" Value='"demo2"' />
+                            </NestedList>
+                        </MudListItem>
+                    </MudList>
                     <MudSpacer />
                     <div class="d-flex flex-row gap-x-4">
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary">Zaloguj się</MudButton>

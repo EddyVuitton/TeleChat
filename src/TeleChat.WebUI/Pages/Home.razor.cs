@@ -6,6 +6,7 @@ using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;
 using TeleChat.WebUI.Services.Hub;
+using TeleChat.Domain.Auth;
 
 namespace TeleChat.WebUI.Pages;
 
@@ -21,7 +22,7 @@ public partial class Home
 
     #region Fields
 
-    private User? _loggedUser;
+    private UserToken? _userToken;
     private ChatBox? _selectedChatBox;
 
     private readonly List<GroupChat> _groups = [];
@@ -37,11 +38,11 @@ public partial class Home
 
     #region Properties
 
-    public User? LoggedUser
+    public UserToken? UserToken
     {
         set
         {
-            _loggedUser = value;
+            _userToken = value;
             StateHasChanged();
         }
     }
@@ -52,7 +53,7 @@ public partial class Home
 
     protected override async Task OnInitializedAsync()
     {
-        if (_loggedUser is null)
+        if (_userToken is null)
         {
             await OpenLoginDialog();
         }
@@ -60,9 +61,9 @@ public partial class Home
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!_isUserDataLoaded && _loggedUser is not null)
+        if (!_isUserDataLoaded && _userToken is not null)
         {
-            var userGroupChats = await HubService.GetUserGroupChatsAsync(_loggedUser.Id);
+            var userGroupChats = await HubService.GetUserGroupChatsAsync(_userToken.User.Id);
             foreach (var ugc in userGroupChats)
             {
                 if (ugc.GroupChat is not null)
@@ -92,7 +93,7 @@ public partial class Home
             return;
         }
 
-        if (!_isUserDataLoaded || _loggedUser is null)
+        if (!_isUserDataLoaded || _userToken is null)
         {
             return;
         }
@@ -105,7 +106,7 @@ public partial class Home
         if (_selectedChatBox is not null)
         {
             await _selectedChatBox.DisposeAsync();
-            var connectionId = await _selectedChatBox.ConnectAsync(groupChat);
+            var connectionId = await _selectedChatBox.ConnectAsync(groupChat, _userToken.Token);
 
             if (!string.IsNullOrEmpty(connectionId))
             {

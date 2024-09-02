@@ -6,6 +6,7 @@ using TeleChat.Domain;
 using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Services.Hub;
+using TeleChat.Domain.Auth;
 
 namespace TeleChat.WebUI.Components.Chat;
 
@@ -79,7 +80,7 @@ public partial class ChatBox : IAsyncDisposable
         Messages.Add(message);        
     }
 
-    public async Task<string> ConnectAsync(GroupChat groupChat)
+    public async Task<string> ConnectAsync(GroupChat groupChat, string token)
     {
         GroupChat = groupChat;
 
@@ -87,7 +88,7 @@ public partial class ChatBox : IAsyncDisposable
         {
             try
             {
-                _hubConnection = HubService.CreateHubConnection(string.Empty);
+                _hubConnection = HubService.CreateHubConnection(token);
 
                 _hubConnection.On<Message>("ReceiveMessage", (message) =>
                 {

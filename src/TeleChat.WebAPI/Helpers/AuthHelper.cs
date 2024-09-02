@@ -37,7 +37,7 @@ public static class AuthHelper
         return CryptographicOperations.FixedTimeEquals(hash, inputHash);
     }
 
-    public static UserToken BuildToken(List<Claim>? claims, string? issuer, string? audience, string jwtKey)
+    public static string BuildToken(List<Claim>? claims, string? issuer, string? audience, string jwtKey)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -51,9 +51,6 @@ public static class AuthHelper
             signingCredentials: creds
         );
 
-        return new UserToken()
-        {
-            Token =  new JwtSecurityTokenHandler().WriteToken(token)
-        };
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

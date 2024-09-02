@@ -32,9 +32,13 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
                 new("UserLogin", user.Login)
             };
 
-            var token = AuthHelper.BuildToken(claims, issuer, audience, jtwKey);
+            var userToken = new UserToken()
+            {
+                User = user,
+                Token = AuthHelper.BuildToken(claims, issuer, audience, jtwKey)
+            };
 
-            return token;
+            return userToken;
         }
         else
         {
@@ -67,16 +71,6 @@ public class AccountRepository(DBContext context, IOptions<JWTOptions> options) 
     public async Task<User?> GetUserByLoginAsync(string login)
     {
         return await _context.User.AsNoTracking().FirstOrDefaultAsync(x => x.Login == login);
-    }
-
-    public UserToken GetToken(string issuer, string audience)
-    {
-        var jtwKey = _jwtOptions.Value.Key;
-        var claims = new List<Claim>();
-
-        var token = AuthHelper.BuildToken(claims, issuer, audience, jtwKey);
-
-        return token;
     }
 
     public async Task<User?> CreateUser(string name)

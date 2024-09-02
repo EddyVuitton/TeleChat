@@ -4,17 +4,20 @@ using System.Text;
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
+using Microsoft.JSInterop;
+using TeleChat.WebUI.Extensions;
 
 namespace TeleChat.WebUI.Services.Account;
 
-public class AccountService(HttpClient httpClient) : IAccountService
+public class AccountService(HttpClient httpClient, IJSRuntime js) : IAccountService
 {
     private readonly HttpClient _httpClient = httpClient;
+    private readonly IJSRuntime _js = js;
     private const string _AccountRoute = "api/Account";
 
     #region PublicMethods
 
-    public async Task<UserToken> LoginAsync(LoginAccountForm form)
+    public async Task<UserToken?> LoginAsync(LoginAccountForm form)
     {
         var (issuer, audience) = GetIssuerAndAudience();
 
@@ -29,13 +32,22 @@ public class AccountService(HttpClient httpClient) : IAccountService
         string queryString = string.Join("&", parameters);
         string url = $"{_AccountRoute}/LoginAsync?{queryString}";
 
-        var response = await _httpClient.PostAsync(url, null);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            var response = await _httpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
 
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var deserialisedResponse = JsonConvert.DeserializeObject<UserToken>(responseContent);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<UserToken>(responseContent);
 
-        return deserialisedResponse ?? new();
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+        }
+
+        return null;
     }
 
     public async Task RegisterAsync(RegisterAccountForm form)

@@ -133,12 +133,22 @@ namespace TeleChat.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Created", "Login", "Name", "Password" },
-                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo", "Demo", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
+                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo1", "Konto Demo 1", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
 
             migrationBuilder.InsertData(
                 table: "UserGroupChat",
                 columns: new[] { "Id", "Created", "GroupChatId", "UserId" },
                 values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915), 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Created", "Login", "Name", "Password" },
+                values: new object[] { 2, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo2", "Konto Demo 2", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
+
+            migrationBuilder.InsertData(
+                table: "UserGroupChat",
+                columns: new[] { "Id", "Created", "GroupChatId", "UserId" },
+                values: new object[] { 2, new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915), 1, 2 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_GroupChatId",
