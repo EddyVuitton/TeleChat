@@ -9,4 +9,6 @@ public interface IHubRepository
     Task<Message> SendMessageAsync(MessageDto message);
     Task<List<MessageType>> GetMessageTypesAsync();
     Task<List<UserGroupChat>> GetUserGroupChatsAsync(int userId);
+    Task<GroupChat?> GetDefaultGroupChatAsync();
+    Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId);
 }

@@ -3,12 +3,15 @@ using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain;
 using Newtonsoft.Json;
 using System.Text;
+using Microsoft.JSInterop;
+using TeleChat.Domain.Extensions;
 
 namespace TeleChat.WebUI.Services.Hub;
 
-public class HubService(HttpClient httpClient) : IHubService
+public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
 {
     private readonly HttpClient _httpClient = httpClient;
+    private readonly IJSRuntime _js = js;
     private const string _HubRoute = "api/Hub";
 
     public HubConnection CreateHubConnection(string token)
@@ -66,25 +69,61 @@ public class HubService(HttpClient httpClient) : IHubService
 
     public async Task<List<UserGroupChat>> GetUserGroupChatsAsync(int userId)
     {
-        string url = $"{_HubRoute}/GetUserGroupChatsAsync?userId={userId}";
-        var response = await _httpClient.GetAsync(url);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            string url = $"{_HubRoute}/GetUserGroupChatsAsync?userId={userId}";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var deserialisedResponse = JsonConvert.DeserializeObject<List<UserGroupChat>>(responseContent) ?? [];
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<List<UserGroupChat>>(responseContent) ?? [];
 
-        return deserialisedResponse;
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return [];
+        }
     }
 
-    public async Task<GroupChat> GetDefaultGroupChatAsync()
+    public async Task<GroupChat?> GetDefaultGroupChatAsync()
     {
-        string url = $"{_HubRoute}/GetDefaultGroupChat";
-        var response = await _httpClient.GetAsync(url);
-        response.EnsureSuccessStatusCode();
+        try
+        {
+            string url = $"{_HubRoute}/GetDefaultGroupChat";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
 
-        var responseContent = await response.Content.ReadAsStringAsync();
-        var deserialisedResponse = JsonConvert.DeserializeObject<GroupChat>(responseContent) ?? new();
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<GroupChat>(responseContent);
 
-        return deserialisedResponse;
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return null;
+        }
+    }
+
+    public async Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId)
+    {
+        try
+        {
+            string url = $"{_HubRoute}/GetGroupChatMessages?groupChatId={groupChatId}";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<List<Message>>(responseContent) ?? [];
+
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return [];
+        }
     }
 }

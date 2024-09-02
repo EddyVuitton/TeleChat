@@ -12,11 +12,11 @@
                                   For="@(() => _model.Password)" InputType="InputType.Password" />
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary">Zamknij</MudButton>
+                    @* <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary">Zamknij</MudButton> *@
                     <MudSpacer />
                     <div class="d-flex flex-row gap-x-4">
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary">Zaloguj się</MudButton>
-                        <MudButton OnClick="@(async () => await OpenRegisterDialog())" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Info">Zarejestruj się</MudButton>
+                        @* <MudButton OnClick="@(async () => await OpenRegisterDialog())" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Info">Zarejestruj się</MudButton> *@
                     </div>
                 </MudCardActions>
             </MudCard>

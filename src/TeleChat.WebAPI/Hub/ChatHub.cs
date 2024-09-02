@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace TeleChat.WebAPI.Hub;
 
-[Authorize]
+//[Authorize]
 public class ChatHub : Hub<IChatHub>
 {
 

@@ -7,18 +7,12 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 
-<MudLayout Style="width: 100vw; height: 100vh;">
-    <MudAppBar Style="background-color: inherit;" Elevation="1" Fixed="true" Dense="true">
-        @if (_loggedUser is not null)
-        {
-            <MudText Typo="Typo.h4" Color="Color.Dark">@_loggedUser.Name</MudText>
-        }
-        <MudSpacer />
-        <AppBarOptions MainLayout="this" />
-    </MudAppBar>
-    <MudMainContent Style="background-color: inherit;">
-        <CascadingValue Value="this">
-            @Body
-        </CascadingValue>
-    </MudMainContent>
+<MudLayout Style="">
+    @*<MudAppBar Style="background-color: inherit;" Elevation="1" Fixed="false" Dense="true">
+         <MudSpacer />
+        <AppBarOptions />
+        </MudAppBar>*@
+    <body>
+        @Body
+    </body>
 </MudLayout>

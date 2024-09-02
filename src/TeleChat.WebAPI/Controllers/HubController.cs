@@ -75,8 +75,32 @@ public class HubController(IHubRepository repository, ILogger<HubController> log
     }
 
     [HttpGet("GetDefaultGroupChat")]
-    public async Task<ActionResult<GroupChat>> GetDefaultGroupChat()
+    public async Task<ActionResult<GroupChat>> GetDefaultGroupChatAsync()
     {
-        return await _context.GroupChat.FirstAsync();
+        try
+        {
+            var result = await _repository.GetDefaultGroupChatAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetGroupChatMessages")]
+    public async Task<ActionResult<List<Message>>> GetGroupChatMessagesAsync(int groupChatId)
+    {
+        try
+        {
+            var result = await _repository.GetGroupChatMessagesAsync(groupChatId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
     }
 }

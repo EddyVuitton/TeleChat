@@ -1,12 +1,19 @@
-﻿<div class="items-container">
-    <div class="d-flex flex-column items-container-content">
-        @foreach (var i in Groups)
-        {
-            <GroupItem />
-        }
+﻿@using TeleChat.Domain.Models.Entities;
+@using TeleChat.WebUI.Pages
+
+@if (Groups.Count > 0)
+{
+    <div class="items-container">
+        <div class="d-flex flex-column items-container-content">
+            @foreach (var i in Groups)
+            {
+                <GroupItem Item="i" HomePage="HomePage" />
+            }
+        </div>
     </div>
-</div>
+}
 
 @code {
-    [Parameter] public List<int> Groups { get; set; } = [];
+    [Parameter] public List<GroupChat> Groups { get; set; } = [];
+    [Parameter] public Home? HomePage { get; set; }
 }

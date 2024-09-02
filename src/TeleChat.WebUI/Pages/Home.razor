@@ -6,11 +6,16 @@
 
 <PageTitle>Home</PageTitle>
 
+@if (_loggedUser is not null)
+{
+    <MudText Typo="Typo.h3">@_loggedUser.Name</MudText>
+}
+
 <div class="d-flex" style="width: 100vw; height: 95vh;">
     <div class="side-bar-container">
         @if (_groups.Count > 0)
         {
-            <GroupList Groups="_groups" />
+            <GroupList Groups="_groups" HomePage="this" />
         }
 
         @if (_contacts.Count > 0)
@@ -24,13 +29,20 @@
         }
     </div>
     <div class="d-flex justify-center" style="border: 1px solid white; width: 100%; padding: 1% 0px">
-        @if (MainLayout is not null && MainLayout.User?.Name != "")
+        @if (_loggedUser is not null)
         {
             <div class="d-flex flex-column">
-                <ChatBox />
-                <MudTextField T="string"
-                              Placeholder="Message"
-                              AutoFocus="true" />
+                <div>
+                    <MudText Typo="Typo.h5" Style="cursor: default;">@_selectedGroupChatName</MudText>
+                </div>
+                <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_loggedUser" />
+                <EditForm Model="_newMessageText" OnValidSubmit="SendMessageAsync">
+                    <MudTextField @bind-Value="_newMessageText"
+                                  T="string"
+                                  Placeholder="Message"
+                                  AutoFocus="true"
+                                  Disabled="!_isChatInitialized" />
+                </EditForm>
             </div>
         }
     </div>

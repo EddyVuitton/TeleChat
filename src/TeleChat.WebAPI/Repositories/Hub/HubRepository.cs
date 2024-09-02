@@ -23,7 +23,7 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
     {
         message = message ?? throw new ArgumentNullException(nameof(message));
 
-        var newMessage = await AddMessageAsync(message) ?? throw new Exception("Could not add message to database..."); ;
+        var newMessage = await AddMessageAsync(message) ?? throw new Exception("Could not add message to database...");
 
         await SendToGroupAsync(message.ConnectionId, newMessage);
 
@@ -45,6 +45,22 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
             .ToListAsync();
 
         return userGroupChats;
+    }
+
+    public async Task<GroupChat?> GetDefaultGroupChatAsync()
+    {
+        return await _context.GroupChat.AsNoTracking().SingleOrDefaultAsync(x => x.Id == 1);
+    }
+
+    public async Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId)
+    {
+        var messages = await _context.Message
+            .Where(x => x.GroupChatId == groupChatId)
+            .Include(x => x.User)
+            .AsNoTracking()
+            .ToListAsync();
+
+        return messages;
     }
 
     #endregion

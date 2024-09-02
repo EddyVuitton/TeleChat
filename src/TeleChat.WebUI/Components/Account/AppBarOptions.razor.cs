@@ -12,8 +12,6 @@ public partial class AppBarOptions
     [Inject] public IDialogService DialogService { get; init; } = null!;
     [Inject] public NavigationManager NavigationManager { get; init; } = null!;
 
-    [Parameter] public MainLayout MainLayout { get; init; } = null!;
-
     private async Task LogOut()
     {
         await LoginService.LogoutAsync();
@@ -30,11 +28,6 @@ public partial class AppBarOptions
             FullWidth = true
         };
 
-        var parameters = new DialogParameters
-        {
-            { "MainLayout", MainLayout }
-        };
-
-        await DialogService.ShowAsync<LoginDialog>(string.Empty, parameters, options);
+        await DialogService.ShowAsync<LoginDialog>(string.Empty, options);
     }
 }
