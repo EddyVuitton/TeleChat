@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 using TeleChat.Domain.Auth;
-using TeleChat.Domain.Extensions;
+using TeleChat.WebUI.Extensions;
 
 namespace TeleChat.WebUI.Auth;
 
@@ -18,7 +17,7 @@ public class JWTAuthenticationStateProvider(IJSRuntime js, HttpClient httpClient
     private const string _TOKENKEY = "TOKENKEY";
     private static AuthenticationState _anonymous => new(new ClaimsPrincipal(new ClaimsIdentity()));
 
-    #region Publics
+    #region PublicMethods
 
     public async override Task<AuthenticationState> GetAuthenticationStateAsync()
     {
@@ -83,7 +82,7 @@ public class JWTAuthenticationStateProvider(IJSRuntime js, HttpClient httpClient
 
     #endregion Publics
 
-    #region Privates
+    #region PrivateMethods
 
     private static List<Claim> ParseClaimsFromJwt(string jwt)
     {

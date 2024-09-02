@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using TeleChat.Domain.Extensions;
+using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;

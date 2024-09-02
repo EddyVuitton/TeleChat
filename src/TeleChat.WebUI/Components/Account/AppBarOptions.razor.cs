@@ -2,15 +2,20 @@
 using MudBlazor;
 using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.Dialogs.Auth;
-using TeleChat.WebUI.Layout;
 
 namespace TeleChat.WebUI.Components.Account;
 
 public partial class AppBarOptions
 {
+    #region DependencyInjection
+
     [Inject] public ILoginService LoginService { get; init; } = null!;
     [Inject] public IDialogService DialogService { get; init; } = null!;
     [Inject] public NavigationManager NavigationManager { get; init; } = null!;
+
+    #endregion
+
+    #region PrivateMethods
 
     private async Task LogOut()
     {
@@ -30,4 +35,6 @@ public partial class AppBarOptions
 
         await DialogService.ShowAsync<LoginDialog>(string.Empty, options);
     }
+
+    #endregion
 }

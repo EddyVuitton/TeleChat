@@ -4,7 +4,7 @@ using TeleChat.Domain;
 using Newtonsoft.Json;
 using System.Text;
 using Microsoft.JSInterop;
-using TeleChat.Domain.Extensions;
+using TeleChat.WebUI.Extensions;
 
 namespace TeleChat.WebUI.Services.Hub;
 

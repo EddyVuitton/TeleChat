@@ -4,7 +4,6 @@ using System.Text;
 using TeleChat.Domain.Auth;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.Domain.Forms;
-using static MudBlazor.CategoryTypes;
 
 namespace TeleChat.WebUI.Services.Account;
 
@@ -13,7 +12,7 @@ public class AccountService(HttpClient httpClient) : IAccountService
     private readonly HttpClient _httpClient = httpClient;
     private const string _AccountRoute = "api/Account";
 
-    #region Publics
+    #region PublicMethods
 
     public async Task<UserToken> LoginAsync(LoginAccountForm form)
     {
@@ -98,7 +97,7 @@ public class AccountService(HttpClient httpClient) : IAccountService
 
     #endregion
 
-    #region Privates
+    #region PrivateMethods
 
     private (string? issuer, string? audience) GetIssuerAndAudience()
     {

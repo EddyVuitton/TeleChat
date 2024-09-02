@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace TeleChat.Domain.Extensions;
+namespace TeleChat.WebUI.Extensions;
 
 public static class JSExtensions
 {
