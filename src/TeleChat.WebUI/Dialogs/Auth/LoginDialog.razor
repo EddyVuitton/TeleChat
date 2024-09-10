@@ -23,7 +23,7 @@
                     </MudList>
                     <MudSpacer />
                     <div class="d-flex flex-row gap-x-4">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary">Zaloguj się</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary" Disabled="_isButtonClicked">Zaloguj się</MudButton>
                         @* <MudButton OnClick="@(async () => await OpenRegisterDialog())" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Info">Zarejestruj się</MudButton> *@
                     </div>
                 </MudCardActions>

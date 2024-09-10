@@ -63,6 +63,36 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         return messages;
     }
 
+    public async Task<UserGroupChat> AddGroupChatAsync(GroupChatDto groupChat)
+    {
+        groupChat = groupChat ?? throw new ArgumentNullException(nameof(groupChat));
+        var user = await _context.User.SingleAsync(x => x.Id == groupChat.User.Id)
+            ?? throw new ArgumentException($"Nie istnieje user o id: {groupChat.User.Id}");
+
+        if (string.IsNullOrEmpty(groupChat.Name))
+        {
+            throw new ArgumentException($"Nazwa [{nameof(groupChat.Name)}] nie może być pusta");
+        }
+
+        var newGroupChat = new GroupChat()
+        {
+            Name = groupChat.Name
+        };
+
+        var newUserGroupChat = new UserGroupChat()
+        {
+            User = user,
+            GroupChat = newGroupChat,
+        };
+
+        await _context.AddAsync(newGroupChat);        
+        await _context.AddAsync(newUserGroupChat);
+
+        await _context.SaveChangesAsync();
+
+        return new();
+    }
+
     #endregion
 
     #region Privates

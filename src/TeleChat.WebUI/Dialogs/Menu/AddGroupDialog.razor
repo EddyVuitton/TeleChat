@@ -1,0 +1,55 @@
+﻿@using TeleChat.Domain.Models.Entities
+
+<MudDialog>
+    <DialogContent>
+        <MudCarousel @ref="_refMudCarousel"
+                     TData="object"
+                     Style="height: 175px;"
+                     ShowArrows="false"
+                     ShowBullets="false"
+                     AutoCycle="false"
+                     AutoCycleTime="TimeSpan.FromSeconds(3)">
+            <MudCarouselItem Transition="Transition.Slide">
+                <EditForm Model="_groupFormModel" OnValidSubmit="OnValidSubmitGroupForm">
+                    <DataAnnotationsValidator />
+                    <MudCard Elevation="0">
+                        <MudCardContent>
+                            <MudTextField @bind-Value="_groupFormModel.Name"
+                                          For="@(() => _groupFormModel.Name)"
+                                          Label="Wybierz nazwę" />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary">Anuluj</MudButton>
+                            <MudSpacer />
+                            <MudButton ButtonType="ButtonType.Submit" Color="Color.Secondary" Variant="Variant.Filled">Wybierz członków...</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </EditForm>
+            </MudCarouselItem>
+            <MudCarouselItem Transition="Transition.Slide">
+                <EditForm Model="_selectedMembers" OnValidSubmit="OnValidSubmitMembers">
+                    <MudCard Elevation="0">
+                        <MudCardContent>
+                            <MudSelect @bind-SelectedValues="_selectedMembers"
+                                       T="User"
+                                       AnchorOrigin="Origin.BottomCenter"
+                                       TransformOrigin="Origin.TopCenter"
+                                       Label="Wybierz członków"
+                                       MultiSelection="true">
+                                @foreach (var c in Contacts)
+                                {
+                                    <MudSelectItem T="User" Value="@c">@c.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton OnClick="Cancel" ButtonType="ButtonType.Button" Variant="Variant.Filled" Color="Color.Primary">Anuluj</MudButton>
+                            <MudSpacer />
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Secondary">Dodaj grupę</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </EditForm>
+            </MudCarouselItem>
+        </MudCarousel>
+    </DialogContent>
+</MudDialog>

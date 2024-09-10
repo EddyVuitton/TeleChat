@@ -2,6 +2,7 @@
 
 @using TeleChat.WebUI.Components.Sidebar.Group
 @using TeleChat.WebUI.Components.Sidebar.Contact
+@using TeleChat.WebUI.Components.Sidebar.Menu
 @using TeleChat.WebUI.Components.Chat
 
 <PageTitle>Home</PageTitle>
@@ -27,6 +28,8 @@
                 <ContactList Contacts="_contacts" />
             </div>
         }
+
+        <SidebarMenu @ref="_refSidebarMenu" User="_userToken?.User" HomePage="this" />
     </div>
     <div class="d-flex justify-center" style="border: 1px solid white; width: 100%; padding: 1% 0px">
         @if (_userToken is not null)

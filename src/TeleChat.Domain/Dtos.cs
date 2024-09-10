@@ -1,4 +1,6 @@
-﻿namespace TeleChat.Domain;
+﻿using TeleChat.Domain.Models.Entities;
+
+namespace TeleChat.Domain;
 
 public record MessageDto(
     string Text,
@@ -7,4 +9,10 @@ public record MessageDto(
     int UserId,
     int GroupChatId,
     string UserName
+);
+
+public record GroupChatDto(
+    string Name,
+    User User,
+    List<User>? Members
 );

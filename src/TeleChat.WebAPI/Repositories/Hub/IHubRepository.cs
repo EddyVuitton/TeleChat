@@ -1,4 +1,5 @@
-﻿using TeleChat.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 
 namespace TeleChat.WebAPI.Repositories.Hub;
@@ -11,4 +12,5 @@ public interface IHubRepository
     Task<List<UserGroupChat>> GetUserGroupChatsAsync(int userId);
     Task<GroupChat?> GetDefaultGroupChatAsync();
     Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId);
+    Task<UserGroupChat> AddGroupChatAsync(GroupChatDto groupChat);
 }

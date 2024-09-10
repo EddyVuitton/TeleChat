@@ -126,4 +126,26 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
             return [];
         }
     }
+
+    public async Task<UserGroupChat?> AddGroupChatAsync(GroupChatDto groupChat)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(groupChat);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"{_HubRoute}/AddGroupChatAsync", content);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<UserGroupChat>(responseContent);
+
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return null;
+        }
+    }
 }

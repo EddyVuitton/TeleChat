@@ -118,31 +118,31 @@ public partial class ChatBox : IAsyncDisposable
 
     public async Task<bool> SendMessageAsync(string messageText)
     {
+        if (string.IsNullOrEmpty(messageText)) return false;
+        if (string.IsNullOrEmpty(_connectionId)) return false;
+        if (User is null) return false;
+        if (GroupChat is null) return false;
+
         try
         {
-            if (!string.IsNullOrEmpty(messageText) && !string.IsNullOrEmpty(_connectionId) && User is not null && GroupChat is not null)
+            var messageDto = new MessageDto(
+                messageText,
+                _connectionId!,
+                1,
+                User!.Id,
+                GroupChat!.Id,
+                User.Name
+            );
+
+            var sentMessage = await HubService.SendMessageAsync(messageDto);
+
+            if (sentMessage is not null)
             {
-                var messageDto = new MessageDto(
-                    messageText,
-                    _connectionId,
-                    1,
-                    User.Id,
-                    GroupChat.Id,
-                    User.Name
-                );
-
-                var sentMessage = await HubService.SendMessageAsync(messageDto);
-
-                if (sentMessage is not null)
-                {
-                    AddMessage(sentMessage);
-                    await RefreshChatAsync();
-                }
-
-                return true;
+                AddMessage(sentMessage);
+                await RefreshChatAsync();
             }
 
-            return false;
+            return true;
         }
         catch (Exception ex)
         {

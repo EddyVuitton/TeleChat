@@ -24,6 +24,7 @@ public partial class LoginDialog
     #region Fields
 
     private readonly LoginAccountForm _model = new();
+    private bool _isButtonClicked = false;
 
     #endregion
 
@@ -53,6 +54,8 @@ public partial class LoginDialog
 
     private async void OnValidSubmit(EditContext context)
     {
+        _isButtonClicked = true;
+
         try
         {
             var loginForm = context.Model as LoginAccountForm ?? new();
@@ -64,12 +67,15 @@ public partial class LoginDialog
             }
 
             //await LoginService.LoginAsync(response);
-
             Cancel();
         }
         catch (Exception ex)
         {
             await JS.LogAsync(ex);
+        }
+        finally
+        {
+            _isButtonClicked = false;
         }
     }
 

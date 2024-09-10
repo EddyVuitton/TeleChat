@@ -1,0 +1,13 @@
+﻿<div class="side-bar-fixed-button">
+    <MudMenu Icon="fa-solid fa-pencil" Color="Color.Primary" Size="Size.Large" Label="Menu with Icons">
+        <MudMenuItem IconSize="Size.Medium" IconColor="Color.Primary" Icon="fa-solid fa-bullhorn" Disabled="true">
+            New Channel
+        </MudMenuItem>
+        <MudMenuItem OnClick="OpenAddGroupDialog" IconSize="Size.Medium" IconColor="Color.Primary" Icon="fa-solid fa-user-group" Disabled="_isUserNull">
+            New Group
+        </MudMenuItem>
+        <MudMenuItem IconSize="Size.Medium" IconColor="Color.Primary" Icon="fa-solid fa-user" Disabled="true">
+            New Private Chat
+        </MudMenuItem>
+    </MudMenu>
+</div>

@@ -13,4 +13,5 @@ public interface IHubService
     Task<Message?> SendMessageAsync(MessageDto message);
     Task<GroupChat?> GetDefaultGroupChatAsync();
     Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId);
+    Task<UserGroupChat?> AddGroupChatAsync(GroupChatDto groupChat);
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Repositories.Hub;
@@ -8,11 +7,10 @@ namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class HubController(IHubRepository repository, ILogger<HubController> logger, DBContext context) : ControllerBase
+public class HubController(IHubRepository repository, ILogger<HubController> logger) : ControllerBase
 {
     private readonly IHubRepository _repository = repository;
     private readonly ILogger<HubController> _logger = logger;
-    private readonly DBContext _context = context;
 
     [HttpPost("AddConnectionToGroupAsync")]
     public async Task<ActionResult> AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
@@ -40,6 +38,21 @@ public class HubController(IHubRepository repository, ILogger<HubController> log
         catch (Exception ex)
         {
             _logger.LogError(ex, "Błąd w wysłaniu wiadomości");
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpPost("AddGroupChatAsync")]
+    public async Task<ActionResult<UserGroupChat>> AddGroupChatAsync(GroupChatDto groupChat)
+    {
+        try
+        {
+            var result = await _repository.AddGroupChatAsync(groupChat);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Błąd w dodaniu grupy");
             return Problem(ex.Message);
         }
     }

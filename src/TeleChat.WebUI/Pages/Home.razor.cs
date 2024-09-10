@@ -7,6 +7,8 @@ using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;
 using TeleChat.WebUI.Services.Hub;
 using TeleChat.Domain.Auth;
+using Microsoft.AspNetCore.Components.Web;
+using TeleChat.WebUI.Components.Sidebar.Menu;
 
 namespace TeleChat.WebUI.Pages;
 
@@ -24,6 +26,7 @@ public partial class Home
 
     private UserToken? _userToken;
     private ChatBox? _selectedChatBox;
+    private SidebarMenu? _refSidebarMenu;
 
     private readonly List<GroupChat> _groups = [];
     private readonly List<int> _contacts = [];
@@ -31,8 +34,10 @@ public partial class Home
 
     private bool _isUserDataLoaded = false;
     private bool _isChatInitialized = false;
+    private bool _isSidebardMenuPopoverOpen = false;
     private string _selectedGroupChatName = string.Empty;
     private string _newMessageText = string.Empty;
+    private string _popoverStyle = string.Empty;
 
     #endregion
 
@@ -44,6 +49,8 @@ public partial class Home
         {
             _userToken = value;
             StateHasChanged();
+            _refSidebarMenu?.InvokeOnInitialized();
+            _refSidebarMenu?.InvokeStateHasChanged();
         }
     }
 
@@ -63,19 +70,7 @@ public partial class Home
     {
         if (!_isUserDataLoaded && _userToken is not null)
         {
-            var userGroupChats = await HubService.GetUserGroupChatsAsync(_userToken.User.Id);
-            foreach (var ugc in userGroupChats)
-            {
-                if (ugc.GroupChat is not null)
-                {
-                    _groups.Add(ugc.GroupChat);
-                }
-            }
-
-            _contacts.Add(1);
-
-            _isUserDataLoaded = true;
-            StateHasChanged();
+            await LoadGroupsAndContactsAsync(_userToken);
         }
     }
 
@@ -120,6 +115,21 @@ public partial class Home
         StateHasChanged();
     }
 
+    public void ClosePopoverMenu()
+    {
+        _isSidebardMenuPopoverOpen = false;
+        _popoverStyle = string.Empty;
+        StateHasChanged();
+    }
+
+    public async Task InvokeLoadGroupsAndContactsAsync()
+    {
+        if (_userToken is not null)
+        {
+            await LoadGroupsAndContactsAsync(_userToken);
+        }
+    }
+
     #endregion
 
     #region PrivateMethods
@@ -161,6 +171,25 @@ public partial class Home
         {
             _newMessageText = string.Empty;
         }
+    }
+
+    private async Task LoadGroupsAndContactsAsync(UserToken userToken)
+    {
+        var userGroupChats = await HubService.GetUserGroupChatsAsync(userToken.User.Id);
+        _groups.Clear();
+        _contacts.Clear();
+
+        foreach (var ugc in userGroupChats)
+        {
+            if (ugc.GroupChat is not null)
+            {
+                _groups.Add(ugc.GroupChat);
+            }
+        }
+        _contacts.Add(1);
+
+        _isUserDataLoaded = true;
+        StateHasChanged();
     }
 
     #endregion
