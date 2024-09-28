@@ -3,7 +3,7 @@
 
 @if (Item is not null)
 {
-    <div class="d-flex align-center gap-x-2 item-container" @onclick="OnGroupChatClick">
+    <div class="d-flex align-center gap-x-2 item-container" @onclick="OnGroupChatClick" @oncontextmenu="OnContextMenuClick" @oncontextmenu:preventDefault="true">
         <div style="width: 15%; height: 65px; border: 1px solid green;"></div>
         <div class="d-flex flex-column" style="width: 80%;">
             <div class="d-flex justify-space-between gap-x-2" style="width: 100%;">
@@ -18,6 +18,8 @@
                 Ostatnia wiadomość(...)
             </div>
         </div>
+
+        <GroupMenu @ref=_groupMenuRef />
     </div>
 }
 
@@ -25,11 +27,21 @@
     [Parameter] public GroupChat? Item { get; init; }
     [Parameter] public Home? HomePage { get; init; }
 
-    private async Task OnGroupChatClick()
+    private GroupMenu? _groupMenuRef;
+
+    private async Task OnGroupChatClick(MouseEventArgs e)
     {
         if (HomePage is not null && Item is not null)
         {
             await HomePage.LoadGroupChat(Item);
+        }
+    }
+
+    private void OnContextMenuClick(MouseEventArgs e)
+    {
+        if (e.Button == 2) //right click
+        {
+            _groupMenuRef?.TogglePopoverMenu(e);
         }
     }
 }

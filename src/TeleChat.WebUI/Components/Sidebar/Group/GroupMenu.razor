@@ -1,0 +1,53 @@
+﻿<MudPopover Open="_isOpenPopoverMenu">
+    <MudPaper Style="@_popoverStyle">
+        <MudStack>
+            <GroupMenuOptions OptionValue="Open in new tab" Icon="fa-solid fa-xmark" Disabled="true" />
+            <GroupMenuOptions OptionValue="Mark as unread" Icon="fa-solid fa-xmark" Disabled="true" />
+            <GroupMenuOptions OptionValue="Pin" Icon="fa-solid fa-xmark" Disabled="true" />
+            <GroupMenuOptions OptionValue="Mute" Icon="fa-solid fa-xmark" Disabled="true" />
+            <GroupMenuOptions OptionValue="Archive" Icon="fa-solid fa-xmark" Disabled="true" />
+            <GroupMenuOptions OptionValue="Delete Chat" Icon="fa-solid fa-trash" />
+        </MudStack>
+    </MudPaper>
+</MudPopover>
+
+<MudOverlay Style="cursor: default;" OnClick="@TogglePopoverMenu" Visible="_isOpenPopoverMenu" LockScroll />
+
+@code {
+    private bool _isOpenPopoverMenu;
+    private string _popoverStyle = string.Empty;
+
+    public void TogglePopoverMenu(MouseEventArgs args)
+    {
+        if (_isOpenPopoverMenu)
+        {
+            ClosePopoverMenu();
+        }
+        else
+        {
+            OpenPopoverMenu(args);
+        }
+    }
+
+    private void ClosePopoverMenu()
+    {
+        _isOpenPopoverMenu = false;
+        _popoverStyle = string.Empty;
+        StateHasChanged();
+    }
+
+    private void OpenPopoverMenu(MouseEventArgs args)
+    {
+        SetPopoverStyle(args);
+        _isOpenPopoverMenu = true;
+
+        StateHasChanged();
+    }
+
+    private void SetPopoverStyle(MouseEventArgs args)
+    {
+        var clientX = args?.ClientX.ToString("0.##");
+        var clientY = args?.ClientY.ToString("0.##");
+        _popoverStyle = $"padding: 10px 0px; position: fixed !important; left: {clientX}px; top: {clientY}px;";
+    }
+}
