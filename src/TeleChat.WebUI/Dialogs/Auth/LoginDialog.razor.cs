@@ -41,6 +41,9 @@ public partial class LoginDialog
 
     protected override void OnInitialized()
     {
+        _model.Login = "demo1";
+        _model.Password = "demo";
+
         if (RegisterAccountForm is not null)
         {
             _model.Login = RegisterAccountForm.Login;
