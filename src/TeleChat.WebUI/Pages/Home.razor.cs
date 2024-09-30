@@ -7,7 +7,6 @@ using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;
 using TeleChat.WebUI.Services.Hub;
 using TeleChat.Domain.Auth;
-using Microsoft.AspNetCore.Components.Web;
 using TeleChat.WebUI.Components.Sidebar.Menu;
 
 namespace TeleChat.WebUI.Pages;
@@ -30,14 +29,12 @@ public partial class Home
 
     private readonly List<GroupChat> _groups = [];
     private readonly List<int> _contacts = [];
-    private readonly List<Message> _messages = [];
+    private List<Message> _messages = [];
 
     private bool _isUserDataLoaded = false;
     private bool _isChatInitialized = false;
-    private bool _isSidebardMenuPopoverOpen = false;
     private string _selectedGroupChatName = string.Empty;
     private string _newMessageText = string.Empty;
-    private string _popoverStyle = string.Empty;
 
     #endregion
 
@@ -115,18 +112,24 @@ public partial class Home
         StateHasChanged();
     }
 
-    public void ClosePopoverMenu()
-    {
-        _isSidebardMenuPopoverOpen = false;
-        _popoverStyle = string.Empty;
-        StateHasChanged();
-    }
-
     public async Task InvokeLoadGroupsAndContactsAsync()
     {
         if (_userToken is not null)
         {
             await LoadGroupsAndContactsAsync(_userToken);
+        }
+    }
+
+    public async Task DisconnectChatOnGroupDelete(int groupChatId)
+    {
+        if (_selectedChatBox is not null && _selectedChatBox.GroupChat?.Id == groupChatId)
+        {
+            await _selectedChatBox.DisposeAsync();
+            _isChatInitialized = false;
+            _selectedGroupChatName = string.Empty;
+            _messages = [];
+
+            StateHasChanged();
         }
     }
 

@@ -148,4 +148,18 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
             return null;
         }
     }
+
+    public async Task DeleteGroupChatAsync(int groupChatId)
+    {
+        try
+        {
+            string url = $"{_HubRoute}/DeleteGroupChat?groupChatId={groupChatId}";
+            var response = await _httpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+        }
+    }
 }

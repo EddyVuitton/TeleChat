@@ -13,4 +13,5 @@ public interface IHubRepository
     Task<GroupChat?> GetDefaultGroupChatAsync();
     Task<List<Message>> GetGroupChatMessagesAsync(int groupChatId);
     Task<UserGroupChat> AddGroupChatAsync(GroupChatDto groupChat);
+    Task DeleteGroupChatAsync(int groupChatId);
 }

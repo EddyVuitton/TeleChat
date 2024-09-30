@@ -6,23 +6,36 @@ using TeleChat.Domain;
 using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Services.Hub;
-using TeleChat.Domain.Auth;
 
 namespace TeleChat.WebUI.Components.Chat;
 
 public partial class ChatBox : IAsyncDisposable
 {
+    #region DependencyInjection
+
     [Inject] public IJSRuntime JS { get; private init; } = null!;
     [Inject] public IScrollManager ScrollManager { get; private init; } = null!;
     [Inject] public IHubService HubService { get; private init; } = null!;
+
+    #endregion
+
+    #region Fields
+
+    private HubConnection? _hubConnection;
+    private string? _connectionId;
+
+    #endregion
+
+    #region Properties
 
     [Parameter] public List<Message> Messages { get; set; } = [];
     [Parameter] public User? User { get; set; }
 
     public GroupChat? GroupChat { get; set; }
 
-    private HubConnection? _hubConnection;
-    private string? _connectionId;
+    #endregion
+
+    #region LifecycleEvents
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -33,12 +46,19 @@ public partial class ChatBox : IAsyncDisposable
         }
     }
 
+    #endregion
+
+    #region PublicMethods
+
     public async ValueTask DisposeAsync()
     {
         if (_hubConnection is not null)
         {
             await _hubConnection.DisposeAsync();
             _hubConnection = null;
+            _connectionId = null;
+
+            StateHasChanged();
         }
 
         GC.SuppressFinalize(this);
@@ -73,11 +93,6 @@ public partial class ChatBox : IAsyncDisposable
         StateHasChanged();
         await Task.Delay(10);
         await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth);
-    }
-
-    private void AddMessage(Message message)
-    {
-        Messages.Add(message);        
     }
 
     public async Task<string> ConnectAsync(GroupChat groupChat, string token)
@@ -150,4 +165,15 @@ public partial class ChatBox : IAsyncDisposable
             return false;
         }
     }
+
+    #endregion
+
+    #region PrivateMethods
+
+    private void AddMessage(Message message)
+    {
+        Messages.Add(message);
+    }
+
+    #endregion
 }

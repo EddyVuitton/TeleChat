@@ -93,6 +93,22 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         return new();
     }
 
+    public async Task DeleteGroupChatAsync(int groupChatId)
+    {
+        var userGroupChats = _context.UserGroupChat.Where(x => x.GroupChatId == groupChatId);
+        var messages = _context.Message.Where(x => x.GroupChatId == groupChatId);
+        var groupChat = await _context.GroupChat.FirstOrDefaultAsync(x => x.Id == groupChatId);
+
+        if (groupChat is not null)
+        {
+            _context.RemoveRange(userGroupChats);
+            _context.RemoveRange(messages);
+            _context.Remove(groupChat);
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
     #endregion
 
     #region Privates

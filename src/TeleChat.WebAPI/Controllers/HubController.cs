@@ -57,6 +57,21 @@ public class HubController(IHubRepository repository, ILogger<HubController> log
         }
     }
 
+    [HttpPost("DeleteGroupChat")]
+    public async Task<ActionResult> DeleteGroupChat(int groupChatId)
+    {
+        try
+        {
+            await _repository.DeleteGroupChatAsync(groupChatId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
     [HttpGet("GetMessageTypesAsync")]
     public async Task<ActionResult<List<MessageType>>> GetMessageTypesAsync()
     {
