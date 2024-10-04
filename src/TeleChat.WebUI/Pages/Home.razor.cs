@@ -77,9 +77,6 @@ public partial class Home
 
     public async Task LoadGroupChat(GroupChat groupChat)
     {
-        _isChatInitialized = false;
-        StateHasChanged();
-
         if (groupChat is null)
         {
             return;
@@ -89,6 +86,14 @@ public partial class Home
         {
             return;
         }
+
+        if (_isChatInitialized && _selectedChatBox is not null && _selectedChatBox.GroupChat is not null)
+        {
+            await DisconnectChatAsync(_selectedChatBox.GroupChat.Id);
+        }
+
+        _isChatInitialized = false;
+        StateHasChanged();
 
         var messages = await HubService.GetGroupChatMessagesAsync(groupChat.Id);
         _messages.Clear();
@@ -106,7 +111,7 @@ public partial class Home
                 await _selectedChatBox.RefreshChatAsync();
             }
 
-            await JS.LogAsync($"{groupChat.Name} ConnectionID: {connectionId}");
+            await JS.LogAsync($"Połączono {groupChat.Name} ConnectionID: {connectionId}");
         }
 
         StateHasChanged();
@@ -120,7 +125,7 @@ public partial class Home
         }
     }
 
-    public async Task DisconnectChatOnGroupDelete(int groupChatId)
+    public async Task DisconnectChatAsync(int groupChatId)
     {
         if (_selectedChatBox is not null && _selectedChatBox.GroupChat?.Id == groupChatId)
         {
@@ -128,6 +133,8 @@ public partial class Home
             _isChatInitialized = false;
             _selectedGroupChatName = string.Empty;
             _messages = [];
+
+            await JS.LogAsync($"Rozłączono {_selectedChatBox.GroupChat.Name}");
 
             StateHasChanged();
         }

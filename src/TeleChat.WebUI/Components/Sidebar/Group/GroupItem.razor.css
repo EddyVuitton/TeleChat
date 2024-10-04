@@ -6,8 +6,7 @@
 }
 
     .item-container:hover {
-        /*background-color: #282828;*/
-        background-color: #F5F5F5;
+        background-color: #333333;
     }
 
 .item-name {

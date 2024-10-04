@@ -16,7 +16,11 @@
     max-width: 500px;
     min-width: 500px;
     max-height: 95vh;
-    /*min-height: 95vh;*/
     position: relative;
     height: min-content;
+}
+
+.item-border {
+    border: 1px solid #404040;
+    border-radius: 15px;
 }

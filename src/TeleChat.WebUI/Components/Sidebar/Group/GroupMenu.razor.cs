@@ -74,7 +74,7 @@ public partial class GroupMenu
             if (GroupItem.HomePage is not null)
             {
                 await GroupItem.HomePage.InvokeLoadGroupsAndContactsAsync();
-                await GroupItem.HomePage.DisconnectChatOnGroupDelete(GroupItem.Item.Id);
+                await GroupItem.HomePage.DisconnectChatAsync(GroupItem.Item.Id);
             }
         }
     }

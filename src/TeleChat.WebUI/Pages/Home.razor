@@ -7,48 +7,52 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (_userToken is not null)
+@* @if (_userToken is not null)
 {
     <MudText Typo="Typo.h3">@_userToken.User.Name</MudText>
-}
+} *@
 
-<div class="d-flex" style="width: 100vw; height: 95vh;">
-    <div class="side-bar-container">
-        @if (_groups.Count > 0)
-        {
-            <GroupList Groups="_groups" HomePage="this" />
-        }
+<div class="d-flex gap-x-2" style="background-color: inherit; width: 100vw; height: 95vh; padding: 1%;">
+    @if (_userToken is not null)
+    {
+        <div class="side-bar-container item-border" style="height: inherit;">
+            @if (_groups.Count > 0)
+            {
+                <GroupList Groups="_groups" HomePage="this" />
+            }
 
-        @if (_contacts.Count > 0)
-        {
-            <div>
-                <MudText Typo="Typo.h5" Color="Color.Primary" Style="width: 100%; padding: 8px;">
-                    Contacts
-                </MudText>
-                <ContactList Contacts="_contacts" />
-            </div>
-        }
-
-        <div style="margin-top: 100px;">
-            <SidebarMenu @ref="_refSidebarMenu" User="_userToken?.User" HomePage="this" />
-        </div>
-    </div>
-    <div class="d-flex justify-center" style="border: 1px solid white; width: 100%; padding: 1% 0px">
-        @if (_userToken is not null)
-        {
-            <div class="d-flex flex-column">
+            @if (_contacts.Count > 0)
+            {
                 <div>
-                    <MudText Typo="Typo.h5" Style="cursor: default;">@_selectedGroupChatName</MudText>
+                    <MudText Typo="Typo.h5" Color="Color.Primary" Style="width: 100%; padding: 8px;">
+                        Contacts
+                    </MudText>
+                    <ContactList Contacts="_contacts" />
                 </div>
-                <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_userToken.User" />
+            }
+
+            <div style="margin-top: 100px;">
+                <SidebarMenu @ref="_refSidebarMenu" User="_userToken?.User" HomePage="this" />
+            </div>
+        </div>
+        <div class="d-flex justify-space-center gap-x-4 item-border" style="width: 100%; height: inherit; padding: 1% 1%">
+            <div class="d-flex justify-center align-content-start item-border" style="width: 20%; height: min-content;">
+                <MudText Style="color: #D3D3D3;" Typo="Typo.h3">@(_userToken!.User.Name)</MudText>
+            </div>
+            <div class="d-flex flex-column gap-y-2 item-border" style="padding: 10px;">
+                <div class="d-flex justify-center">
+                    <MudText Typo="Typo.h5" Style="cursor: default; color: #D3D3D3;">@_selectedGroupChatName</MudText>
+                </div>
+                <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_userToken!.User" />
                 <EditForm Model="_newMessageText" OnValidSubmit="SendMessageAsync">
                     <MudTextField @bind-Value="_newMessageText"
                                   T="string"
+                                  Style="color: #fff !important;"
                                   Placeholder="Message"
                                   AutoFocus="true"
                                   Disabled="!_isChatInitialized" />
                 </EditForm>
             </div>
-        }
-    </div>
+        </div>
+    }
 </div>
