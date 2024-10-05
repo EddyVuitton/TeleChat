@@ -31,7 +31,8 @@ public static class BuilderExtensions
         });
         builder.Services.AddDbContextFactory<DBContext>(options =>
         {
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"));
+            //options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
         });
     }
 

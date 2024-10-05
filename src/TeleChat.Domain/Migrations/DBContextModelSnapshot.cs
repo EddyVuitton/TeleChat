@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TeleChat.Domain;
 
 #nullable disable
@@ -18,27 +18,27 @@ namespace TeleChat.Domain.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.7")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("TeleChat.Domain.Models.Entities.GroupChat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("Guid")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -48,8 +48,8 @@ namespace TeleChat.Domain.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(9182),
-                            Guid = new Guid("dd1cdaef-ee33-4cdc-8fa1-5285627aeccf"),
+                            Created = new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(3916),
+                            Guid = new Guid("8bd13829-9450-4d47-b054-2044a27eebff"),
                             Name = "Domyślna grupa"
                         });
                 });
@@ -58,25 +58,25 @@ namespace TeleChat.Domain.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("GroupChatId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("MessageTypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -93,16 +93,16 @@ namespace TeleChat.Domain.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("DefaultStyle")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -126,24 +126,24 @@ namespace TeleChat.Domain.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Login")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -153,9 +153,17 @@ namespace TeleChat.Domain.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212),
-                            Login = "demo",
-                            Name = "Demo",
+                            Created = new DateTime(2024, 10, 5, 20, 57, 40, 226, DateTimeKind.Utc).AddTicks(8309),
+                            Login = "demo1",
+                            Name = "Konto Demo 1",
+                            Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Created = new DateTime(2024, 10, 5, 20, 57, 40, 226, DateTimeKind.Utc).AddTicks(8331),
+                            Login = "demo2",
+                            Name = "Konto Demo 2",
                             Password = "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C"
                         });
                 });
@@ -164,18 +172,18 @@ namespace TeleChat.Domain.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("GroupChatId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -189,9 +197,16 @@ namespace TeleChat.Domain.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915),
+                            Created = new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(6628),
                             GroupChatId = 1,
                             UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Created = new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(6641),
+                            GroupChatId = 1,
+                            UserId = 2
                         });
                 });
 

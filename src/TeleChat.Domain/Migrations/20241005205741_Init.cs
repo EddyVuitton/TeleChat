@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -18,11 +17,11 @@ namespace TeleChat.Domain.Migrations
                 name: "GroupChat",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Guid = table.Column<Guid>(type: "uuid", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Guid = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,10 +32,10 @@ namespace TeleChat.Domain.Migrations
                 name: "MessageType",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    DefaultStyle = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DefaultStyle = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -47,12 +46,12 @@ namespace TeleChat.Domain.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Login = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,13 +62,13 @@ namespace TeleChat.Domain.Migrations
                 name: "Message",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Text = table.Column<string>(type: "text", nullable: false),
-                    MessageTypeId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    GroupChatId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MessageTypeId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GroupChatId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,11 +94,11 @@ namespace TeleChat.Domain.Migrations
                 name: "UserGroupChat",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    GroupChatId = table.Column<int>(type: "integer", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    GroupChatId = table.Column<int>(type: "int", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,7 +118,7 @@ namespace TeleChat.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "GroupChat",
                 columns: new[] { "Id", "Created", "Guid", "Name" },
-                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(9182), new Guid("dd1cdaef-ee33-4cdc-8fa1-5285627aeccf"), "Domyślna grupa" });
+                values: new object[] { 1, new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(3916), new Guid("8bd13829-9450-4d47-b054-2044a27eebff"), "Domyślna grupa" });
 
             migrationBuilder.InsertData(
                 table: "MessageType",
@@ -133,22 +132,20 @@ namespace TeleChat.Domain.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Created", "Login", "Name", "Password" },
-                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo1", "Konto Demo 1", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 10, 5, 20, 57, 40, 226, DateTimeKind.Utc).AddTicks(8309), "demo1", "Konto Demo 1", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" },
+                    { 2, new DateTime(2024, 10, 5, 20, 57, 40, 226, DateTimeKind.Utc).AddTicks(8331), "demo2", "Konto Demo 2", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" }
+                });
 
             migrationBuilder.InsertData(
                 table: "UserGroupChat",
                 columns: new[] { "Id", "Created", "GroupChatId", "UserId" },
-                values: new object[] { 1, new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915), 1, 1 });
-
-            migrationBuilder.InsertData(
-                table: "User",
-                columns: new[] { "Id", "Created", "Login", "Name", "Password" },
-                values: new object[] { 2, new DateTime(2024, 8, 31, 19, 43, 47, 67, DateTimeKind.Utc).AddTicks(3212), "demo2", "Konto Demo 2", "739136E95F37FEE4B526F9C20C3E9DA6-11FB2578105BEA2A05F32D9CA5DFD27C" });
-
-            migrationBuilder.InsertData(
-                table: "UserGroupChat",
-                columns: new[] { "Id", "Created", "GroupChatId", "UserId" },
-                values: new object[] { 2, new DateTime(2024, 8, 31, 19, 43, 47, 68, DateTimeKind.Utc).AddTicks(2915), 1, 2 });
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(6628), 1, 1 },
+                    { 2, new DateTime(2024, 10, 5, 20, 57, 40, 227, DateTimeKind.Utc).AddTicks(6641), 1, 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Message_GroupChatId",
