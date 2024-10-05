@@ -1,29 +1,40 @@
-﻿.disabled {
-    color: #aaa;
-}
-
-    .disabled:hover {
-        background-color: inherit !important;
-        cursor: default !important
-    }
-
-.option {
-    height: 30px;
-    padding: 0px 25px;
+﻿.option {
     display: flex;
-    justify-content: start;
+    column-gap: 10px;
     align-items: center;
+    font-size: 1.2rem;
+    padding: 10px 14px;
 }
 
     .option:hover {
-        background-color: #eee;
+        background-color: #eeeeee;
         cursor: pointer;
     }
 
-.icon-contener {
+    .option .icon {
+        font-size: 2rem;
+        color: rgba(89,74,226,1);
+    }
+
+.disabled * {
+    color: #aaa !important;
+}
+
+.disabled:hover {
+    background-color: inherit !important;
+    cursor: default !important;
+}
+
+.stack {
     display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 30px;
-    margin-right: 25px;
+    flex-direction: column;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }

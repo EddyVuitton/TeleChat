@@ -1,0 +1,49 @@
+﻿<MudPopover Open="_isOpen">
+    <MudPaper Style="@_popoverStyle">
+        @ChildContent
+    </MudPaper>
+</MudPopover>
+
+<MudOverlay Style="cursor: default;" OnClick="@TogglePopoverMenu" Visible="_isOpen" LockScroll />
+
+@code {
+    private string _popoverStyle = string.Empty;
+    private bool _isOpen = false;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public void TogglePopoverMenu(MouseEventArgs args)
+    {
+        if (_isOpen)
+        {
+            ClosePopoverMenu();
+        }
+        else
+        {
+            OpenPopoverMenu(args);
+        }
+    }
+
+    private void ClosePopoverMenu()
+    {
+        _isOpen = false;
+        _popoverStyle = string.Empty;
+        StateHasChanged();
+    }
+
+    private void OpenPopoverMenu(MouseEventArgs args)
+    {
+        SetPopoverStyle(args);
+        _isOpen = true;
+
+        StateHasChanged();
+    }
+
+    private void SetPopoverStyle(MouseEventArgs args)
+    {
+        var clientX = args?.ClientX.ToString("0.##");
+        var clientY = args?.ClientY.ToString("0.##");
+        _popoverStyle = $"position: fixed !important; left: {clientX}px; top: {clientY}px;";
+    }
+}

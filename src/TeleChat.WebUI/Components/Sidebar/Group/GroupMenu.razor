@@ -1,44 +1,30 @@
-﻿<MudPopover Open="_isOpenPopoverMenu">
-    <MudPaper Style="@_popoverStyle">
-        <MudStack>
-            <div class="option disabled" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-xmark" />
-                </div>
-                <div>Open in new tab</div>
-            </div>
-            <div class="option disabled" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-xmark" />
-                </div>
-                <div>Mark as unread</div>
-            </div>
-            <div class="option disabled" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-xmark" />
-                </div>
-                <div>Pin</div>
-            </div>
-            <div class="option disabled" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-xmark" />
-                </div>
-                <div>Mute</div>
-            </div>
-            <div class="option disabled" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-xmark" />
-                </div>
-                <div>Archive</div>
-            </div>
-            <div @onclick="DeleteGroupChat" class="option" style="padding: 0px 10px;">
-                <div class="icon-contener">
-                    <MudIcon Icon="fa-solid fa-trash" />
-                </div>
-                <div>Delete Chat</div>
-            </div>
-        </MudStack>
-    </MudPaper>
-</MudPopover>
+﻿@using TeleChat.WebUI.Customs;
 
-<MudOverlay Style="cursor: default;" OnClick="@TogglePopoverMenu" Visible="_isOpenPopoverMenu" LockScroll />
+<TCPopover @ref="_popoverRef">
+    <div class="stack noselect">
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Open in new tab</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Mark as unread</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Pin</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Mute</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Archive</div>
+        </div>
+        <div @onclick="DeleteGroupChat" class="option">
+            <i class="fa-solid fa-trash icon" style="font-size: 1.7rem;" />
+            <div>Delete Chat</div>
+        </div>
+    </div>
+</TCPopover>
