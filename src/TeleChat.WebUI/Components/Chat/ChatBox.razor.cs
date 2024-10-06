@@ -6,6 +6,9 @@ using TeleChat.Domain;
 using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Services.Hub;
+using Microsoft.AspNetCore.Components.Forms;
+using TeleChat.WebUI.Services.File;
+using TeleChat.Domain.Enums;
 
 namespace TeleChat.WebUI.Components.Chat;
 
@@ -16,6 +19,7 @@ public partial class ChatBox : IAsyncDisposable
     [Inject] public IJSRuntime JS { get; private init; } = null!;
     [Inject] public IScrollManager ScrollManager { get; private init; } = null!;
     [Inject] public IHubService HubService { get; private init; } = null!;
+    [Inject] public IFileService FileService { get; private init; } = null!;
 
     #endregion
 
@@ -146,6 +150,63 @@ public partial class ChatBox : IAsyncDisposable
                 1,
                 User!.Id,
                 GroupChat!.Id,
+                User.Name
+            );
+
+            var sentMessage = await HubService.SendMessageAsync(messageDto);
+
+            if (sentMessage is not null)
+            {
+                AddMessage(sentMessage);
+                await RefreshChatAsync();
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            await JS.LogAsync(ex);
+            return false;
+        }
+    }
+
+    public async Task<bool> SendFileAsync(IBrowserFile file)
+    {
+        if (file is null || file.Size == 0)
+        {
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(_connectionId))
+        {
+            return false;
+        }
+
+        if (User is null)
+        {
+            return false;
+        }
+
+        if (GroupChat is null)
+        {
+            return false;
+        }
+
+        try
+        {
+            var result = await FileService.SaveFileAsync(file);
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return false;
+            }
+
+            var messageDto = new MessageDto(
+                result,
+                _connectionId,
+                (int)MessageTypeEnum.Image,
+                User.Id,
+                GroupChat.Id,
                 User.Name
             );
 

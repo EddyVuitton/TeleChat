@@ -8,6 +8,7 @@ using TeleChat.WebUI.Dialogs.Auth;
 using TeleChat.WebUI.Services.Hub;
 using TeleChat.Domain.Auth;
 using TeleChat.WebUI.Components.Sidebar.Menu;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace TeleChat.WebUI.Pages;
 
@@ -200,6 +201,16 @@ public partial class Home
 
         _isUserDataLoaded = true;
         StateHasChanged();
+    }
+
+    private async void SendFile(IBrowserFile file)
+    {
+        if (_selectedChatBox is null)
+        {
+            return;
+        }
+
+        await _selectedChatBox.SendFileAsync(file);
     }
 
     #endregion

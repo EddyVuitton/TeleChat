@@ -7,11 +7,6 @@
 
 <PageTitle>Home</PageTitle>
 
-@* @if (_userToken is not null)
-{
-    <MudText Typo="Typo.h3">@_userToken.User.Name</MudText>
-} *@
-
 <div class="d-flex gap-x-2" style="background-color: inherit; width: 100vw; height: 95vh; padding: 1%;">
     @if (_userToken is not null)
     {
@@ -44,14 +39,21 @@
                     <MudText Typo="Typo.h5" Style="cursor: default; color: #D3D3D3;">@_selectedGroupChatName</MudText>
                 </div>
                 <ChatBox @ref="_selectedChatBox" Messages="_messages" User="_userToken!.User" />
-                <EditForm Model="_newMessageText" OnValidSubmit="SendMessageAsync">
-                    <MudTextField @bind-Value="_newMessageText"
-                                  T="string"
-                                  Style="color: #fff !important;"
-                                  Placeholder="Message"
-                                  AutoFocus="true"
-                                  Disabled="!_isChatInitialized" />
-                </EditForm>
+                <div class="d-flex">
+                    <EditForm Model="_newMessageText" OnValidSubmit="SendMessageAsync" style="width: 100%;">
+                        <MudTextField @bind-Value="_newMessageText"
+                                      T="string"
+                                      Style="color: #fff !important;"
+                                      Placeholder="Message"
+                                      AutoFocus="true"
+                                      Disabled="!_isChatInitialized" />
+                    </EditForm>
+                    <MudFileUpload T="IBrowserFile" FilesChanged="SendFile" Accept=".png, .jpg" Disabled="!_isChatInitialized">
+                        <ActivatorContent>
+                            <MudIconButton style="color: rgba(255,255,255,1);" Icon="@Icons.Material.Filled.AttachFile" />
+                        </ActivatorContent>
+                    </MudFileUpload>
+                </div>
             </div>
         </div>
     }

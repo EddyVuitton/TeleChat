@@ -9,6 +9,8 @@ using TeleChat.Domain;
 using TeleChat.WebAPI.Options.JWT;
 using TeleChat.WebAPI.Repositories.Hub;
 using TeleChat.WebAPI.Repositories.Account;
+using TeleChat.WebAPI.Options.FilesContainer;
+using TeleChat.WebAPI.Files;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -34,6 +36,7 @@ public static class BuilderExtensions
             //options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"));
             options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
         });
+        builder.Services.AddScoped<IFileService, FileService>();
     }
 
     public static void AddHubChat(this WebApplicationBuilder builder)
@@ -65,6 +68,7 @@ public static class BuilderExtensions
     public static void AddOptions(this WebApplicationBuilder builder)
     {
         builder.Services.ConfigureOptions<JWTOptionsSetup>();
+        builder.Services.ConfigureOptions<FilesContainerOptionsSetup>();
     }
 
     public static void AddRepositories(this WebApplicationBuilder builder)

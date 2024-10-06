@@ -5,6 +5,7 @@ using TeleChat.Server.Options.WebAPI;
 using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.Services.Hub;
 using TeleChat.WebUI.Services.Account;
+using TeleChat.WebUI.Services.File;
 
 namespace TeleChat.Server.Extensions;
 
@@ -27,6 +28,7 @@ public static class BuilderExtensions
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(webapiOptions.Value.BaseAddress) });
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IHubService, HubService>();
+        builder.Services.AddScoped<IFileService, FileService>();
     }
 
     public static void AddOptions(this WebApplicationBuilder builder)

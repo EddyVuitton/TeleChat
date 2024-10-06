@@ -57,6 +57,7 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         var messages = await _context.Message
             .Where(x => x.GroupChatId == groupChatId)
             .Include(x => x.User)
+            .Include(x => x.MessageType)
             .AsNoTracking()
             .ToListAsync();
 
