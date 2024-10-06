@@ -7,7 +7,7 @@ public class Message
     public int MessageTypeId { get; set; }
     public int UserId { get; set; }
     public int GroupChatId { get; set; }
-    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created { get; set; } = DateTime.Now;
 
     public virtual MessageType? MessageType { get; set; }
     public virtual User? User { get; set; }
