@@ -12,8 +12,8 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
     private readonly IAppRepository _repository = repository;
     private readonly ILogger<AppController> _logger = logger;
 
-    [HttpPost("AddConnectionToGroupAsync")]
-    public async Task<ActionResult> AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
+    [HttpPost("AddConnectionToGroup")]
+    public async Task<ActionResult> AddConnectionToGroup(string connectionId, Guid groupChatGuid)
     {
         try
         {
@@ -27,8 +27,8 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         }
     }
 
-    [HttpPost("SendMessageAsync")]
-    public async Task<ActionResult<Message>> SendMessageAsync(MessageDto message)
+    [HttpPost("SendMessage")]
+    public async Task<ActionResult<Message>> SendMessage(MessageDto message)
     {
         try
         {
@@ -42,8 +42,8 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         }
     }
 
-    [HttpPost("AddGroupChatAsync")]
-    public async Task<ActionResult<UserGroupChat>> AddGroupChatAsync(GroupChatDto groupChat)
+    [HttpPost("AddGroupChat")]
+    public async Task<ActionResult<UserGroupChat>> AddGroupChat(GroupChatDto groupChat)
     {
         try
         {
@@ -87,8 +87,8 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         }
     }
 
-    [HttpGet("GetMessageTypesAsync")]
-    public async Task<ActionResult<List<MessageType>>> GetMessageTypesAsync()
+    [HttpGet("GetMessageTypes")]
+    public async Task<ActionResult<List<MessageType>>> GetMessageTypes()
     {
         try
         {
@@ -102,8 +102,8 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         }
     }
 
-    [HttpGet("GetUserGroupChatsAsync")]
-    public async Task<ActionResult<List<UserGroupChat>>> GetUserGroupChatsAsync(int userId)
+    [HttpGet("GetUserGroupChats")]
+    public async Task<ActionResult<List<UserGroupChat>>> GetUserGroupChats(int userId)
     {
         try
         {
@@ -118,7 +118,7 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
     }
 
     [HttpGet("GetDefaultGroupChat")]
-    public async Task<ActionResult<GroupChat>> GetDefaultGroupChatAsync()
+    public async Task<ActionResult<GroupChat>> GetDefaultGroupChat()
     {
         try
         {
@@ -133,7 +133,7 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
     }
 
     [HttpGet("GetGroupChatMessages")]
-    public async Task<ActionResult<List<Message>>> GetGroupChatMessagesAsync(int groupChatId)
+    public async Task<ActionResult<List<Message>>> GetGroupChatMessages(int groupChatId)
     {
         try
         {

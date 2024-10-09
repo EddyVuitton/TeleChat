@@ -35,7 +35,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
         };
 
         string queryString = string.Join("&", parameters);
-        string url = $"{_AppRoute}/AddConnectionToGroupAsync?{queryString}";
+        string url = $"{_AppRoute}/AddConnectionToGroup?{queryString}";
 
         var response = await _httpClient.PostAsync(url, null);
         response.EnsureSuccessStatusCode();
@@ -46,7 +46,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
         var json = JsonConvert.SerializeObject(message);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync($"{_AppRoute}/SendMessageAsync", content);
+        var response = await _httpClient.PostAsync($"{_AppRoute}/SendMessage", content);
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -57,7 +57,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
 
     public async Task<List<MessageType>> GetMessageTypesAsync()
     {
-        string url = $"{_AppRoute}/GetMessageTypesAsync";
+        string url = $"{_AppRoute}/GetMessageTypes";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
@@ -71,7 +71,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
     {
         try
         {
-            string url = $"{_AppRoute}/GetUserGroupChatsAsync?userId={userId}";
+            string url = $"{_AppRoute}/GetUserGroupChats?userId={userId}";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
@@ -134,7 +134,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
             var json = JsonConvert.SerializeObject(groupChat);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"{_AppRoute}/AddGroupChatAsync", content);
+            var response = await _httpClient.PostAsync($"{_AppRoute}/AddGroupChat", content);
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();

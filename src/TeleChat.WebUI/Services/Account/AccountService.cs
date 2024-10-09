@@ -30,7 +30,7 @@ public class AccountService(HttpClient httpClient, IJSRuntime js) : IAccountServ
         };
 
         string queryString = string.Join("&", parameters);
-        string url = $"{_AccountRoute}/LoginAsync?{queryString}";
+        string url = $"{_AccountRoute}/Login?{queryString}";
 
         try
         {
@@ -55,13 +55,13 @@ public class AccountService(HttpClient httpClient, IJSRuntime js) : IAccountServ
         var json = JsonConvert.SerializeObject(form);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync($"{_AccountRoute}/RegisterAsync", content);
+        var response = await _httpClient.PostAsync($"{_AccountRoute}/Register", content);
         response.EnsureSuccessStatusCode();
     }
 
     public async Task<User?> GetUserByLoginAsync(string login)
     {
-        string url = $"{_AccountRoute}/GetUserByLoginAsync?login={login}";
+        string url = $"{_AccountRoute}/GetUserByLogin?login={login}";
 
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();

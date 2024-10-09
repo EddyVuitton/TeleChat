@@ -1,7 +1,7 @@
 ﻿<div id="chat" class="chat-message-container">
     <div></div>
     @{
-        foreach (var message in Messages.OrderByDescending(x => x.Created))
+        foreach (var message in Messages.OrderBy(x => x.Created))
         {
             <ChatMessage Message=@message LoggedUser="User" ChatBox="this" />
         }

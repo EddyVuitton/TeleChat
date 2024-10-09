@@ -13,8 +13,8 @@ public class AccountController(IAccountRepository accountRepository, ILogger<Acc
     private readonly IAccountRepository _accountRepository = accountRepository;
     private readonly ILogger<AccountController> _logger = logger;
 
-    [HttpPost("LoginAsync")]
-    public async Task<ActionResult<UserToken>> LoginAsync(string login, string password, string issuer, string audience)
+    [HttpPost("Login")]
+    public async Task<ActionResult<UserToken>> Login(string login, string password, string issuer, string audience)
     {
         try
         {
@@ -28,8 +28,8 @@ public class AccountController(IAccountRepository accountRepository, ILogger<Acc
         }
     }
 
-    [HttpPost("RegisterAsync")]
-    public async Task<ActionResult> RegisterAsync(RegisterAccountForm form)
+    [HttpPost("Register")]
+    public async Task<ActionResult> Register(RegisterAccountForm form)
     {
         try
         {
@@ -43,8 +43,8 @@ public class AccountController(IAccountRepository accountRepository, ILogger<Acc
         }
     }
 
-    [HttpGet("GetUserByLoginAsync")]
-    public async Task<ActionResult<User>> GetUserByLoginAsync(string login)
+    [HttpGet("GetUserByLogin")]
+    public async Task<ActionResult<User>> GetUserByLogin(string login)
     {
         try
         {
