@@ -5,7 +5,7 @@ using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;
-using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.App;
 using TeleChat.Domain.Auth;
 using TeleChat.WebUI.Components.Sidebar.Menu;
 using Microsoft.AspNetCore.Components.Forms;
@@ -17,7 +17,7 @@ public partial class Home
     #region DependencyInjection
 
     [Inject] public IDialogService DialogService { get; private set; } = null!;
-    [Inject] public IHubService HubService { get; private init; } = null!;
+    [Inject] public IAppService AppService { get; private init; } = null!;
     [Inject] public IJSRuntime JS { get; private init; } = null!;
 
     #endregion
@@ -96,7 +96,7 @@ public partial class Home
         _isChatInitialized = false;
         StateHasChanged();
 
-        var messages = await HubService.GetGroupChatMessagesAsync(groupChat.Id);
+        var messages = await AppService.GetGroupChatMessagesAsync(groupChat.Id);
         _messages.Clear();
         _messages.AddRange(messages);
         _selectedGroupChatName = groupChat.Name;
@@ -186,7 +186,7 @@ public partial class Home
 
     private async Task LoadGroupsAndContactsAsync(UserToken userToken)
     {
-        var userGroupChats = await HubService.GetUserGroupChatsAsync(userToken.User.Id);
+        var userGroupChats = await AppService.GetUserGroupChatsAsync(userToken.User.Id);
         _groups.Clear();
         _contacts.Clear();
 

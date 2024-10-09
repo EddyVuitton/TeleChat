@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using TeleChat.Domain.Enums;
 using TeleChat.Domain.Models.Entities;
 
@@ -14,6 +15,7 @@ public partial class ChatMessage
     private string _style = string.Empty;
     private string _timeStampStyle = string.Empty;
     private MessageTypeEnum _type;
+    private MessageMenu? _messageMenuRef;
 
     #endregion
 
@@ -21,6 +23,7 @@ public partial class ChatMessage
 
     [Parameter] public Message? Message { get; init; }
     [Parameter] public User? LoggedUser { get; init; }
+    [Parameter] public ChatBox ChatBox { get; init; } = null!;
 
     #endregion
 
@@ -39,6 +42,18 @@ public partial class ChatMessage
         _style = Message?.MessageType?.DefaultStyle ?? string.Empty;
         _timeStampStyle = "color: " + (_isLeft ? "#959595" : "#bbb0ee");
         _type = (MessageTypeEnum)Message!.MessageTypeId;
+    }
+
+    #endregion
+
+    #region PrivateMethods
+
+    private void OnContextMenuClick(MouseEventArgs e)
+    {
+        if (e.Button == 2) //right click
+        {
+            _messageMenuRef?.TogglePopoverMenu(e);
+        }
     }
 
     #endregion

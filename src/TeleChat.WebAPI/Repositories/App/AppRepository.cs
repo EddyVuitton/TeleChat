@@ -5,9 +5,9 @@ using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebAPI.Hub;
 
-namespace TeleChat.WebAPI.Repositories.Hub;
+namespace TeleChat.WebAPI.Repositories.App;
 
-public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext context) : IHubRepository
+public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext context) : IAppRepository
 {
     private readonly IHubContext<ChatHub, IChatHub> _hubContext = hubContext;
     private readonly DBContext _context = context;
@@ -106,6 +106,17 @@ public class HubRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
             _context.RemoveRange(messages);
             _context.Remove(groupChat);
 
+            await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task DeleteMessageAsync(int messageId)
+    {
+        var message = await _context.Message.FindAsync(messageId);
+
+        if (message is not null)
+        {
+            _context.Remove(message);
             await _context.SaveChangesAsync();
         }
     }

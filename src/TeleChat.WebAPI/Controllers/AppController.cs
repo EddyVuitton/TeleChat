@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
-using TeleChat.WebAPI.Repositories.Hub;
+using TeleChat.WebAPI.Repositories.App;
 
 namespace TeleChat.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class HubController(IHubRepository repository, ILogger<HubController> logger) : ControllerBase
+public class AppController(IAppRepository repository, ILogger<AppController> logger) : ControllerBase
 {
-    private readonly IHubRepository _repository = repository;
-    private readonly ILogger<HubController> _logger = logger;
+    private readonly IAppRepository _repository = repository;
+    private readonly ILogger<AppController> _logger = logger;
 
     [HttpPost("AddConnectionToGroupAsync")]
     public async Task<ActionResult> AddConnectionToGroupAsync(string connectionId, Guid groupChatGuid)
@@ -63,6 +63,21 @@ public class HubController(IHubRepository repository, ILogger<HubController> log
         try
         {
             await _repository.DeleteGroupChatAsync(groupChatId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpPost("DeleteMessage")]
+    public async Task<ActionResult> DeleteMessage(int messageId)
+    {
+        try
+        {
+            await _repository.DeleteMessageAsync(messageId);
             return Ok();
         }
         catch (Exception ex)

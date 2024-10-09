@@ -5,7 +5,7 @@ using MudBlazor;
 using TeleChat.Domain;
 using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
-using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.App;
 using Microsoft.AspNetCore.Components.Forms;
 using TeleChat.WebUI.Services.File;
 using TeleChat.Domain.Enums;
@@ -18,7 +18,7 @@ public partial class ChatBox : IAsyncDisposable
 
     [Inject] public IJSRuntime JS { get; private init; } = null!;
     [Inject] public IScrollManager ScrollManager { get; private init; } = null!;
-    [Inject] public IHubService HubService { get; private init; } = null!;
+    [Inject] public IAppService AppService { get; private init; } = null!;
     [Inject] public IFileService FileService { get; private init; } = null!;
 
     #endregion
@@ -107,7 +107,7 @@ public partial class ChatBox : IAsyncDisposable
         {
             try
             {
-                _hubConnection = HubService.CreateHubConnection(token);
+                _hubConnection = AppService.CreateHubConnection(token);
 
                 _hubConnection.On<Message>("ReceiveMessage", (message) =>
                 {
@@ -120,7 +120,7 @@ public partial class ChatBox : IAsyncDisposable
                 if (_hubConnection is not null && _hubConnection.ConnectionId is not null)
                 {
                     _connectionId = _hubConnection.ConnectionId;
-                    await HubService.AddConnectionToGroupAsync(_connectionId, GroupChat.Guid);
+                    await AppService.AddConnectionToGroupAsync(_connectionId, GroupChat.Guid);
                 }
 
                 StateHasChanged();
@@ -153,7 +153,7 @@ public partial class ChatBox : IAsyncDisposable
                 User.Name
             );
 
-            var sentMessage = await HubService.SendMessageAsync(messageDto);
+            var sentMessage = await AppService.SendMessageAsync(messageDto);
 
             if (sentMessage is not null)
             {
@@ -210,7 +210,7 @@ public partial class ChatBox : IAsyncDisposable
                 User.Name
             );
 
-            var sentMessage = await HubService.SendMessageAsync(messageDto);
+            var sentMessage = await AppService.SendMessageAsync(messageDto);
 
             if (sentMessage is not null)
             {
@@ -225,6 +225,14 @@ public partial class ChatBox : IAsyncDisposable
             await JS.LogAsync(ex);
             return false;
         }
+    }
+
+    public void RemoveMessage(Message message)
+    {
+        AppService.DeleteMessageAsync(message.Id);
+        Messages.Remove(message);
+
+        StateHasChanged();
     }
 
     #endregion

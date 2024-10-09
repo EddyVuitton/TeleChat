@@ -10,10 +10,9 @@
     private string _popoverStyle = string.Empty;
     private bool _isOpen = false;
 
-    [Parameter]
-    public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    public void TogglePopoverMenu(MouseEventArgs args)
+    public void TogglePopoverMenu(MouseEventArgs? args)
     {
         if (_isOpen)
         {
@@ -32,7 +31,7 @@
         StateHasChanged();
     }
 
-    private void OpenPopoverMenu(MouseEventArgs args)
+    private void OpenPopoverMenu(MouseEventArgs? args)
     {
         SetPopoverStyle(args);
         _isOpen = true;
@@ -40,8 +39,13 @@
         StateHasChanged();
     }
 
-    private void SetPopoverStyle(MouseEventArgs args)
+    private void SetPopoverStyle(MouseEventArgs? args)
     {
+        if (args is null)
+        {
+            return;
+        }
+
         var clientX = args?.ClientX.ToString("0.##");
         var clientY = args?.ClientY.ToString("0.##");
         _popoverStyle = $"position: fixed !important; left: {clientX}px; top: {clientY}px;";

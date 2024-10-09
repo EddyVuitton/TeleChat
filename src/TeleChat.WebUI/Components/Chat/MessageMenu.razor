@@ -1,0 +1,45 @@
+﻿@using TeleChat.WebUI.Customs;
+@using TeleChat.Domain.Enums;
+
+<TCPopover @ref="_popoverRef">
+    <div class="stack noselect">
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Reply</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Edit</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Pin</div>
+        </div>
+        @if ((MessageTypeEnum)Message!.MessageTypeId == MessageTypeEnum.PlainText)
+        {
+            <div class="option disabled">
+                <i class="fa-solid fa-xmark icon" />
+                <div>Copy</div>
+            </div>
+        }
+        @if ((MessageTypeEnum)Message!.MessageTypeId == MessageTypeEnum.Image)
+        {
+            <div class="option disabled">
+                <i class="fa-solid fa-xmark icon" />
+                <div>Download</div>
+            </div>
+        }
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Select</div>
+        </div>
+        <div class="option disabled">
+            <i class="fa-solid fa-xmark icon" />
+            <div>Nobody viewed</div>
+        </div>
+        <div class="option delete-option" @onclick="DeleteClick">
+            <i class="fa-solid fa-trash icon" style="color: #ff595a !important;" />
+            <div>Delete</div>
+        </div>
+    </div>
+</TCPopover>

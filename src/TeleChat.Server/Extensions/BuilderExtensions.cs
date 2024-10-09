@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 using TeleChat.Server.Options.WebAPI;
 using TeleChat.WebUI.Auth;
-using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.App;
 using TeleChat.WebUI.Services.Account;
 using TeleChat.WebUI.Services.File;
 
@@ -27,7 +27,7 @@ public static class BuilderExtensions
         builder.Services.AddMudServices();
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(webapiOptions.Value.BaseAddress) });
         builder.Services.AddScoped<IAccountService, AccountService>();
-        builder.Services.AddScoped<IHubService, HubService>();
+        builder.Services.AddScoped<IAppService, AppService>();
         builder.Services.AddScoped<IFileService, FileService>();
     }
 

@@ -2,10 +2,15 @@
 
 @if (Message is not null && LoggedUser is not null)
 {
-    <div class="@_class">
+    <div class="@_class" @oncontextmenu="OnContextMenuClick" @oncontextmenu:preventDefault="true">
         @if (_isLeft)
         {
             <div style="color: #935bd8;">@Message.User?.Name</div>
+        }
+
+        @if (Message.MessageTypeId == 3)
+        {
+            
         }
 
         @{
@@ -26,4 +31,6 @@
 
         <div class="message-timestamp" style="@_timeStampStyle">@_timeStamp</div>
     </div>
+
+    <MessageMenu @ref=_messageMenuRef Message="Message" ChatBox="ChatBox" />
 }

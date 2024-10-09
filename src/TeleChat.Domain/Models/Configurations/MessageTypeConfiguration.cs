@@ -17,7 +17,8 @@ public class MessageTypeConfiguration : IEntityTypeConfiguration<MessageType>
         builder.HasData(new List<MessageType>
         {
             new() { Id = 1, Name = "PlainText" },
-            new() { Id = 2, Name = "GIF", DefaultStyle = "max-width: 200px; max-height: 200px;" }
+            new() { Id = 2, Name = "GIF", DefaultStyle = "max-width: 200px; max-height: 200px;" },
+            new() { Id = 3, Name = "Image", DefaultStyle = "max-width: 450px; max-height: 350px;" }
         });
     }
 }

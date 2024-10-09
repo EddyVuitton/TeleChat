@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using TeleChat.Domain;
 using TeleChat.WebAPI.Options.JWT;
-using TeleChat.WebAPI.Repositories.Hub;
+using TeleChat.WebAPI.Repositories.App;
 using TeleChat.WebAPI.Repositories.Account;
 using TeleChat.WebAPI.Options.FilesContainer;
 using TeleChat.WebAPI.Files;
@@ -73,7 +73,7 @@ public static class BuilderExtensions
 
     public static void AddRepositories(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<IHubRepository, HubRepository>();
+        builder.Services.AddScoped<IAppRepository, AppRepository>();
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
     }
 

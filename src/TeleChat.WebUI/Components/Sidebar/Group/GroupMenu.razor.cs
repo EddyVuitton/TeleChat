@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using TeleChat.WebUI.Customs;
-using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.App;
 
 namespace TeleChat.WebUI.Components.Sidebar.Group;
 
@@ -9,7 +9,7 @@ public partial class GroupMenu
 {
     #region DependencyInjection
 
-    [Inject] public IHubService HubService { get; private init; } = null!;
+    [Inject] public IAppService AppService { get; private init; } = null!;
 
     #endregion
 
@@ -36,7 +36,7 @@ public partial class GroupMenu
     {
         if (GroupItem is not null && GroupItem.Item is not null)
         {
-            await HubService.DeleteGroupChatAsync(GroupItem.Item.Id);
+            await AppService.DeleteGroupChatAsync(GroupItem.Item.Id);
 
             if (GroupItem.HomePage is not null)
             {

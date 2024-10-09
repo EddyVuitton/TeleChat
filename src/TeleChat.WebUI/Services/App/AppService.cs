@@ -6,13 +6,13 @@ using System.Text;
 using Microsoft.JSInterop;
 using TeleChat.WebUI.Extensions;
 
-namespace TeleChat.WebUI.Services.Hub;
+namespace TeleChat.WebUI.Services.App;
 
-public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
+public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly IJSRuntime _js = js;
-    private const string _HubRoute = "api/Hub";
+    private const string _AppRoute = "api/App";
 
     public HubConnection CreateHubConnection(string token)
     {
@@ -35,7 +35,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
         };
 
         string queryString = string.Join("&", parameters);
-        string url = $"{_HubRoute}/AddConnectionToGroupAsync?{queryString}";
+        string url = $"{_AppRoute}/AddConnectionToGroupAsync?{queryString}";
 
         var response = await _httpClient.PostAsync(url, null);
         response.EnsureSuccessStatusCode();
@@ -46,7 +46,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
         var json = JsonConvert.SerializeObject(message);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync($"{_HubRoute}/SendMessageAsync", content);
+        var response = await _httpClient.PostAsync($"{_AppRoute}/SendMessageAsync", content);
         response.EnsureSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -57,7 +57,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
 
     public async Task<List<MessageType>> GetMessageTypesAsync()
     {
-        string url = $"{_HubRoute}/GetMessageTypesAsync";
+        string url = $"{_AppRoute}/GetMessageTypesAsync";
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
@@ -71,7 +71,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
     {
         try
         {
-            string url = $"{_HubRoute}/GetUserGroupChatsAsync?userId={userId}";
+            string url = $"{_AppRoute}/GetUserGroupChatsAsync?userId={userId}";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
@@ -91,7 +91,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
     {
         try
         {
-            string url = $"{_HubRoute}/GetDefaultGroupChat";
+            string url = $"{_AppRoute}/GetDefaultGroupChat";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
@@ -111,7 +111,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
     {
         try
         {
-            string url = $"{_HubRoute}/GetGroupChatMessages?groupChatId={groupChatId}";
+            string url = $"{_AppRoute}/GetGroupChatMessages?groupChatId={groupChatId}";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
@@ -134,7 +134,7 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
             var json = JsonConvert.SerializeObject(groupChat);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($"{_HubRoute}/AddGroupChatAsync", content);
+            var response = await _httpClient.PostAsync($"{_AppRoute}/AddGroupChatAsync", content);
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -153,7 +153,21 @@ public class HubService(HttpClient httpClient, IJSRuntime js) : IHubService
     {
         try
         {
-            string url = $"{_HubRoute}/DeleteGroupChat?groupChatId={groupChatId}";
+            string url = $"{_AppRoute}/DeleteGroupChat?groupChatId={groupChatId}";
+            var response = await _httpClient.PostAsync(url, null);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+        }
+    }
+
+    public async Task DeleteMessageAsync(int messageId)
+    {
+        try
+        {
+            string url = $"{_AppRoute}/DeleteMessage?messageId={messageId}";
             var response = await _httpClient.PostAsync(url, null);
             response.EnsureSuccessStatusCode();
         }

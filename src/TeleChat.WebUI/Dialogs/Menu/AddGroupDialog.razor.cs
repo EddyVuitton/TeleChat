@@ -6,7 +6,7 @@ using TeleChat.Domain.Forms;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Extensions;
 using TeleChat.WebUI.Pages;
-using TeleChat.WebUI.Services.Hub;
+using TeleChat.WebUI.Services.App;
 
 namespace TeleChat.WebUI.Dialogs.Menu;
 
@@ -14,7 +14,7 @@ public partial class AddGroupDialog
 {
     #region DependencyInjection
 
-    [Inject] public IHubService HubService { get; private init; } = null!;
+    [Inject] public IAppService AppService { get; private init; } = null!;
     [Inject] public IJSRuntime JS { get; private init; } = null!;
 
     #endregion
@@ -55,7 +55,7 @@ public partial class AddGroupDialog
         {
             if (User is not null && _groupChatDto is not null)
             {
-                var response = await HubService.AddGroupChatAsync(_groupChatDto);
+                var response = await AppService.AddGroupChatAsync(_groupChatDto);
                 if (HomePage is not null)
                 {
                     await HomePage.InvokeLoadGroupsAndContactsAsync();
