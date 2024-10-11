@@ -1,0 +1,16 @@
+﻿<MudDialog Style="max-width: fit-content;max-height: fit-content;overflow: hidden;" ContentStyle="width: fit-content;height: fit-content;padding: 0px;margin: 0px;overflow: hidden;line-height: 0px;">
+    <DialogContent>
+        <img @onclick="OnClick" src="@Source" style="max-width: 90vw !important; max-height: 90vh !important;" />
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; init; } = null!;
+
+    [Parameter] public string Source { get; set; } = string.Empty;
+
+    private void OnClick()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}

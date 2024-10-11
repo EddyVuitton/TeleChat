@@ -1,8 +1,16 @@
 ﻿@using Domain.Enums;
 
+<style>
+    .blur {
+        backdrop-filter: blur(10px);
+    }
+</style>
+
 @if (Message is not null && LoggedUser is not null)
 {
-    <div class="@_class" @oncontextmenu="OnContextMenuClick" @oncontextmenu:preventDefault="true">
+    <div class="@_class"
+         @oncontextmenu="OnContextMenuClick" @oncontextmenu:preventDefault="true"
+         @onclick="OnClickAsync" @onclick:preventDefault="true">
         @if (_isLeft)
         {
             <div style="color: #935bd8;">@Message.User?.Name</div>

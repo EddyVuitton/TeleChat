@@ -1,12 +1,20 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using MudBlazor;
 using TeleChat.Domain.Enums;
 using TeleChat.Domain.Models.Entities;
+using TeleChat.WebUI.Dialogs.Chat;
 
 namespace TeleChat.WebUI.Components.Chat;
 
 public partial class ChatMessage
 {
+    #region DependencyInjection
+
+    [Inject] public IDialogService DialogService { get; private set; } = null!;
+
+    #endregion
+
     #region Fields
 
     private bool _isLeft;
@@ -53,6 +61,26 @@ public partial class ChatMessage
         if (e.Button == 2) //right click
         {
             _messageMenuRef?.TogglePopoverMenu(e);
+        }
+    }
+
+    private async Task OnClickAsync()
+    {
+        if (_type == MessageTypeEnum.Image)
+        {
+            var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                NoHeader = true,
+                BackgroundClass = "blur"
+            };
+
+            var parameters = new DialogParameters
+            {
+                { "Source", Message!.Text }
+            };
+
+            await DialogService.ShowAsync<ImagePreviewDialog>(string.Empty, parameters, options);
         }
     }
 

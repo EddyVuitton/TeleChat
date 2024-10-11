@@ -70,6 +70,11 @@ public partial class Home
         {
             await LoadGroupsAndContactsAsync(_userToken);
         }
+
+        if (_selectedChatBox is not null)
+        {
+            await _selectedChatBox.RefreshChatAsync();
+        }
     }
 
     #endregion
