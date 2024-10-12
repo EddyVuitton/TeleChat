@@ -1,4 +1,3 @@
-using Microsoft.Extensions.FileProviders;
 using TeleChat.Server.Extensions;
 using TeleChat.WebUI.EntryPoint;
 
@@ -22,10 +21,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "wwwroot", "images")),
-});
+app.AddFileProvider();
 
 app.UseAntiforgery();
 

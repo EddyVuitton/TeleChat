@@ -6,10 +6,11 @@ using TeleChat.WebUI.Auth;
 using TeleChat.WebUI.Services.App;
 using TeleChat.WebUI.Services.Account;
 using TeleChat.WebUI.Services.File;
+using Microsoft.Extensions.FileProviders;
 
 namespace TeleChat.Server.Extensions;
 
-public static class BuilderExtensions
+public static class ServerExtensions
 {
     public static void AddServices(this WebApplicationBuilder builder)
     {
@@ -41,5 +42,17 @@ public static class BuilderExtensions
         builder.Services.AddScoped<JWTAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider, JWTAuthenticationStateProvider>(provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
         builder.Services.AddScoped<ILoginService, JWTAuthenticationStateProvider>(provider => provider.GetRequiredService<JWTAuthenticationStateProvider>());
+    }
+
+    public static void AddFileProvider(this WebApplication app)
+    {
+        var path = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "images");
+
+        Directory.CreateDirectory(path);
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(path),
+        });
     }
 }
