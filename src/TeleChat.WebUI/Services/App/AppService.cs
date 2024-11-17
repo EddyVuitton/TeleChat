@@ -176,4 +176,66 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
             await _js.LogAsync(ex);
         }
     }
+
+    public async Task<List<Reaction>> GetReactionsAsync()
+    {
+        try
+        {
+            string url = $"{_AppRoute}/GetReactions";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<List<Reaction>>(responseContent) ?? [];
+
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return [];
+        }
+    }
+
+    public async Task<MessageReaction?> AddReactionAsync(ReactionDto reaction)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(reaction);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"{_AppRoute}/AddReaction", content);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<MessageReaction>(responseContent);
+
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return null;
+        }
+    }
+
+    public async Task<List<ReactionDto>> GetChatReactionsAsync(int chatId)
+    {
+        try
+        {
+            string url = $"{_AppRoute}/GetChatReactions?chatId={chatId}";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var deserialisedResponse = JsonConvert.DeserializeObject<List<ReactionDto>>(responseContent) ?? [];
+
+            return deserialisedResponse;
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+            return [];
+        }
+    }
 }

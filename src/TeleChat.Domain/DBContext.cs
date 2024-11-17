@@ -11,6 +11,8 @@ public class DBContext(DbContextOptions<DBContext> options) : DbContext(options)
     public DbSet<MessageType> MessageType => Set<MessageType>();
     public DbSet<GroupChat> GroupChat => Set<GroupChat>();
     public DbSet<UserGroupChat> UserGroupChat => Set<UserGroupChat>();
+    public DbSet<Reaction> Reaction => Set<Reaction>();
+    public DbSet<MessageReaction> MessageReaction => Set<MessageReaction>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,5 +21,7 @@ public class DBContext(DbContextOptions<DBContext> options) : DbContext(options)
         modelBuilder.ApplyConfiguration(new MessageTypeConfiguration());
         modelBuilder.ApplyConfiguration(new GroupChatConfiguration());
         modelBuilder.ApplyConfiguration(new UserGroupChatConfiguration());
+        modelBuilder.ApplyConfiguration(new ReactionConfiguration());
+        modelBuilder.ApplyConfiguration(new MessageReactionConfiguration());
     }
 }

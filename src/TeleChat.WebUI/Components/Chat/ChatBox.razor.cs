@@ -36,6 +36,7 @@ public partial class ChatBox : IAsyncDisposable
     [Parameter] public User? User { get; set; }
 
     public GroupChat? GroupChat { get; set; }
+    public List<ReactionDto> Reactions { get; set; } = [];
 
     #endregion
 
@@ -201,10 +202,17 @@ public partial class ChatBox : IAsyncDisposable
                 return false;
             }
 
+            var messageType = file.ContentType switch
+            {
+                "image/gif" => MessageTypeEnum.GIF,
+                "image/png" or "image/jpg" => MessageTypeEnum.Image,
+                _ => MessageTypeEnum.PlainText
+            };
+
             var messageDto = new MessageDto(
                 result,
                 _connectionId,
-                (int)MessageTypeEnum.Image,
+                (int)messageType,
                 User.Id,
                 GroupChat.Id,
                 User.Name
@@ -234,6 +242,8 @@ public partial class ChatBox : IAsyncDisposable
 
         StateHasChanged();
     }
+
+    public string? GetConnectionId => _connectionId;
 
     #endregion
 

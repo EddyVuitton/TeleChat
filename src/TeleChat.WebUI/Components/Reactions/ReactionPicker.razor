@@ -1,0 +1,13 @@
+﻿@if (_reactions.Count > 0)
+{
+    <div class="container">
+        @foreach (var reaction in _reactions)
+        {
+            <div class="reaction" @onclick="() => AddReactionAsync(reaction)">
+                <div>
+                    @reaction.Value
+                </div>
+            </div>
+        }
+    </div>
+}

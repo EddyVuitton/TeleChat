@@ -16,4 +16,7 @@ public interface IAppService
     Task<UserGroupChat?> AddGroupChatAsync(GroupChatDto groupChat);
     Task DeleteGroupChatAsync(int groupChatId);
     Task DeleteMessageAsync(int messageId);
+    Task<List<Reaction>> GetReactionsAsync();
+    Task<MessageReaction?> AddReactionAsync(ReactionDto reaction);
+    Task<List<ReactionDto>> GetChatReactionsAsync(int chatId);
 }

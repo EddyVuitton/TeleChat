@@ -1,0 +1,29 @@
+﻿.container {
+    display: flex;
+    flex-direction: row;
+    width: min-content;
+    height: min-content;
+    border-radius: 10px;
+    background-color: #212121;
+}
+
+.reaction {
+    --size: 3rem;
+    --padding-base: .1rem;
+    --padding-vertical: 0rem;
+    --padding-horizontal: var(--padding-base);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    width: calc(var(--size) + var(--padding-horizontal) * 2);
+    height: calc(var(--size) + var(--padding-vertical) * 2);
+    flex: 0 0 auto;
+    padding: var(--padding-vertical) var(--padding-horizontal);
+    cursor: pointer;
+}
+
+    .reaction:hover {
+        background-color: rgba(170, 170, 170, 0.08);
+        border-radius: inherit;
+    }

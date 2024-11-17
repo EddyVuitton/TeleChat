@@ -11,6 +11,9 @@ using TeleChat.WebAPI.Repositories.App;
 using TeleChat.WebAPI.Repositories.Account;
 using TeleChat.WebAPI.Options.FilesContainer;
 using TeleChat.WebAPI.Files;
+using Microsoft.EntityFrameworkCore.Migrations;
+using System.Reflection;
+using System.IO;
 
 namespace TeleChat.WebAPI.Extensions;
 
@@ -86,5 +89,17 @@ public static class BuilderExtensions
         {
             await dbContext.Database.MigrateAsync();
         }
+
+        var assemblyLocation = Assembly.GetAssembly(typeof(DBContext))?.Location ?? string.Empty;
+        var domainPath = Path.GetFullPath(Path.Combine(assemblyLocation, @"..\..\..\..\..\"));
+        var path = Path.Combine(Path.GetDirectoryName(domainPath)!, @"TeleChat.Domain\SQL\CreateObjects.sql");
+
+        using var stream = new StreamReader(path);
+        var sqlResult = stream.ReadToEnd();
+
+        if (!string.IsNullOrEmpty(sqlResult) && dbContext is not null)
+        {
+            await dbContext.Database.ExecuteSqlRawAsync(sqlResult);
+        };
     }
 }

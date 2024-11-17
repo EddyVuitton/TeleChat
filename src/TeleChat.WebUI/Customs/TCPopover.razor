@@ -1,7 +1,7 @@
 ﻿<MudPopover Open="_isOpen">
-    <MudPaper Style="@_popoverStyle">
+    <div style=@_popoverStyle>
         @ChildContent
-    </MudPaper>
+    </div>
 </MudPopover>
 
 <MudOverlay Style="cursor: default;" OnClick="@TogglePopoverMenu" Visible="_isOpen" LockScroll />
@@ -24,7 +24,7 @@
         }
     }
 
-    private void ClosePopoverMenu()
+    public void ClosePopoverMenu()
     {
         _isOpen = false;
         _popoverStyle = string.Empty;

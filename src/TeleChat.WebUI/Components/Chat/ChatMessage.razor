@@ -8,7 +8,9 @@
 
 @if (Message is not null && LoggedUser is not null)
 {
-    <div class="@_class"
+    var tempStyle = _type == MessageTypeEnum.PlainText ? "width: fit-content !important;" : "width: min-content !important;";
+
+    <div class="@_class" style=@tempStyle
          @oncontextmenu="OnContextMenuClick" @oncontextmenu:preventDefault="true"
          @onclick="OnClickAsync" @onclick:preventDefault="true">
         @if (_isLeft)
@@ -20,19 +22,41 @@
             switch (_type)
             {
                 case MessageTypeEnum.PlainText:
-                    <div>@Message.Text</div>
+                    <div style=@_style>@Message.Text</div>
                     break;
 
                 case MessageTypeEnum.GIF:
+                    <img src="@Message.Text" style=@_style>
                     break;
 
                 case MessageTypeEnum.Image:
-                    <img src="@Message.Text" style="@_style">
+                    <img src="@Message.Text" style=@_style>
                     break;
             }
         }
+        <div class="d-flex justify-space-between" style="margin-top: 0.25rem;">
+            <div style="font-size: 1.2rem; padding: 2px; margin-right: 10px;">
+                @{
+                    var reactionsTemp = ChatBox.Reactions.Where(x => x.MessageId == Message.Id).ToList();
+                    var groupedReactions = reactionsTemp.GroupBy(x => x.Value);
 
-        <div class="message-timestamp" style="@_timeStampStyle">@(_timeStamp)</div>
+                    foreach (var item in groupedReactions)
+                    {
+                        if (item.Count() > 1)
+                        {
+                            <MudBadge Content="item.Count()" Color="Color.Info" Overlap="true" Origin="Origin.TopRight">
+                                <span style="margin-right: 0.4rem">@item.Key</span>
+                            </MudBadge>
+                        }
+                        else
+                        {
+                            <span>@item.Key</span>
+                        }
+                    }
+                }
+            </div>
+            <div class="message-timestamp" style=@_timeStampStyle>@(_timeStamp)</div>
+        </div>
     </div>
 
     <MessageMenu @ref=_messageMenuRef Message="Message" ChatBox="ChatBox" />

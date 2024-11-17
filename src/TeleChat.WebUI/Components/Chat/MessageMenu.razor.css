@@ -2,18 +2,22 @@
     display: flex;
     column-gap: 10px;
     align-items: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 5px 10px;
+    margin: 5px;
+    border-radius: 12px;
+    color: #ffffff;
 }
 
     .option:hover {
-        background-color: #eeeeee;
+        background-color: rgba(170, 170, 170, 0.08);
         cursor: pointer;
+        border-radius: 12px;
     }
 
     .option .icon {
         font-size: 1.3rem;
-        color: rgba(89,74,226,1);
+        color: rgba(89, 74, 226, 1);
     }
 
 .disabled * {
@@ -30,13 +34,14 @@
 }
 
     .delete-option:hover {
-        background-color: #ffe6e6;
+        background-color: rgba(255, 89, 90, 0.08);
         cursor: pointer;
     }
 
 .stack {
     display: flex;
     flex-direction: column;
+    border-radius: 12px;
 }
 
 .noselect {

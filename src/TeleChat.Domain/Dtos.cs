@@ -16,3 +16,13 @@ public record GroupChatDto(
     User User,
     List<User>? Members
 );
+
+public class ReactionDto
+{
+    public int MessageReactionId { get; set; }
+    public int ReactionId { get; set; }
+    public string Value { get; set; } = string.Empty;
+    public int UserId { get; set; }
+    public int MessageId { get; set; }
+    public string? ConnectionId { get; set; }
+}

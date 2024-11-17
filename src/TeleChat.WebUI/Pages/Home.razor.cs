@@ -9,6 +9,7 @@ using TeleChat.WebUI.Services.App;
 using TeleChat.Domain.Auth;
 using TeleChat.WebUI.Components.Sidebar.Menu;
 using Microsoft.AspNetCore.Components.Forms;
+using TeleChat.Domain;
 
 namespace TeleChat.WebUI.Pages;
 
@@ -106,19 +107,21 @@ public partial class Home
         _messages.AddRange(messages);
         _selectedGroupChatName = groupChat.Name;
 
-        if (_selectedChatBox is not null)
+        var reactions = await AppService.GetChatReactionsAsync(groupChat.Id);
+        _selectedChatBox!.Reactions.Clear();
+        _selectedChatBox!.Reactions.AddRange(reactions);
+
+        await _selectedChatBox!.DisposeAsync();
+        var connectionId = await _selectedChatBox.ConnectAsync(groupChat, _userToken.Token);
+
+        if (!string.IsNullOrEmpty(connectionId))
         {
-            await _selectedChatBox.DisposeAsync();
-            var connectionId = await _selectedChatBox.ConnectAsync(groupChat, _userToken.Token);
-
-            if (!string.IsNullOrEmpty(connectionId))
-            {
-                _isChatInitialized = true;
-                await _selectedChatBox.RefreshChatAsync();
-            }
-
-            await JS.LogAsync($"Połączono {groupChat.Name} ConnectionID: {connectionId}");
+            _isChatInitialized = true;
+            await _selectedChatBox.RefreshChatAsync();
         }
+
+        await JS.LogAsync($"Połączono {groupChat.Name} ConnectionID: {connectionId}");
+
 
         StateHasChanged();
     }

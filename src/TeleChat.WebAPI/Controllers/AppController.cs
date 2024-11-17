@@ -87,6 +87,21 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         }
     }
 
+    [HttpPost("AddReaction")]
+    public async Task<ActionResult> AddReaction(ReactionDto dto)
+    {
+        try
+        {
+            var result = await _repository.AddReactionAsync(dto);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
     [HttpGet("GetMessageTypes")]
     public async Task<ActionResult<List<MessageType>>> GetMessageTypes()
     {
@@ -138,6 +153,36 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
         try
         {
             var result = await _repository.GetGroupChatMessagesAsync(groupChatId);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetReactions")]
+    public async Task<ActionResult<List<Reaction>>> GetReactions()
+    {
+        try
+        {
+            var result = await _repository.GetReactionsAsync();
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
+
+    [HttpGet("GetChatReactions")]
+    public async Task<ActionResult<List<ReactionDto>>> GetChatReactionsAsync(int chatId)
+    {
+        try
+        {
+            var result = await _repository.GetChatReactionsAsync(chatId);
             return Ok(result);
         }
         catch (Exception ex)

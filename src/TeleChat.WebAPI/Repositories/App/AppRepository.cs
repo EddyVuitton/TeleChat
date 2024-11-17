@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Dapper;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using TeleChat.Domain;
@@ -119,6 +121,57 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
             _context.Remove(message);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task<List<Reaction>> GetReactionsAsync()
+    {
+        return await _context.Reaction.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<MessageReaction> AddReactionAsync(ReactionDto dto)
+    {
+        dto = dto ?? throw new ArgumentNullException(nameof(dto));
+
+        var reaction = await _context.Reaction.SingleAsync(x => x.Id == dto.ReactionId)
+            ?? throw new ArgumentException($"Nie istnieje reakcja o id: {dto.ReactionId}");
+
+        var message = await _context.Message.SingleAsync(x => x.Id == dto.MessageId)
+            ?? throw new ArgumentException($"Nie istnieje wiadomość o id: {dto.MessageId}");
+
+        var user = await _context.User.SingleAsync(x => x.Id == dto.UserId)
+            ?? throw new ArgumentException($"Nie istnieje użytkownik o id: {dto.UserId}");
+
+        var newMessageReaction = new MessageReaction()
+        {
+            Message = message,
+            Reaction = reaction,
+            User = user
+        };
+
+        try
+        {
+            await _context.AddAsync(newMessageReaction);
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
+            //to do...
+        }
+
+        return newMessageReaction;
+    }
+
+    public async Task<List<ReactionDto>> GetChatReactionsAsync(int chatId)
+    {
+        using var conn = new SqlConnection(_context.Database.GetConnectionString());
+
+        var param = new
+        {
+            chatId
+        };
+        var result = await conn.QueryAsync<ReactionDto>("exec p_GetChatReactions @chatId;", param);
+
+        return result.ToList();
     }
 
     #endregion

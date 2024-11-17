@@ -14,4 +14,7 @@ public interface IAppRepository
     Task<UserGroupChat> AddGroupChatAsync(GroupChatDto groupChat);
     Task DeleteGroupChatAsync(int groupChatId);
     Task DeleteMessageAsync(int messageId);
+    Task<List<Reaction>> GetReactionsAsync();
+    Task<MessageReaction> AddReactionAsync(ReactionDto dto);
+    Task<List<ReactionDto>> GetChatReactionsAsync(int chatId);
 }
