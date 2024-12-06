@@ -211,7 +211,7 @@ public partial class Home
         StateHasChanged();
     }
 
-    private async void SendFile(IBrowserFile file)
+    private async Task SendFile(IBrowserFile file)
     {
         if (_selectedChatBox is null)
         {

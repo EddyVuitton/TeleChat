@@ -135,7 +135,9 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         var reaction = await _context.Reaction.SingleAsync(x => x.Id == dto.ReactionId)
             ?? throw new ArgumentException($"Nie istnieje reakcja o id: {dto.ReactionId}");
 
-        var message = await _context.Message.SingleAsync(x => x.Id == dto.MessageId)
+        var message = await _context.Message
+                          .Include(x => x.GroupChat)
+                          .SingleAsync(x => x.Id == dto.MessageId)
             ?? throw new ArgumentException($"Nie istnieje wiadomość o id: {dto.MessageId}");
 
         var user = await _context.User.SingleAsync(x => x.Id == dto.UserId)
@@ -152,6 +154,11 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         {
             await _context.AddAsync(newMessageReaction);
             await _context.SaveChangesAsync();
+
+            if (!string.IsNullOrEmpty(dto.ConnectionId))
+            {
+                await RefreshMessageReactionsAsync(dto, message.GroupChat!);   
+            }
         }
         catch
         {
@@ -220,6 +227,11 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         {
             await _hubContext.Clients.GroupExcept(message.GroupChat.Guid.ToString(), connectionId).ReceiveMessage(message);
         }
+    }
+
+    private async Task RefreshMessageReactionsAsync(ReactionDto reaction, GroupChat groupChat)
+    {
+        await _hubContext.Clients.Group(groupChat.Guid.ToString()).RefreshMessageReactions(reaction);
     }
 
     #endregion

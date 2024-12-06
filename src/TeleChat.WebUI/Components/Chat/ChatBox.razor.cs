@@ -99,38 +99,45 @@ public partial class ChatBox : IAsyncDisposable
         await Task.Delay(10);
         await ScrollManager.ScrollToBottomAsync("#chat", ScrollBehavior.Smooth);
     }
-
+    
     public async Task<string> ConnectAsync(GroupChat groupChat, string token)
     {
         GroupChat = groupChat;
 
-        if (_hubConnection is null)
+        if (_hubConnection is not null)
         {
-            try
+            return _connectionId ?? string.Empty;
+        }
+        
+        try
+        {
+            _hubConnection = AppService.CreateHubConnection(token);
+
+            _hubConnection.On<Message>("ReceiveMessage", (message) =>
             {
-                _hubConnection = AppService.CreateHubConnection(token);
+                AddMessage(message);
+                InvokeAsync(RefreshChatAsync);
+            });
 
-                _hubConnection.On<Message>("ReceiveMessage", (message) =>
-                {
-                    AddMessage(message);
-                    InvokeAsync(RefreshChatAsync);
-                });
-
-                await _hubConnection.StartAsync();
-
-                if (_hubConnection is not null && _hubConnection.ConnectionId is not null)
-                {
-                    _connectionId = _hubConnection.ConnectionId;
-                    await AppService.AddConnectionToGroupAsync(_connectionId, GroupChat.Guid);
-                }
-
-                StateHasChanged();
-                return _connectionId ?? string.Empty;
-            }
-            catch (Exception ex)
+            _hubConnection.On<ReactionDto>("RefreshMessageReactions", (reactionDto) =>
             {
-                await JS.LogAsync(ex);
+                InvokeAsync(() => RefreshMessageReactions(reactionDto));
+            });
+
+            await _hubConnection.StartAsync();
+
+            if (_hubConnection?.ConnectionId is not null)
+            {
+                _connectionId = _hubConnection.ConnectionId;
+                await AppService.AddConnectionToGroupAsync(_connectionId, GroupChat.Guid);
             }
+
+            StateHasChanged();
+            return _connectionId ?? string.Empty;
+        }
+        catch (Exception ex)
+        {
+            await JS.LogAsync(ex);
         }
 
         return _connectionId ?? string.Empty;
@@ -205,7 +212,7 @@ public partial class ChatBox : IAsyncDisposable
             var messageType = file.ContentType switch
             {
                 "image/gif" => MessageTypeEnum.GIF,
-                "image/png" or "image/jpg" => MessageTypeEnum.Image,
+                "image/png" or "image/jpg" or "image/jpeg" => MessageTypeEnum.Image,
                 _ => MessageTypeEnum.PlainText
             };
 
@@ -252,6 +259,12 @@ public partial class ChatBox : IAsyncDisposable
     private void AddMessage(Message message)
     {
         Messages.Add(message);
+    }
+    
+    private void RefreshMessageReactions(ReactionDto dto)
+    {
+        Reactions.Add(dto);
+        StateHasChanged();
     }
 
     #endregion
