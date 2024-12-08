@@ -119,9 +119,9 @@ public partial class ChatBox : IAsyncDisposable
                 InvokeAsync(RefreshChatAsync);
             });
 
-            _hubConnection.On<ReactionDto>("RefreshMessageReactions", (reactionDto) =>
+            _hubConnection.On<ReactionDto, bool>("RefreshMessageReactions", (dto, isAdded) =>
             {
-                InvokeAsync(() => RefreshMessageReactions(reactionDto));
+                InvokeAsync(() => RefreshMessageReactions(dto, isAdded));
             });
 
             await _hubConnection.StartAsync();
@@ -261,9 +261,27 @@ public partial class ChatBox : IAsyncDisposable
         Messages.Add(message);
     }
     
-    private void RefreshMessageReactions(ReactionDto dto)
+    private void RefreshMessageReactions(ReactionDto dto, bool isAdded)
     {
-        Reactions.Add(dto);
+        if (dto is null)
+        {
+            return;
+        }
+        
+        if (isAdded)
+        {
+            Reactions.Add(dto);
+        }
+        else
+        {
+            var reaction = Reactions.FirstOrDefault(x => x.MessageReactionId == dto.MessageReactionId);
+            
+            if (reaction is not null)
+            {
+                Reactions.Remove(reaction);
+            }
+        }
+        
         StateHasChanged();
     }
 

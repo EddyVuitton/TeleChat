@@ -17,4 +17,5 @@ public interface IAppRepository
     Task<List<Reaction>> GetReactionsAsync();
     Task<MessageReaction> AddReactionAsync(ReactionDto dto);
     Task<List<ReactionDto>> GetChatReactionsAsync(int chatId);
+    Task RemoveReactionAsync(ReactionDto dto);
 }

@@ -101,6 +101,21 @@ public class AppController(IAppRepository repository, ILogger<AppController> log
             return Problem(ex.Message);
         }
     }
+    
+    [HttpPost("RemoveReaction")]
+    public async Task<ActionResult> RemoveReaction(ReactionDto dto)
+    {
+        try
+        {
+            await _repository.RemoveReactionAsync(dto);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            //to do...
+            return Problem(ex.Message);
+        }
+    }
 
     [HttpGet("GetMessageTypes")]
     public async Task<ActionResult<List<MessageType>>> GetMessageTypes()

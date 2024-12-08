@@ -6,5 +6,5 @@ namespace TeleChat.WebAPI.Hub;
 public interface IChatHub
 {
     Task ReceiveMessage(Message message);
-    Task RefreshMessageReactions(ReactionDto reaction);
+    Task RefreshMessageReactions(ReactionDto dto, bool isAdded);
 }

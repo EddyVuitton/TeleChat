@@ -45,26 +45,40 @@ namespace TeleChat.WebUI.Components.Reactions
 
         #region PrivateMethods
 
-        private async Task AddReactionAsync(Reaction reaction)
+        private async Task AddOrRemoveReactionAsync(Reaction reaction)
         {
-            if (Message is null || ChatBox is null || ChatBox?.GetConnectionId is null || ChatBox?.User is null)
+            if (Message is null || ChatBox?.GetConnectionId is null || ChatBox?.User is null)
             {
                 return;
             }
 
-            var dto = new ReactionDto()
+            var sameUserReaction = ChatBox.Reactions.FirstOrDefault(x => 
+                x.UserId == ChatBox.User.Id && 
+                x.ReactionId == reaction.Id && 
+                x.MessageId == Message.Id);
+
+            try
             {
-                MessageReactionId = -1,
-                ReactionId = reaction.Id,
-                Value = reaction.Value,
-                UserId = ChatBox.User.Id,
-                MessageId = Message.Id,
-                ConnectionId = ChatBox!.GetConnectionId!
-            };
-
-            var result = await AppService.AddReactionAsync(dto);
-
-            if (result is not null && result.Id > 0)
+                if (sameUserReaction is not null)
+                {
+                    await AppService.RemoveReactionAsync(sameUserReaction);
+                }
+                else
+                {
+                    var dto = new ReactionDto()
+                    {
+                        MessageReactionId = -1,
+                        ReactionId = reaction.Id,
+                        Value = reaction.Value,
+                        UserId = ChatBox.User.Id,
+                        MessageId = Message.Id,
+                        ConnectionId = ChatBox!.GetConnectionId!
+                    };
+                    
+                    _ = await AppService.AddReactionAsync(dto);
+                }
+            }
+            finally
             {
                 Popover?.ClosePopoverMenu();
             }

@@ -3,7 +3,7 @@
     <div class="container">
         @foreach (var reaction in _reactions)
         {
-            <div class="reaction" @onclick="() => AddReactionAsync(reaction)">
+            <div class="reaction" @onclick="() => AddOrRemoveReactionAsync(reaction)">
                 <div>
                     @reaction.Value
                 </div>

@@ -154,11 +154,10 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         {
             await _context.AddAsync(newMessageReaction);
             await _context.SaveChangesAsync();
-
-            if (!string.IsNullOrEmpty(dto.ConnectionId))
-            {
-                await RefreshMessageReactionsAsync(dto, message.GroupChat!);   
-            }
+            
+            dto.MessageReactionId = newMessageReaction.Id;
+            
+            await RefreshMessageReactionsAsync(dto, message.GroupChat!);
         }
         catch
         {
@@ -179,6 +178,26 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         var result = await conn.QueryAsync<ReactionDto>("exec p_GetChatReactions @chatId;", param);
 
         return result.ToList();
+    }
+
+    public async Task RemoveReactionAsync(ReactionDto dto)
+    {
+        var messageReaction = await _context.MessageReaction.FindAsync(dto.MessageReactionId);
+
+        if (messageReaction is null)
+        {
+            return;
+        }
+        
+        var message = await _context.Message
+            .Include(x => x.GroupChat)
+            .AsNoTracking()
+            .FirstAsync(x => x.Id == dto.MessageId);
+        
+        _context.Remove(messageReaction);
+        await _context.SaveChangesAsync();
+        
+        await RefreshMessageReactionsAsync(dto, message.GroupChat!, false);
     }
 
     #endregion
@@ -229,9 +248,9 @@ public class AppRepository(IHubContext<ChatHub, IChatHub> hubContext, DBContext 
         }
     }
 
-    private async Task RefreshMessageReactionsAsync(ReactionDto reaction, GroupChat groupChat)
+    private async Task RefreshMessageReactionsAsync(ReactionDto reaction, GroupChat groupChat, bool isAdded = true)
     {
-        await _hubContext.Clients.Group(groupChat.Guid.ToString()).RefreshMessageReactions(reaction);
+        await _hubContext.Clients.Group(groupChat.Guid.ToString()).RefreshMessageReactions(reaction, isAdded);
     }
 
     #endregion

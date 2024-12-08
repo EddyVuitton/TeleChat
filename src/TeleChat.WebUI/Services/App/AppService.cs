@@ -238,4 +238,20 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
             return [];
         }
     }
+
+    public async Task RemoveReactionAsync(ReactionDto dto)
+    {
+        try
+        {
+            var json = JsonConvert.SerializeObject(dto);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            
+            var response = await _httpClient.PostAsync($"{_AppRoute}/RemoveReaction", content);
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception ex)
+        {
+            await _js.LogAsync(ex);
+        }
+    }
 }
