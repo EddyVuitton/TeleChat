@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleChat.WebUI", "TeleChat.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleChat.Domain", "TeleChat.Domain\TeleChat.Domain.csproj", "{7A9EFA28-0A0B-4E7B-B21C-38073DB95F53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleChat.WebAPI", "TeleChat.WebAPI\TeleChat.WebAPI.csproj", "{B8E220D1-4FF0-445A-8ADE-DC6275FEE36E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeleChat.Api", "TeleChat.Api\TeleChat.Api.csproj", "{B8E220D1-4FF0-445A-8ADE-DC6275FEE36E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeleChat.ApiProxy", "TeleChat.ApiProxy\TeleChat.ApiProxy.csproj", "{FCC65B1D-06D4-4D61-BA15-B72B14CEC1CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B8E220D1-4FF0-445A-8ADE-DC6275FEE36E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8E220D1-4FF0-445A-8ADE-DC6275FEE36E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8E220D1-4FF0-445A-8ADE-DC6275FEE36E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCC65B1D-06D4-4D61-BA15-B72B14CEC1CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCC65B1D-06D4-4D61-BA15-B72B14CEC1CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCC65B1D-06D4-4D61-BA15-B72B14CEC1CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCC65B1D-06D4-4D61-BA15-B72B14CEC1CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using TeleChat.WebUI.Customs;
-using TeleChat.WebUI.Services.App;
+using TeleChat.ApiProxy.App;
 
 namespace TeleChat.WebUI.Components.Sidebar.Group;
 

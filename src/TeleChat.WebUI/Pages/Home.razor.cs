@@ -5,11 +5,10 @@ using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Dialogs.Auth;
-using TeleChat.WebUI.Services.App;
+using TeleChat.ApiProxy.App;
 using TeleChat.Domain.Auth;
 using TeleChat.WebUI.Components.Sidebar.Menu;
 using Microsoft.AspNetCore.Components.Forms;
-using TeleChat.Domain;
 
 namespace TeleChat.WebUI.Pages;
 

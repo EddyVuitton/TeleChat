@@ -16,6 +16,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.7" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\TeleChat.Domain\TeleChat.Domain.csproj" />
+	  
+	  <ProjectReference Include="..\TeleChat.ApiProxy\TeleChat.ApiProxy.csproj" />
 	</ItemGroup>
 </Project>
