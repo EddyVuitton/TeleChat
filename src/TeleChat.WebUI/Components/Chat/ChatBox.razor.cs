@@ -5,9 +5,9 @@ using MudBlazor;
 using TeleChat.Domain;
 using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Models.Entities;
-using TeleChat.WebUI.Services.App;
+using TeleChat.ApiProxy.App;
 using Microsoft.AspNetCore.Components.Forms;
-using TeleChat.WebUI.Services.File;
+using TeleChat.ApiProxy.Files;
 using TeleChat.Domain.Enums;
 
 namespace TeleChat.WebUI.Components.Chat;

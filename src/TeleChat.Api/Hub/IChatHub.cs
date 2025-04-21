@@ -1,0 +1,10 @@
+﻿using TeleChat.Domain.Models.Entities;
+using TeleChat.Domain;
+
+namespace TeleChat.Api.Hub;
+
+public interface IChatHub
+{
+    Task ReceiveMessage(Message message);
+    Task RefreshMessageReactions(ReactionDto dto, bool isAdded);
+}

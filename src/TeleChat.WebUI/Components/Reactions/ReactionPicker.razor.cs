@@ -3,7 +3,7 @@ using TeleChat.Domain;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Components.Chat;
 using TeleChat.WebUI.Customs;
-using TeleChat.WebUI.Services.App;
+using TeleChat.ApiProxy.App;
 
 namespace TeleChat.WebUI.Components.Reactions
 {

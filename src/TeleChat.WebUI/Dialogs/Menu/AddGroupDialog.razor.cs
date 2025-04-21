@@ -6,7 +6,7 @@ using TeleChat.Domain.Forms;
 using TeleChat.Domain.Models.Entities;
 using TeleChat.WebUI.Extensions;
 using TeleChat.WebUI.Pages;
-using TeleChat.WebUI.Services.App;
+using TeleChat.ApiProxy.App;
 
 namespace TeleChat.WebUI.Dialogs.Menu;
 

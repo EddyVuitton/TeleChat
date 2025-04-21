@@ -6,7 +6,7 @@ using TeleChat.WebUI.Extensions;
 using TeleChat.Domain.Forms;
 using TeleChat.WebUI.Pages;
 //using TeleChat.WebUI.Auth;
-using TeleChat.WebUI.Services.Account;
+using TeleChat.ApiProxy.Account;
 
 namespace TeleChat.WebUI.Dialogs.Auth;
 

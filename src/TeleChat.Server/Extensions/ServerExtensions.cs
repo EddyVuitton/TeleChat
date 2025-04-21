@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
 using MudBlazor.Services;
-using TeleChat.Server.Options.WebAPI;
+using TeleChat.Server.Options.Api;
 using TeleChat.WebUI.Auth;
-using TeleChat.WebUI.Services.App;
-using TeleChat.WebUI.Services.Account;
-using TeleChat.WebUI.Services.File;
+using TeleChat.ApiProxy.App;
+using TeleChat.ApiProxy.Account;
+using TeleChat.ApiProxy.Files;
 using Microsoft.Extensions.FileProviders;
 
 namespace TeleChat.Server.Extensions;
@@ -15,7 +15,7 @@ public static class ServerExtensions
     public static void AddServices(this WebApplicationBuilder builder)
     {
         var provider = builder.Services.BuildServiceProvider();
-        var webapiOptions = provider.GetService<IOptions<WebAPIOptions>>()!;
+        var apiOptions = provider.GetService<IOptions<ApiOptions>>()!;
 
         // Add services to the container.
         builder.Services
@@ -26,7 +26,7 @@ public static class ServerExtensions
                 o.DetailedErrors = true;
             });
         builder.Services.AddMudServices();
-        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(webapiOptions.Value.BaseAddress) });
+        builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiOptions.Value.BaseAddress) });
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IAppService, AppService>();
         builder.Services.AddScoped<IFileService, FileService>();
@@ -34,7 +34,7 @@ public static class ServerExtensions
 
     public static void AddOptions(this WebApplicationBuilder builder)
     {
-        builder.Services.ConfigureOptions<WebAPIOptionsSetup>();
+        builder.Services.ConfigureOptions<ApiOptionsSetup>();
     }
 
     public static void AddJwtAuthentication(this WebApplicationBuilder builder)
