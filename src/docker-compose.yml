@@ -1,0 +1,46 @@
+services:
+  telechat.api:
+    build:
+      context: .
+      dockerfile: TeleChat.Api/Dockerfile
+    container_name: telechat_api
+    ports:
+      - "8080:80"
+    volumes:
+          - uploaded-images:/app/wwwroot/images
+    depends_on:
+      - sqlserver
+    networks:
+      - telechat-net
+
+  telechat.server:
+    build:
+      context: .
+      dockerfile: TeleChat.Server/Dockerfile
+    container_name: telechat_server
+    ports:
+      - "8081:80"
+    volumes:
+          - uploaded-images:/app/wwwroot/images
+    depends_on:
+      - sqlserver 
+    networks:
+      - telechat-net
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "2LB%sL!fq%XNQ6&#cGG"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - telechat-net
+
+networks:
+  telechat-net:
+    driver: bridge
+
+volumes:
+  uploaded-images:

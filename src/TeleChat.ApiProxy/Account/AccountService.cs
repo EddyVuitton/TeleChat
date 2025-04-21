@@ -44,6 +44,8 @@ public class AccountService(HttpClient httpClient, IJSRuntime js) : IAccountServ
         catch (Exception ex)
         {
             //await _js.LogAsync(ex);
+
+            Console.WriteLine($"{ex.Message}{Environment.NewLine}{ex.StackTrace}");
         }
 
         return null;

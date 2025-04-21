@@ -53,6 +53,7 @@ public static class ServerExtensions
         app.UseStaticFiles(new StaticFileOptions
         {
             FileProvider = new PhysicalFileProvider(path),
+            RequestPath = "/images"
         });
     }
 }

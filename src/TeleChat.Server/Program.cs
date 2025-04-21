@@ -7,6 +7,8 @@ builder.AddOptions();
 builder.AddServices();
 builder.AddJwtAuthentication();
 
+builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -17,12 +19,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.AddFileProvider();
-
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();

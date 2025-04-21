@@ -1,15 +1,13 @@
-﻿using Microsoft.Extensions.Options;
-using TeleChat.Api.Options.FilesContainer;
-
-namespace TeleChat.Api.Repositories.Files;
+﻿namespace TeleChat.Api.Repositories.Files;
 
 public class FileService : IFileService
 {
     private readonly string _uploadPath;
 
-    public FileService(IWebHostEnvironment env, IOptions<FilesContainerOptions> options)
+    public FileService(IWebHostEnvironment env)
     {
-        _uploadPath = env.ContentRootPath.Replace(env.ApplicationName, options.Value.Path);
+        _uploadPath = Path.Combine(env.ContentRootPath, "wwwroot", "images");
+
         Directory.CreateDirectory(_uploadPath);
     }
 
@@ -28,20 +26,6 @@ public class FileService : IFileService
             await file.CopyToAsync(stream);
         }
 
-        return $"./images/{fileName}";
-    }
-
-    public async Task<byte[]> GetFileAsync(string fileName)
-    {
-        var filePath = Path.Combine(_uploadPath, fileName);
-
-        if (!File.Exists(filePath))
-        {
-            throw new FileNotFoundException("Nie znaleziono pliku");
-        }
-
-        var file = await File.ReadAllBytesAsync(filePath);
-
-        return file;
+        return $"/images/{fileName}";
     }
 }

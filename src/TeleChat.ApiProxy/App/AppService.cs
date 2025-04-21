@@ -15,8 +15,10 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
 
     public HubConnection CreateHubConnection(string token)
     {
+        var chatUrl = _httpClient.BaseAddress + "Chat";
+
         var hubConnection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:44362/Chat", options =>
+            .WithUrl(chatUrl, options =>
             {
                 options.AccessTokenProvider = async () => await Task.FromResult(token);
             })
@@ -81,7 +83,7 @@ public class AppService(HttpClient httpClient, IJSRuntime js) : IAppService
         }
         catch (Exception ex)
         {
-            //// await _js.LogAsync(ex);
+            // await _js.LogAsync(ex);
             return [];
         }
     }

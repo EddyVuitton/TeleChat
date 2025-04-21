@@ -10,9 +10,6 @@ using TeleChat.Api.Options.JWT;
 using TeleChat.Api.Repositories.App;
 using TeleChat.Api.Repositories.Account;
 using TeleChat.Api.Repositories.Files;
-using TeleChat.Api.Options.FilesContainer;
-using System.Reflection;
-
 namespace TeleChat.Api.Extensions;
 
 public static class BuilderExtensions
@@ -54,10 +51,10 @@ public static class BuilderExtensions
             x.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
                 ValidIssuers = jwtOptions.Value.ValidIssuers,
-                ValidAudiences = jwtOptions.Value.ValidAudiences,
+                //ValidAudiences = jwtOptions.Value.ValidAudiences, /* TODO */
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.Key))
             };
         });
@@ -67,7 +64,6 @@ public static class BuilderExtensions
     public static void AddOptions(this WebApplicationBuilder builder)
     {
         builder.Services.ConfigureOptions<JWTOptionsSetup>();
-        builder.Services.ConfigureOptions<FilesContainerOptionsSetup>();
     }
 
     public static void AddRepositories(this WebApplicationBuilder builder)
@@ -79,12 +75,26 @@ public static class BuilderExtensions
 
     public static async Task MigrateDatabaseAsync(this WebApplication app)
     {
-        using var serviceScope = app.Services.CreateScope();
-        var dbContext = serviceScope.ServiceProvider.GetService<DBContext>();
-
-        if (dbContext is not null)
+        try
         {
-            await dbContext.Database.MigrateAsync();
+            using var serviceScope = app.Services.CreateScope();
+            var dbContext = serviceScope.ServiceProvider.GetService<DBContext>();
+
+            if (dbContext is null)
+            {
+                return;
+            }
+
+            var canConnect = await dbContext.Database.CanConnectAsync();
+
+            if (!canConnect)
+            {
+                await dbContext.Database.MigrateAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[MigrateDatabaseAsync] {ex}");
         }
     }
 }

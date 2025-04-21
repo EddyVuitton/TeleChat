@@ -2,5 +2,5 @@
 
 public class ApiOptions
 {
-    public string BaseAddress { get; set; } = string.Empty;
+    public required string BaseAddress { get; set; }
 }
