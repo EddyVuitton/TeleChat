@@ -6,7 +6,11 @@ public class FileService : IFileService
 
     public FileService(IWebHostEnvironment env)
     {
-        _uploadPath = Path.Combine(env.ContentRootPath, "wwwroot", "images");
+        var currentDirectory = Directory.GetCurrentDirectory();
+        
+        _uploadPath = env.IsProduction() ? 
+            Path.Combine(currentDirectory, "wwwroot", "images") : 
+            Path.Combine(Directory.GetParent(currentDirectory)!.FullName, "TeleChat.Server", "wwwroot", "images");
 
         Directory.CreateDirectory(_uploadPath);
     }
