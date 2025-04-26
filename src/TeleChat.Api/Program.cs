@@ -9,10 +9,12 @@ builder.AddServices();
 builder.AddHubChat();
 builder.AddRepositories();
 
+builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -23,8 +25,6 @@ if (app.Environment.IsDevelopment())
     });
     await app.MigrateDatabaseAsync();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
